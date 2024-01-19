@@ -7,7 +7,7 @@
 	export let data; //Pasted data from the Database
 </script>
 
-<T.PerspectiveCamera makeDefault position={[-10, 10, 10]} fov={45}>
+<T.PerspectiveCamera makeDefault position={[-100, 100, 100]} fov={45} far={10000}>
 	<OrbitControls autoRotate enableZoom={true} enableDamping autoRotateSpeed={0.5} target.y={1.5} />
 </T.PerspectiveCamera>
 
