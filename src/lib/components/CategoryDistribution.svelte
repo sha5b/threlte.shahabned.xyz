@@ -2,12 +2,12 @@
 	import { Vector3 } from 'three';
 
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
-	import { addSyntheticLeadingComment } from 'typescript';
+
 	export let categories = [];
 
 	// Define the range for each axis and the step size.
 	const range = new Vector3(2000, 2000, 2000);
-	const step = 50; // This should be the minimum size or a common factor of sizes.
+	const step = 250; // This should be the minimum size or a common factor of sizes.
 
 	// Helper function to generate a random position on the grid.
 	function getRandomGridPosition(range, step) {
