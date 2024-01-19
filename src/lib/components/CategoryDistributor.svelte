@@ -3,10 +3,10 @@
 
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkBox from '$lib/components/WorkBox.svelte';
+	import WorkDistributor from './WorkDistributor.svelte';
 
 	export let categories = [];
 	export let size = new Vector3(250, 250, 250);
-	
 
 	// Define the range for each axis and the step size.
 	const range = new Vector3(2000, 2000, 2000);
@@ -26,10 +26,10 @@
 	const categoryPositions = new Map(
 		categories.map((category) => [category.id, getRandomGridPosition(range, step)])
 	);
-	
 </script>
 
 {#each categories as category (category.id)}
-	<CategoryBox position={categoryPositions.get(category.id)} {size}><WorkBox/></CategoryBox>
+	<CategoryBox position={categoryPositions.get(category.id)} {size}>
+		<WorkDistributor/>
+	</CategoryBox>
 {/each}
-

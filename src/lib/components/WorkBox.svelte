@@ -1,6 +1,6 @@
 <script>
 	import { T } from '@threlte/core';
-	import { Vector3 } from 'three';
+	import { Group, Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
 	import { onMount } from 'svelte';
 
@@ -49,12 +49,16 @@
 	});
 </script>
 
-<T.Mesh position={[position.x, position.y, position.z]}>
-	{#each lines as points}
-		<T.Mesh>
-			<MeshLineGeometry {points} />
-			<MeshLineMaterial {width} {color} opacity={1} transparent={true} attenuate={true} />
-		</T.Mesh>
-	{/each}
-	<slot />
-</T.Mesh>
+<T.Group position={[position.x, position.y, position.z]}>
+	<T.Mesh>
+		{#each lines as points}
+			<T.Mesh>
+				<MeshLineGeometry {points} />
+				<MeshLineMaterial {width} {color} opacity={1} transparent={true} attenuate={true} />
+			</T.Mesh>
+		{/each}
+	</T.Mesh>
+	<T.Mesh>
+		<slot />
+	</T.Mesh>
+</T.Group>
