@@ -1,12 +1,13 @@
 <script>
+	
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
 
-	export let boxPosition = new Vector3(0, 0, 0);
-	export let size = new Vector3(100, 100, 100);
-	export let cellSize = 50;
-	export let width = 1;
+	export let position = new Vector3(0, 0, 0);
+	export let size = new Vector3(250, 250, 250);
+	export let cellSize = 250;
+	export let width = 10;
 	export let color = '#4b6e84';
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
@@ -45,11 +46,11 @@
 
 </script>
 
-<T.Mesh position={[boxPosition.x, boxPosition.y, boxPosition.z]}>
+<T.Mesh position={[position.x, position.y, position.z]}>
 	{#each lines as points}
 		<T.Mesh>
 			<MeshLineGeometry {points} />
-			<MeshLineMaterial {width} {color} opacity={1} transparent />
+			<MeshLineMaterial {width} {color} opacity={1} transparent attenuate={true} />
 		</T.Mesh>
 	{/each}
 	<slot />
