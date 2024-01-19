@@ -1,11 +1,11 @@
-<script>
-	//@ts-nocheck
+<script lang='ts'>
+
 	import { T } from '@threlte/core';
 	import { Float, Grid, OrbitControls } from '@threlte/extras';
 	import CategoryDistribution from '$lib/components/CategoryDistribution.svelte';
 
 
-	export let data; //Pasted data from the Database
+	export let data: any; //Pasted data from the Database
 	console.log(data);
 </script>
 
@@ -16,4 +16,4 @@
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
-<CategoryDistribution categories={data.categories} works={data.works}/>
+<CategoryDistribution categories={data.categories}/>

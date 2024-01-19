@@ -1,19 +1,20 @@
-<script>
+<script lang='ts'>
+
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
 	import { onMount } from 'svelte';
 
-	export let position = new Vector3(0, 0, 0);
-	export let size = new Vector3(50, 50, 50);
-	export let cellSize = 50;
-	export let width = 2;
-	export let color = 'white';
+	export let position: any = new Vector3(0, 0, 0);
+	export let size: any = new Vector3(50, 50, 50);
+	export let cellSize: any = 50;
+	export let width: any = 2;
+	export let color: any = 'white';
 
-	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
+	const roundToCellSize = (value: any) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
-	const createBoxLines = (size) => {
+	const createBoxLines = (size: any) => {
 		const halfSize = size.clone().multiplyScalar(0.5);
 		const corners = [
 			new Vector3(-1, -1, -1),
