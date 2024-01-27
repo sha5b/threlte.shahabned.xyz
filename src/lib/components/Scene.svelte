@@ -1,4 +1,5 @@
 <script>
+	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Float, Grid, OrbitControls } from '@threlte/extras';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';

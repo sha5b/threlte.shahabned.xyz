@@ -7,7 +7,7 @@
 	import WorkDistributor from './WorkDistributor.svelte';
 
 	export let categories = [];
-	export let size = new Vector3(500, 250, 250);
+	export let size = new Vector3(250, 250, 250);
 
 	// Define the range for each axis and the step size.
 	const range = new Vector3(2000, 2000, 2000);

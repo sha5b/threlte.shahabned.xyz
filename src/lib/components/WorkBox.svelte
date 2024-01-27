@@ -1,4 +1,5 @@
 <script>
+	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Group, Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
