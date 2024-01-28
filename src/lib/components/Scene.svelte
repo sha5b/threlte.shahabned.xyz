@@ -3,13 +3,31 @@
 	import { T } from '@threlte/core';
 	import { Float, Grid, OrbitControls } from '@threlte/extras';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
+	import { writable } from 'svelte/store';
+
+	const cameraPosition = writable([-5000, 5000, 5000]); // Store for camera position
+	const cameraTarget = writable([0, 0, 0]); // Store for camera targets
 
 	export let data; //Pasted data from the Database
-	console.log(data);
+
+	// Function to handle the change event from OrbitControls
+	function handleCameraChange() {
+		console.log('Camera Position:', $cameraPosition);
+		console.log('Camera Target:', $cameraTarget);
+	}
 </script>
 
-<T.PerspectiveCamera makeDefault position={[-500, 500, 500]} fov={45} far={10000}>
-	<OrbitControls autoRotate enableZoom={true} enableDamping autoRotateSpeed={0.5} target.y={1.5} />
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={25} far={50000} >
+	<OrbitControls
+		bind:position={$cameraPosition}
+		bind:target={$cameraTarget}
+		on:change={handleCameraChange}
+		autoRotate
+		enableZoom={true}
+		enableDamping
+		autoRotateSpeed={0.5}
+		target.y={1.5}
+	/>
 </T.PerspectiveCamera>
 
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />

@@ -1,14 +1,14 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { Group, Vector3 } from 'three';
+	import { BoxGeometry, Group, Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
-	export let cellSize = 250;
-	export let width = 2;
-	export let color = 'red';
+	export let cellSize;
+	export let width = 15;
+	export let color = 'lightblue';
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -42,8 +42,11 @@
 		];
 	};
 
-	$: lines = createBoxLines(size);
+	function handleClick() {
+		console.log('CategoryBox clicked');
+	}
 
+	$: lines = createBoxLines(size);
 </script>
 
 <T.Group position={[position.x, position.y, position.z]}>
@@ -51,11 +54,22 @@
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
-				<MeshLineMaterial {width} {color} opacity={1} transparent={true} attenuate={true} />
+				<MeshLineMaterial
+					{width}
+					{color}
+					opacity={1}
+					transparent={true}
+					attenuate={true}
+					dashArray={0.1}
+					dashRatio={0.5}
+				/>
 			</T.Mesh>
 		{/each}
 	</T.Mesh>
 	<T.Mesh>
 		<slot />
+	</T.Mesh>
+	<T.Mesh>
+		<T.BoxGeometry args={[size.x, size.y, size.z]} on:click={handleClick} />
 	</T.Mesh>
 </T.Group>

@@ -7,12 +7,10 @@
 
 	export let categories = [];
 	export let size = new Vector3(500, 500, 500);
+	let cellSize = 500;
 
 	// Define the range for each axis and the step size.
-	const range = new Vector3(3000, 3000, 3000);
-
-
-
+	const range = new Vector3(5000, 5000, 5000);
 
 	// Helper function to generate a random position on the grid.
 	function getRandomGridPosition(range, size) {
@@ -25,9 +23,6 @@
 			Math.floor(Math.random() * ((range.z - size.z) / step)) * step - (range.z - size.z) / 2
 		);
 	}
-
-	
-
 
 	function isOverlapping(position, size) {
 		for (let [_, otherPosition] of categoryPositions) {
@@ -47,7 +42,6 @@
 		return false;
 	}
 
-	
 	// Generate random positions for each category and store them in a map.
 	const categoryPositions = new Map();
 	categories.forEach((category) => {
@@ -62,7 +56,7 @@
 </script>
 
 {#each categories as category (category.id)}
-	<CategoryBox position={categoryPositions.get(category.id)} {size}>
+	<CategoryBox position={categoryPositions.get(category.id)} {size} {cellSize}>
 		<WorkDistributor />
 	</CategoryBox>
 {/each}
