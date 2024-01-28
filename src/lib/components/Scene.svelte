@@ -4,6 +4,7 @@
 	import { Float, Grid, OrbitControls } from '@threlte/extras';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
+	import { onMount, onDestroy } from 'svelte';
 
 	const cameraPosition = writable([-5000, 5000, 5000]); // Store for camera position
 	const cameraTarget = writable([0, 0, 0]); // Store for camera targets
@@ -15,13 +16,17 @@
 		console.log('Camera Position:', $cameraPosition);
 		console.log('Camera Target:', $cameraTarget);
 	}
+
+	function handleClick() {
+		console.log('Canvas clicked');
+	}
+
+	// on:change={handleCameraChange}
 </script>
 
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={25} far={50000} >
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={25} far={50000}>
 	<OrbitControls
-		bind:position={$cameraPosition}
 		bind:target={$cameraTarget}
-		on:change={handleCameraChange}
 		autoRotate
 		enableZoom={true}
 		enableDamping
@@ -33,4 +38,4 @@
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
-<CategoryDistributor categories={data.categories} />
+<CategoryDistributor categories={data.categories} on:click={handleClick} />
