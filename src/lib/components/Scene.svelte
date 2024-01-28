@@ -22,6 +22,8 @@
 	}
 
 	// on:change={handleCameraChange}
+
+	
 </script>
 
 <T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={25} far={50000}>
