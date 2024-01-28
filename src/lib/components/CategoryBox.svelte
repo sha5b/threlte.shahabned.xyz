@@ -42,9 +42,6 @@
 		];
 	};
 
-	function handleClick() {
-		console.log('CategoryBox clicked');
-	}
 
 	$: lines = createBoxLines(size);
 </script>
@@ -70,6 +67,6 @@
 		<slot />
 	</T.Mesh>
 	<T.Mesh>
-		<T.BoxGeometry args={[size.x, size.y, size.z]} on:click={handleClick} />
+		<T.BoxGeometry args={[size.x, size.y, size.z]} />
 	</T.Mesh>
 </T.Group>
