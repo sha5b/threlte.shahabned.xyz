@@ -5,6 +5,14 @@
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkDistributor from './WorkDistributor.svelte';
 
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
+	function handleBoxClick(event) {
+		// Re-dispatch the event so it bubbles up to the parent (Scene.svelte)
+		dispatch('boxclick', event.detail);
+	}
+
 	export let categories = [];
 	export let size = new Vector3(500, 500, 500);
 	let cellSize = 500;
@@ -62,6 +70,7 @@
 		position={categoryPositions.get(category.id)}
 		{size}
 		{cellSize}
+		on:boxclick={handleBoxClick}
 
 	>
 		<WorkDistributor />

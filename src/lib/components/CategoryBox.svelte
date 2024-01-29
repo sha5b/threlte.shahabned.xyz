@@ -1,8 +1,9 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { BoxGeometry, Group, Vector3 } from 'three';
+	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
+	import { createEventDispatcher } from 'svelte';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
@@ -10,10 +11,14 @@
 	export let width = 15;
 	export let color = 'lightblue';
 
-	const { target } = interactivity();
 
+	// Handling the Interactivity of the CategoryBox
+	const { target } = interactivity();
+	const dispatch = createEventDispatcher();
 	function handleClick() {
-		console.log('CategoryBox clicked');
+		// Dispatch a custom event named 'boxclick' with the position of the CategoryBox
+		dispatch('boxclick', { position: position });
+		console.log('Clicked on CategoryBox');
 	}
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
@@ -74,5 +79,6 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x, size.y, size.z]} />
+		<T.MeshBasicMaterial color={'white'} opacity={0} transparent={true} />
 	</T.Mesh>
 </T.Group>
