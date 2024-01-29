@@ -7,6 +7,8 @@
 
 	import { createEventDispatcher } from 'svelte';
 
+
+	// Event Dispatches Start
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 	function handleBoxClick(event) {
@@ -14,6 +16,7 @@
 		activeBoxId = id; // Set the active box ID
 		dispatch('boxclick', event.detail); // Re-dispatch the event to the Scene
 	}
+	// Event Dispatches End
 
 	export let categories = [];
 	export let size = new Vector3(500, 500, 500);

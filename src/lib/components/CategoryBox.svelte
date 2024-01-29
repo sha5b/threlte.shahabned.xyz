@@ -8,7 +8,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize;
-	export let width = 15;
+	export let width = 5;
 	export let color = 'lightblue';
 
 
@@ -70,7 +70,6 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					attenuate={true}
 					dashArray={0.1}
 					dashRatio={0.5}
 				/>

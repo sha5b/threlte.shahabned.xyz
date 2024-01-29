@@ -1,7 +1,7 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { Float, Grid, OrbitControls } from '@threlte/extras';
+	import { OrbitControls } from '@threlte/extras';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
 
@@ -13,7 +13,7 @@
 		const { position } = event.detail;
 		cameraTarget.set(position);
 
-		const randomOffset = () => Math.random() * 3000 - 2000; // Random number between -1000 and 1000
+		const randomOffset = () => Math.random() * 3000 - 2000; // Random number
 
 		// Calculate new camera position to zoom in, for example, move 1000 units closer on all axes.
 		const zoomPosition = [
@@ -26,13 +26,7 @@
 
 	export let data; //Pasted data from the Database
 
-	// Function to handle the change event from OrbitControls
-	function handleCameraChange() {
-		console.log('Camera Position:', $cameraPosition);
-		console.log('Camera Target:', $cameraTarget);
-	}
 
-	// on:change={handleCameraChange}
 </script>
 
 <T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={50000}>
