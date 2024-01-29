@@ -8,9 +8,11 @@
 	import { createEventDispatcher } from 'svelte';
 
 	const dispatch = createEventDispatcher();
+	let activeBoxId = null; // This will store the ID of the currently active box
 	function handleBoxClick(event) {
-		// Re-dispatch the event so it bubbles up to the parent (Scene.svelte)
-		dispatch('boxclick', event.detail);
+		const { id } = event.detail;
+		activeBoxId = id; // Set the active box ID
+		dispatch('boxclick', event.detail); // Re-dispatch the event to the Scene
 	}
 
 	export let categories = [];
@@ -70,6 +72,8 @@
 		position={categoryPositions.get(category.id)}
 		{size}
 		{cellSize}
+		id={category.id}
+		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
 
 	>

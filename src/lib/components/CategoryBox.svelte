@@ -12,15 +12,6 @@
 	export let color = 'lightblue';
 
 
-	// Handling the Interactivity of the CategoryBox
-	const { target } = interactivity();
-	const dispatch = createEventDispatcher();
-	function handleClick() {
-		// Dispatch a custom event named 'boxclick' with the position of the CategoryBox
-		dispatch('boxclick', { position: position });
-		console.log('Clicked on CategoryBox');
-	}
-
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
@@ -55,6 +46,18 @@
 
 	$: lines = createBoxLines(size);
 
+	export let id; // Export id to set it from the parent component
+	export let active // Add this line to accept an 'active' prop
+
+	// Handling the Interactivity of the CategoryBox
+	const { target } = interactivity();
+	const dispatch = createEventDispatcher();
+	function handleClick() {
+        if (!active) {
+            dispatch('boxclick', { position: position, id: id });
+            console.log('Clicked on CategoryBox with id:', id);
+        }
+	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
@@ -79,6 +82,6 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x - 100, size.y - 100, size.z - 100]} />
-		<T.MeshBasicMaterial  opacity={0.2} transparent={true} doubleSided/>
+		<T.MeshBasicMaterial  opacity={0} transparent={true} doubleSided={true}/>
 	</T.Mesh>
 </T.Group>
