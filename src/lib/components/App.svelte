@@ -4,6 +4,7 @@
 	import Scene from './Scene.svelte';
 	export let data;
 	
+	
 </script>
 
 <Canvas>

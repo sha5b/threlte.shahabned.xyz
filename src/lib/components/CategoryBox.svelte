@@ -2,13 +2,19 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { BoxGeometry, Group, Vector3 } from 'three';
-	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
+	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize;
 	export let width = 15;
 	export let color = 'lightblue';
+
+	const { target } = interactivity();
+
+	function handleClick() {
+		console.log('CategoryBox clicked');
+	}
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -42,12 +48,12 @@
 		];
 	};
 
-
 	$: lines = createBoxLines(size);
+
 </script>
 
-<T.Group position={[position.x, position.y, position.z]}>
-	<T.Mesh>
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
+	<T.Mesh >
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />

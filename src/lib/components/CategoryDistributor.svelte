@@ -53,10 +53,17 @@
 		}
 		categoryPositions.set(category.id, pos);
 	});
+
+
 </script>
 
 {#each categories as category (category.id)}
-	<CategoryBox position={categoryPositions.get(category.id)} {size} {cellSize}>
+	<CategoryBox
+		position={categoryPositions.get(category.id)}
+		{size}
+		{cellSize}
+
+	>
 		<WorkDistributor />
 	</CategoryBox>
 {/each}

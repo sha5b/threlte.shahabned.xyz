@@ -4,10 +4,9 @@
 	import { Float, Grid, OrbitControls } from '@threlte/extras';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
-	import { onMount, onDestroy } from 'svelte';
 
-	const cameraPosition = writable([-5000, 5000, 5000]); // Store for camera position
-	const cameraTarget = writable([0, 0, 0]); // Store for camera targets
+	let cameraPosition = writable([-5000, 5000, 5000]); // Store for camera position
+	let cameraTarget = writable([0, 0, 0]); // Store for camera targets
 
 	export let data; //Pasted data from the Database
 
@@ -17,9 +16,6 @@
 		console.log('Camera Target:', $cameraTarget);
 	}
 
-	function handleClick() {
-		console.log('Canvas clicked');
-	}
 
 	// on:change={handleCameraChange}
 
@@ -40,4 +36,5 @@
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
-<CategoryDistributor categories={data.categories} on:click={handleClick} />
+
+<CategoryDistributor categories={data.categories}  />
