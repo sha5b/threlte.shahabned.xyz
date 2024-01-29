@@ -78,7 +78,7 @@
 		<slot />
 	</T.Mesh>
 	<T.Mesh>
-		<T.BoxGeometry args={[size.x, size.y, size.z]} />
-		<T.MeshBasicMaterial color={'white'} opacity={0} transparent={true} />
+		<T.BoxGeometry args={[size.x - 100, size.y - 100, size.z - 100]} />
+		<T.MeshBasicMaterial  opacity={0.2} transparent={true} doubleSided/>
 	</T.Mesh>
 </T.Group>
