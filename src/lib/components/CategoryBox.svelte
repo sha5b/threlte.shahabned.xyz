@@ -8,8 +8,8 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize;
-	export let width = 5;
-	export let color = 'lightblue';
+	export let width = 10;
+	export let color = 'black';
 
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
@@ -72,6 +72,7 @@
 					transparent={true}
 					dashArray={0.1}
 					dashRatio={0.5}
+					attenuate={true}
 				/>
 			</T.Mesh>
 		{/each}
@@ -81,6 +82,6 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x - 100, size.y - 100, size.z - 100]} />
-		<T.MeshBasicMaterial  opacity={0} transparent={true} doubleSided={true}/>
+		<T.MeshBasicMaterial  opacity={0} transparent={true} doubleSided={true} wireframe/>
 	</T.Mesh>
 </T.Group>
