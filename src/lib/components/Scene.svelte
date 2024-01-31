@@ -5,14 +5,21 @@
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
 
+
+	export let data; //Pasted data from the Database
+
+
 	let cameraPosition = writable([-5000, 5000, 5000]); // Store for camera position
 	let cameraTarget = writable([0, 0, 0]); // Store for camera targets
 	let cameraFOV = 25;
 
+
+	// Handle Mouse Events
+
 	function onBoxClick(event) {
-		const { position, size } = event.detail;
-		console.log('position:' + position )
-		console.log('size:', size)
+		const { position, size } = event.detail; // Listen for the 'boxclick' that is Propagated from the CategoryDistributor
+		console.log('position:' + position);
+		console.log('size:', size);
 		cameraTarget.set(position);
 
 		const randomOffset = () => Math.random() * 3000 - 2000; // Random number
@@ -25,11 +32,10 @@
 		];
 		cameraPosition.set(zoomPosition);
 	}
-	
-	export let data; //Pasted data from the Database
 
 
 </script>
+
 {console.log(data.works)}
 <T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000}>
 	<OrbitControls
