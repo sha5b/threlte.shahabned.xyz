@@ -5,4 +5,8 @@ Interactive 3D Portfolio made with SvelteKit2, Svelte 4, Threlte, Three.js
 
 ### Clone repository
 ### NPM
-'' npm install ''
+
+npm install
+npm run dev
+
+### Documentation in JSDocs inside the Files
