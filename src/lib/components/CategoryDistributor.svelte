@@ -11,7 +11,7 @@
 	export let size = new Vector3(500, 500, 500);
 
 	let cellSize = 500;
-	const range = new Vector3(10000, 10000, 10000);
+	const range = new Vector3(25000, 25000, 25000);
 
 	// Event Dispatches Start
 	const dispatch = createEventDispatcher();
@@ -40,14 +40,6 @@
 	function roundToCellSize(value) {
 		return Math.round(value / cellSize) * cellSize;
 	}
-
-	// Refactored update categories function
-	const updatedCategories = categories.map((category) => {
-		const workCount = countWorksPerCategory(category.id);
-		const scaleFactor = 1 + workCount;
-		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return { ...category, size: roundVectorToCellSize(scaledSize) };
-	});
 
 	// Helper function to generate a random position on the grid.
 	function getRandomGridPosition(range, size) {
@@ -79,17 +71,27 @@
 		return false;
 	}
 
+	// Updated Category function
+	const updatedCategories = categories.map((category) => {
+		const workCount = countWorksPerCategory(category.id);
+		const scaleFactor = 1 + workCount;
+		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
+		return { ...category, size: roundVectorToCellSize(scaledSize) };
+	});
+
 	// Generate random positions for each category and store them in a map.
+	// Use the updated size for each category when generating positions
 	const categoryPositions = new Map();
-	categories.forEach((category) => {
-		// Assume each category has a 'size' property with x, y, and z dimensions.
-		let pos = getRandomGridPosition(range, size);
-		while (isOverlapping(pos, size)) {
-			// If overlap detected, generate a new position.
-			pos = getRandomGridPosition(range, size);
+	updatedCategories.forEach((category) => {
+		let pos = getRandomGridPosition(range, category.size); // use updated size here
+		while (isOverlapping(pos, category.size)) {
+			// and here
+			pos = getRandomGridPosition(range, category.size); // and also here
 		}
 		categoryPositions.set(category.id, pos);
 	});
+
+	
 </script>
 
 {#each updatedCategories as category (category.id)}
