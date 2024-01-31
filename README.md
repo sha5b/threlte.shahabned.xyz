@@ -1,2 +1,8 @@
 # threlte.shahabned.xyz
- 3d Portfolio made with Threlte, Svelte and Three
+Interactive 3D Portfolio made with SvelteKit2, Svelte 4, Threlte, Three.js
+
+## Install
+
+### Clone repository
+### NPM
+'' npm install ''
