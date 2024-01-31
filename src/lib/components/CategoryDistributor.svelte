@@ -5,6 +5,13 @@
 	import WorkDistributor from './WorkDistributor.svelte';
 	import { Text } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
+	import {
+		countWorksPerCategory,
+		calculateScaledSize,
+		roundVectorToCellSize,
+		createBoxClickHandler,
+		generateUniquePositions
+	} from '$lib/utils/categoryUtils';
 
 	export let categories = [];
 	export let works = [];
@@ -13,85 +20,27 @@
 	let cellSize = 500;
 	const range = new Vector3(25000, 25000, 25000);
 
-	// Event Dispatches Start
+	// Event Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
-	function handleBoxClick(event) {
-		const { id } = event.detail;
-		activeBoxId = id; // Set the active box ID
-		dispatch('boxclick', event.detail); // Re-dispatch the event to the Scene
-	}
 
-	function countWorksPerCategory(categoryId) {
-		return works.filter((work) => work.category === categoryId).length;
+	function setActiveBoxId(id) {
+		activeBoxId = id;
 	}
-
-	function calculateScaledSize(baseSize, scaleFactor) {
-		return baseSize.multiplyScalar(scaleFactor);
-	}
-
-	function roundVectorToCellSize(vector) {
-		vector.x = roundToCellSize(vector.x);
-		vector.y = roundToCellSize(vector.y);
-		vector.z = roundToCellSize(vector.z);
-		return vector;
-	}
-
-	function roundToCellSize(value) {
-		return Math.round(value / cellSize) * cellSize;
-	}
-
-	// Helper function to generate a random position on the grid.
-	function getRandomGridPosition(range, size) {
-		// Calculate the step size based on the size of the current box.
-		const step = Math.max(size.x, size.y, size.z);
-
-		return new Vector3(
-			Math.floor(Math.random() * ((range.x - size.x) / step)) * step - (range.x - size.x) / 2,
-			Math.floor(Math.random() * ((range.y - size.y) / step)) * step - (range.y - size.y) / 2,
-			Math.floor(Math.random() * ((range.z - size.z) / step)) * step - (range.z - size.z) / 2
-		);
-	}
-
-	function isOverlapping(position, size) {
-		for (let [_, otherPosition] of categoryPositions) {
-			if (
-				position.x < otherPosition.x + size.x &&
-				position.x + size.x > otherPosition.x &&
-				position.y < otherPosition.y + size.y &&
-				position.y + size.y > otherPosition.y &&
-				position.z < otherPosition.z + size.z &&
-				position.z + size.z > otherPosition.z
-			) {
-				// There is an overlap
-				return true;
-			}
-		}
-		// No overlap with any other boxes
-		return false;
-	}
+	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
 	// Updated Category function
 	const updatedCategories = categories.map((category) => {
-		const workCount = countWorksPerCategory(category.id);
+		const workCount = countWorksPerCategory(works, category.id);
 		const scaleFactor = 1 + workCount;
 		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return { ...category, size: roundVectorToCellSize(scaledSize) };
+		return { ...category, size: roundVectorToCellSize(scaledSize, cellSize) };
 	});
 
 	// Generate random positions for each category and store them in a map.
-	// Use the updated size for each category when generating positions
 	const categoryPositions = new Map();
-	updatedCategories.forEach((category) => {
-		let pos = getRandomGridPosition(range, category.size); // use updated size here
-		while (isOverlapping(pos, category.size)) {
-			// and here
-			pos = getRandomGridPosition(range, category.size); // and also here
-		}
-		categoryPositions.set(category.id, pos);
-	});
+	generateUniquePositions(updatedCategories, range, categoryPositions);
 
-	
 </script>
 
 {#each updatedCategories as category (category.id)}
