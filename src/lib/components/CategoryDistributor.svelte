@@ -4,9 +4,9 @@
 
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkDistributor from './WorkDistributor.svelte';
+	import { Text } from '@threlte/extras';
 
 	import { createEventDispatcher } from 'svelte';
-
 
 	// Event Dispatches Start
 	const dispatch = createEventDispatcher();
@@ -19,11 +19,41 @@
 	// Event Dispatches End
 
 	export let categories = [];
+	export let works = [];
 	export let size = new Vector3(500, 500, 500);
 	let cellSize = 500;
+	const range = new Vector3(10000, 10000, 10000);
 
-	// Define the range for each axis and the step size.
-	const range = new Vector3(5000, 5000, 5000);
+	function countWorksPerCategory(categoryId) {
+		return works.filter((work) => work.category === categoryId).length;
+	}
+
+	// Function to calculate the new size based on the count of works
+	function calculateNewSize(baseSize, count) {
+		const scaleFactor = 1 + count; // example scaling factor
+		const newSize = new Vector3(
+			baseSize.x * scaleFactor,
+			baseSize.y * scaleFactor,
+			baseSize.z * scaleFactor
+		);
+
+		// Round newSize components to the nearest multiple of cellSize
+		return newSize.set(
+			roundToCellSize(newSize.x),
+			roundToCellSize(newSize.y),
+			roundToCellSize(newSize.z)
+		);
+	}
+	
+	function roundToCellSize(value) {
+		return Math.round(value / cellSize) * cellSize;
+	}
+	// Update categories with the new size
+	const updatedCategories = categories.map((category) => {
+		const count = countWorksPerCategory(category.id);
+		const newSize = calculateNewSize(size, count);
+		return { ...category, size: newSize };
+	});
 
 	// Helper function to generate a random position on the grid.
 	function getRandomGridPosition(range, size) {
@@ -66,20 +96,18 @@
 		}
 		categoryPositions.set(category.id, pos);
 	});
-
-
 </script>
 
-{#each categories as category (category.id)}
+{#each updatedCategories as category (category.id)}
 	<CategoryBox
 		position={categoryPositions.get(category.id)}
-		{size}
+		size={category.size}
 		{cellSize}
 		id={category.id}
 		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
-
 	>
+		<Text text={category.title} fontSize={50} color="black" />
 		<WorkDistributor />
 	</CategoryBox>
 {/each}

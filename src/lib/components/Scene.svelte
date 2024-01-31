@@ -10,7 +10,9 @@
 	let cameraFOV = 25;
 
 	function onBoxClick(event) {
-		const { position } = event.detail;
+		const { position, size } = event.detail;
+		console.log('position:' + position )
+		console.log('size:', size)
 		cameraTarget.set(position);
 
 		const randomOffset = () => Math.random() * 3000 - 2000; // Random number
@@ -23,13 +25,13 @@
 		];
 		cameraPosition.set(zoomPosition);
 	}
-
+	
 	export let data; //Pasted data from the Database
 
 
 </script>
-
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={50000}>
+{console.log(data.works)}
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000}>
 	<OrbitControls
 		bind:target={$cameraTarget}
 		autoRotate
@@ -43,4 +45,4 @@
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
-<CategoryDistributor categories={data.categories} on:boxclick={onBoxClick} />
+<CategoryDistributor categories={data.categories} works={data.works} on:boxclick={onBoxClick} />

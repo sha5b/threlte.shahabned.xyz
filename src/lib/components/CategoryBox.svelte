@@ -51,13 +51,16 @@
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
+
 	const dispatch = createEventDispatcher();
+	
 	function handleClick() {
         if (!active) {
-            dispatch('boxclick', { position: position, id: id });
+            dispatch('boxclick', { position: position, size: size, id: id });
             console.log('Clicked on CategoryBox with id:', id);
         }
 	}
+
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
@@ -70,7 +73,7 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					dashArray={0.1}
+					dashArray={0.}
 					dashRatio={0.5}
 					attenuate={true}
 				/>
