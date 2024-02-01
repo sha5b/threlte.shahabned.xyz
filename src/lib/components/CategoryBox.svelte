@@ -26,7 +26,7 @@
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
 	const createBoxLines = (size) => {
-		const halfSize = size.clone().multiplyScalar(0.51);
+		const halfSize = size.clone().multiplyScalar(0.5);
 		const corners = [
 			new Vector3(-1, -1, -1),
 			new Vector3(1, -1, -1),
