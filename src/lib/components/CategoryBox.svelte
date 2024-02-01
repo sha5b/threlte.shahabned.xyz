@@ -14,19 +14,19 @@
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
 	onMount(() => {
-    // Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
-    rotation = [
-      Math.floor(Math.random() * 4) * Math.PI / 2,
-      Math.floor(Math.random() * 4) * Math.PI / 2,
-      Math.floor(Math.random() * 4) * Math.PI / 2
-    ];
-  });
+		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
+		rotation = [
+			(Math.floor(Math.random() * 4) * Math.PI) / 2,
+			(Math.floor(Math.random() * 4) * Math.PI) / 2,
+			(Math.floor(Math.random() * 4) * Math.PI) / 2
+		];
+	});
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
 	const createBoxLines = (size) => {
-		const halfSize = size.clone().multiplyScalar(0.5);
+		const halfSize = size.clone().multiplyScalar(0.51);
 		const corners = [
 			new Vector3(-1, -1, -1),
 			new Vector3(1, -1, -1),
@@ -119,7 +119,7 @@
 	}
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} rotation={rotation}>
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
 	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
@@ -147,8 +147,8 @@
 			<MeshLineGeometry points={line} />
 			<MeshLineMaterial
 				{color}
-				opacity={0.05}
-				width={0.05}
+				opacity={0.1}
+				width={0.1}
 				transparent={true}
 				dashArray={0.1}
 				dashRatio={0.2}

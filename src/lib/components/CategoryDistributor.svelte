@@ -71,6 +71,14 @@
 	const dynamicRange = calculateRange(categories, size);
 
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
+
+	function calculateFontSize(workCount) {
+		// Define your logic for changing the font size here
+		// This is a simple example where font size increases by 10 for each work
+		const baseFontSize = 300; // Set a base font size
+		const incrementPerWork = 10; // Set the increment per work
+		return baseFontSize + workCount * incrementPerWork;
+	}
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -90,13 +98,7 @@
 				category.size.z / 2 // Assuming you want it aligned with the front of the box
 			]}
 		>
-			<Text
-				text={category.title}
-				fontSize={400}
-				color="black"
-				anchorX="left"
-				anchorY="bottom"
-			/>
+			<Text text={category.title} fontSize={400} color="black" anchorX="left" anchorY="bottom" />
 		</T.Mesh>
 		{category.works}
 		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />
