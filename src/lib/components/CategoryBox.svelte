@@ -7,7 +7,7 @@
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
-	export let cellSize;
+	export let cellSize = 500;
 	export let width = 10;
 	export let color = 'black';
 
@@ -57,27 +57,36 @@
 		const lines = [];
 		const halfSize = size.clone().multiplyScalar(0.5);
 
+		// Add lines along the X axis
 		for (let x = 0; x <= cellCount.x; x++) {
-			for (let y = 0; y <= cellCount.y; y++) {
-				for (let z = 0; z <= cellCount.z; z++) {
-					// Add horizontal lines along the X axis
-					lines.push([
-						new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, -halfSize.z),
-						new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, halfSize.z)
-					]);
-					// Add vertical lines along the Y axis
-					lines.push([
-						new Vector3(-halfSize.x + x * cellSize, -halfSize.y, -halfSize.z + z * cellSize),
-						new Vector3(-halfSize.x + x * cellSize, halfSize.y, -halfSize.z + z * cellSize)
-					]);
-					// Add depth lines along the Z axis
-					lines.push([
-						new Vector3(-halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize),
-						new Vector3(halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize)
-					]);
-				}
+			for (let y = 0; y < cellCount.y; y++) {
+				lines.push([
+					new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, -halfSize.z),
+					new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, halfSize.z)
+				]);
 			}
 		}
+
+		// Add lines along the Y axis
+		for (let y = 0; y <= cellCount.y; y++) {
+			for (let z = 0; z < cellCount.z; z++) {
+				lines.push([
+					new Vector3(-halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize),
+					new Vector3(halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize)
+				]);
+			}
+		}
+
+		// Add lines along the Z axis
+		for (let z = 0; z <= cellCount.z; z++) {
+			for (let x = 0; x < cellCount.x; x++) {
+				lines.push([
+					new Vector3(-halfSize.x + x * cellSize, -halfSize.y, -halfSize.z + z * cellSize),
+					new Vector3(-halfSize.x + x * cellSize, halfSize.y, -halfSize.z + z * cellSize)
+				]);
+			}
+		}
+
 		return lines;
 	}
 
@@ -109,7 +118,7 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					dashArray={0}
+					dashArray={0.1}
 					dashRatio={0.5}
 					attenuate={true}
 				/>
@@ -120,13 +129,20 @@
 		<slot />
 	</T.Mesh>
 	<T.Mesh>
-		<T.BoxGeometry args={[size.x - 100, size.y - 100, size.z - 100]} />
+		<T.BoxGeometry args={[size.x, size.y, size.z]} />
 		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe />
 	</T.Mesh>
 	{#each gridLines as line}
 		<T.LineSegments>
 			<MeshLineGeometry points={line} />
-			<MeshLineMaterial color="#cccccc" />
+			<MeshLineMaterial
+				{color}
+				opacity={0.1}
+				width={0.1}
+				transparent={true}
+				dashArray={0.1}
+				dashRatio={0.1}
+			/>
 		</T.LineSegments>
 	{/each}
 </T.Group>

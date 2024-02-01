@@ -51,6 +51,7 @@
 		id={category.id}
 		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
+		workCount={countWorksPerCategory(works, category.id)}
 	>
 		<Text text={category.title} fontSize={50} color="black" />
 		<WorkDistributor />
