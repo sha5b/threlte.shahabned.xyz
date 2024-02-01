@@ -4,7 +4,7 @@
 	import { Vector3 } from 'three';
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkDistributor from './WorkDistributor.svelte';
-	import { Text } from '@threlte/extras';
+	import { Text, HTML } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 	import {
 		countWorksPerCategory,
@@ -61,7 +61,14 @@
 				category.size.z / 2 // Assuming you want it aligned with the front of the box
 			]}
 		>
-			<Text text={category.title} fontSize={400} color="black" anchorX="left" anchorY="bottom" />
+			<Text
+				text={category.title}
+				fontSize={400}
+				color="black"
+				anchorX="left"
+				anchorY="bottom"
+				billBoard={true}
+			/>
 		</T.Mesh>
 		{category.works}
 		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />
