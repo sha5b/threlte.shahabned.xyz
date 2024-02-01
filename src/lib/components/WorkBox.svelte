@@ -7,14 +7,14 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
-	export let width = 2;
+	export let width = 5;
 	export let color = 'white';
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
 	const createBoxLines = (size) => {
-		const halfSize = size.clone().multiplyScalar(0.5);
+		const halfSize = size.clone().multiplyScalar(0.49);
 		const corners = [
 			new Vector3(-1, -1, -1),
 			new Vector3(1, -1, -1),
@@ -46,12 +46,12 @@
 
 </script>
 
-<T.Group position={[position.x, position.y, position.z]}>
-	<T.Mesh>
+<T.Group position={[position.x, position.y, position.z]} >
+	<T.Mesh renderOrder={2}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
-				<MeshLineMaterial {width} {color} opacity={1} transparent={true} attenuate={true} />
+				<MeshLineMaterial {width} {color} opacity={1} transparent={true}  />
 			</T.Mesh>
 		{/each}
 	</T.Mesh>

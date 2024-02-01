@@ -15,7 +15,7 @@
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
 	const createBoxLines = (size) => {
-		const halfSize = size.clone().multiplyScalar(0.5);
+		const halfSize = size.clone().multiplyScalar(0.51);
 		const corners = [
 			new Vector3(-1, -1, -1),
 			new Vector3(1, -1, -1),
@@ -109,7 +109,7 @@
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
-	<T.Mesh>
+	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -118,8 +118,6 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					dashArray={0.1}
-					dashRatio={0.5}
 					attenuate={true}
 				/>
 			</T.Mesh>
@@ -133,12 +131,12 @@
 		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe />
 	</T.Mesh>
 	{#each gridLines as line}
-		<T.LineSegments>
+		<T.LineSegments renderOrder={0}>
 			<MeshLineGeometry points={line} />
 			<MeshLineMaterial
 				{color}
-				opacity={0.1}
-				width={0.1}
+				opacity={0.05}
+				width={0.05}
 				transparent={true}
 				dashArray={0.1}
 				dashRatio={0.1}
