@@ -10,6 +10,7 @@
 	export let cellSize = 500;
 	export let width = 10;
 	export let color = 'black';
+	export let workCount;
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));

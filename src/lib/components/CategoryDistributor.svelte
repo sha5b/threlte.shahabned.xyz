@@ -31,10 +31,11 @@
 
 	// Updated Category function
 	const updatedCategories = categories.map((category) => {
+		const categoryWorks = works.filter((work) => work.category === category.id);
 		const workCount = countWorksPerCategory(works, category.id);
 		const scaleFactor = 1 + workCount;
 		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return { ...category, size: roundVectorToCellSize(scaledSize, cellSize) };
+		return { ...category,works: categoryWorks, size: roundVectorToCellSize(scaledSize, cellSize) };
 	});
 
 	// Generate random positions for each category and store them in a map.
@@ -48,12 +49,13 @@
 		position={categoryPositions.get(category.id)}
 		size={category.size}
 		{cellSize}
-		id={category.id}
+		id={category.id}  
 		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
 		workCount={countWorksPerCategory(works, category.id)}
 	>
 		<Text text={category.title} fontSize={50} color="black" />
-		<WorkDistributor />
+		{category.works}
+		<WorkDistributor works={category.works} categorySize={category.size} {cellSize}/>
 	</CategoryBox>
 {/each}

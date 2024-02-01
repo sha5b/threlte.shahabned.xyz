@@ -5,8 +5,8 @@
 	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
 
 	export let position = new Vector3(0, 0, 0);
-	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
+	export let size = new Vector3(cellSize, cellSize, cellSize);
 	export let width = 5;
 	export let color = 'white';
 
