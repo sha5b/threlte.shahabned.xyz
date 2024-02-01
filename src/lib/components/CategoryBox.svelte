@@ -2,7 +2,7 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
-	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
+	import { MeshLineGeometry, MeshLineMaterial, interactivity, Grid } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 
 	export let position = new Vector3(0, 0, 0);
@@ -10,7 +10,6 @@
 	export let cellSize;
 	export let width = 10;
 	export let color = 'black';
-
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -46,25 +45,62 @@
 
 	$: lines = createBoxLines(size);
 
+	// Calculate the number of cells in each dimension
+	$: cellCount = {
+		x: Math.floor(size.x / cellSize),
+		y: Math.floor(size.y / cellSize),
+		z: Math.floor(size.z / cellSize)
+	};
+
+	// Create grid lines based on the calculated cell count
+	function createGridLines(cellCount, cellSize) {
+		const lines = [];
+		const halfSize = size.clone().multiplyScalar(0.5);
+
+		for (let x = 0; x <= cellCount.x; x++) {
+			for (let y = 0; y <= cellCount.y; y++) {
+				for (let z = 0; z <= cellCount.z; z++) {
+					// Add horizontal lines along the X axis
+					lines.push([
+						new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, -halfSize.z),
+						new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, halfSize.z)
+					]);
+					// Add vertical lines along the Y axis
+					lines.push([
+						new Vector3(-halfSize.x + x * cellSize, -halfSize.y, -halfSize.z + z * cellSize),
+						new Vector3(-halfSize.x + x * cellSize, halfSize.y, -halfSize.z + z * cellSize)
+					]);
+					// Add depth lines along the Z axis
+					lines.push([
+						new Vector3(-halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize),
+						new Vector3(halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize)
+					]);
+				}
+			}
+		}
+		return lines;
+	}
+
+	$: gridLines = createGridLines(cellCount, cellSize);
+
 	export let id; // Export id to set it from the parent component
-	export let active // Add this line to accept an 'active' prop
+	export let active; // Add this line to accept an 'active' prop
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
 
 	const dispatch = createEventDispatcher();
-	
-	function handleClick() {
-        if (!active) {
-            dispatch('boxclick', { position: position, size: size, id: id });
-            console.log('Clicked on CategoryBox with id:', id);
-        }
-	}
 
+	function handleClick() {
+		if (!active) {
+			dispatch('boxclick', { position: position, size: size, id: id });
+			console.log('Clicked on CategoryBox with id:', id);
+		}
+	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
-	<T.Mesh >
+	<T.Mesh>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -73,7 +109,7 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					dashArray={0.}
+					dashArray={0}
 					dashRatio={0.5}
 					attenuate={true}
 				/>
@@ -85,6 +121,12 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x - 100, size.y - 100, size.z - 100]} />
-		<T.MeshBasicMaterial  opacity={0} transparent={true} doubleSided={true} wireframe/>
+		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe />
 	</T.Mesh>
+	{#each gridLines as line}
+		<T.LineSegments>
+			<MeshLineGeometry points={line} />
+			<MeshLineMaterial color="#cccccc" />
+		</T.LineSegments>
+	{/each}
 </T.Group>
