@@ -1,2 +1,14 @@
 # threlte.shahabned.xyz
- 3d Portfolio made with Threlte, Svelte and Three
+Interactive 3D Portfolio made with SvelteKit2, Svelte 4, Threlte, Three.js
+
+## Install
+
+### npm install
+### npm run dev
+
+.env file is not synced. so the website won't work out of the box, you have to add your Pocketbase URL like this VITE_API_URL=https://mypocketbaseurl.com/  
+
+
+## Documentation in JSDocs inside the Files
+
+
