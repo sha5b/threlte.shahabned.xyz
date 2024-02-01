@@ -121,4 +121,3 @@ export function createBoxClickHandler(dispatch, activeBoxSetter) {
 		dispatch('boxclick', event.detail);
 	};
 }
-

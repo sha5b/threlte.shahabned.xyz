@@ -58,4 +58,8 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
+	<T.Mesh>
+		<T.BoxGeometry args={[size.x, size.y, size.z]} />
+		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe color="black"/>
+	</T.Mesh>
 </T.Group>

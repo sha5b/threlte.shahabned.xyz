@@ -5,18 +5,19 @@
 	import { Vector3 } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
+	import { tweened } from 'svelte/motion';
 
 	export let data; //Pasted data from the Database
 
 	let cameraPosition = writable([-25000, 25000, 25000]); // Store for camera position
 	let cameraTarget = writable([0, 0, 0]); // Store for camera targets
 	let cameraFOV = 25;
+	let cameraRotation = writable([0, 0, 0]);
 
 	// Handle Mouse Events
 
 	function onBoxClick(event) {
-		const { position, size } = event.detail; // Get the position and size of the category box
-		cameraTarget.set(position);
+		const { position, size, rotation } = event.detail; // Get the position and size of the category box
 
 		// Calculate the distance required to fit the box in view
 		const distanceToFitBox = size.y / 2 / Math.tan((cameraFOV * Math.PI) / 180 / 2);
@@ -35,19 +36,20 @@
 		newCameraPosition.y += randomOffset();
 		newCameraPosition.z += randomOffset();
 
+		cameraTarget.set(position);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+		console.log('rotation', rotation.map((r) => (r * 180) / Math.PI).join(', '));
+		cameraRotation.set(rotation);
 	}
 </script>
 
-{console.log(data.works)}
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000}>
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000} >
 	<OrbitControls
 		bind:target={$cameraTarget}
 		autoRotate
 		enableZoom={true}
 		enableDamping
-		autoRotateSpeed={0.5}
-		target.y={1.5}
+		autoRotateSpeed={0.25}
 	/>
 </T.PerspectiveCamera>
 

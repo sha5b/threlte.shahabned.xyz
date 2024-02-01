@@ -3,7 +3,7 @@
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity, Grid } from '@threlte/extras';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
@@ -11,6 +11,16 @@
 	export let width = 25;
 	export let color = 'black';
 	export let workCount;
+	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
+
+	onMount(() => {
+    // Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
+    rotation = [
+      Math.floor(Math.random() * 4) * Math.PI / 2,
+      Math.floor(Math.random() * 4) * Math.PI / 2,
+      Math.floor(Math.random() * 4) * Math.PI / 2
+    ];
+  });
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -103,13 +113,13 @@
 
 	function handleClick() {
 		if (!active) {
-			dispatch('boxclick', { position: position, size: size, id: id });
+			dispatch('boxclick', { position: position, size: size, rotation: rotation, id: id });
 			console.log('Clicked on CategoryBox with id:', id);
 		}
 	}
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} rotation={rotation}>
 	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>

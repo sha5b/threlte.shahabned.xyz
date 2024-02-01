@@ -19,8 +19,6 @@
 	export let size = new Vector3(500, 500, 500);
 
 	let cellSize = 500;
-	const range = new Vector3(25000, 25000, 25000);
-
 	// Event Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
@@ -41,7 +39,38 @@
 
 	// Generate random positions for each category and store them in a map.
 	const categoryPositions = new Map();
-	generateUniquePositions(updatedCategories, range, categoryPositions);
+
+	function calculateRange(categories, baseSize, padding = 1.05) {
+		// Reduced padding for tighter spacing
+		let maxScaledSize = new Vector3();
+
+		// Calculate the maximum scaled size among all categories
+		categories.forEach((category) => {
+			const workCount = countWorksPerCategory(works, category.id);
+			const scaleFactor = 1 + workCount;
+			const scaledSize = calculateScaledSize(baseSize.clone(), scaleFactor);
+			maxScaledSize.x = Math.max(maxScaledSize.x, scaledSize.x);
+			maxScaledSize.y = Math.max(maxScaledSize.y, scaledSize.y);
+			maxScaledSize.z = Math.max(maxScaledSize.z, scaledSize.z);
+		});
+
+		// Calculate the arrangement of the boxes in a grid layout
+		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
+
+		// Calculate total volume needed with padding
+		const totalVolume =
+			(maxScaledSize.x * numBoxesPerSide + (numBoxesPerSide - 1) * padding) *
+			(maxScaledSize.y * numBoxesPerSide + (numBoxesPerSide - 1) * padding) *
+			(maxScaledSize.z * numBoxesPerSide + (numBoxesPerSide - 1) * padding);
+
+		// Derive range from total volume (for a cubic distribution)
+		const sideLength = Math.cbrt(totalVolume);
+		return new Vector3(sideLength, sideLength, sideLength);
+	}
+	// Use the range for generateUniquePositions
+	const dynamicRange = calculateRange(categories, size);
+
+	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -67,7 +96,6 @@
 				color="black"
 				anchorX="left"
 				anchorY="bottom"
-				billBoard={true}
 			/>
 		</T.Mesh>
 		{category.works}
