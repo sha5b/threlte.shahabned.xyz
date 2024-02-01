@@ -119,7 +119,6 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					attenuate={true}
 					dashArray={0.1}
 					dashRatio={0.3}
 				/>
