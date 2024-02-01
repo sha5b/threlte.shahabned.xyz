@@ -7,7 +7,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
-	export let width = 5;
+	export let width = 10;
 	export let color = 'white';
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;

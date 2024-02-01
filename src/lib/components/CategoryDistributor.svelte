@@ -1,5 +1,6 @@
 <script>
 	//@ts-nocheck
+	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkDistributor from './WorkDistributor.svelte';
@@ -35,13 +36,12 @@
 		const workCount = countWorksPerCategory(works, category.id);
 		const scaleFactor = 1 + workCount;
 		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return { ...category,works: categoryWorks, size: roundVectorToCellSize(scaledSize, cellSize) };
+		return { ...category, works: categoryWorks, size: roundVectorToCellSize(scaledSize, cellSize) };
 	});
 
 	// Generate random positions for each category and store them in a map.
 	const categoryPositions = new Map();
 	generateUniquePositions(updatedCategories, range, categoryPositions);
-
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -49,13 +49,21 @@
 		position={categoryPositions.get(category.id)}
 		size={category.size}
 		{cellSize}
-		id={category.id}  
+		id={category.id}
 		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
 		workCount={countWorksPerCategory(works, category.id)}
 	>
-		<Text text={category.title} fontSize={50} color="black" />
+		<T.Mesh
+			position={[
+				category.size.x / 2 + 125, // Half the size to the right
+				-category.size.y / 2 - 125, // Half the size down
+				category.size.z / 2 // Assuming you want it aligned with the front of the box
+			]}
+		>
+			<Text text={category.title} fontSize={400} color="black" anchorX="left" anchorY="bottom" />
+		</T.Mesh>
 		{category.works}
-		<WorkDistributor works={category.works} categorySize={category.size} {cellSize}/>
+		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />
 	</CategoryBox>
 {/each}

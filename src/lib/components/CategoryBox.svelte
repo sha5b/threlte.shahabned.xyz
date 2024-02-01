@@ -8,7 +8,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
-	export let width = 10;
+	export let width = 25;
 	export let color = 'black';
 	export let workCount;
 
@@ -120,6 +120,8 @@
 					opacity={1}
 					transparent={true}
 					attenuate={true}
+					dashArray={0.1}
+					dashRatio={0.3}
 				/>
 			</T.Mesh>
 		{/each}
@@ -140,7 +142,7 @@
 				width={0.05}
 				transparent={true}
 				dashArray={0.1}
-				dashRatio={0.1}
+				dashRatio={0.2}
 			/>
 		</T.LineSegments>
 	{/each}
