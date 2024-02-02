@@ -28,14 +28,33 @@
 	}
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
+
+  // Define a spacing factor; 2 will double the size, providing ample space
+  const spacingFactor = 2;
 	// Updated Category function
-	const updatedCategories = categories.map((category) => {
-		const categoryWorks = works.filter((work) => work.category === category.id);
-		const workCount = countWorksPerCategory(works, category.id);
-		const scaleFactor = 1 + workCount;
-		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return { ...category, works: categoryWorks, size: roundVectorToCellSize(scaledSize, cellSize) };
-	});
+  const updatedCategories = categories.map((category) => {
+    const categoryWorks = works.filter((work) => work.category === category.id);
+    const workCount = categoryWorks.length;
+
+    if (workCount === 0) {
+      console.error(`Category with id ${category.id} has no works.`);
+      return { ...category, works: categoryWorks, size: new Vector3() };
+    }
+
+    const baseArea = Math.ceil(Math.sqrt(workCount));
+    const height = Math.ceil(workCount / baseArea);
+
+    const scaledSize = new Vector3(
+      baseArea * cellSize * spacingFactor,
+      height * cellSize * spacingFactor,
+      baseArea * cellSize * spacingFactor
+    );
+
+    // Log the size to see if it contains NaN values
+    console.log(`Category id ${category.id} size:`, scaledSize);
+
+    return { ...category, works: categoryWorks, size: scaledSize };
+  });
 
 	// Generate random positions for each category and store them in a map.
 	const categoryPositions = new Map();
@@ -68,17 +87,9 @@
 		return new Vector3(sideLength, sideLength, sideLength);
 	}
 	// Use the range for generateUniquePositions
-	const dynamicRange = calculateRange(categories, size);
+	const dynamicRange = calculateRange(updatedCategories, size);
 
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
-
-	function calculateFontSize(workCount) {
-		// Define your logic for changing the font size here
-		// This is a simple example where font size increases by 10 for each work
-		const baseFontSize = 300; // Set a base font size
-		const incrementPerWork = 10; // Set the increment per work
-		return baseFontSize + workCount * incrementPerWork;
-	}
 </script>
 
 {#each updatedCategories as category (category.id)}
