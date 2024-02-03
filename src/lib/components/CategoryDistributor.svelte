@@ -28,67 +28,64 @@
 	}
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
-
-  // Define a spacing factor; 2 will double the size, providing ample space
-  const spacingFactor = 2;
+	// Define a spacing factor; 2 will double the size, providing ample space
+	const spacingFactor = 2;
 	// Updated Category function
-  const updatedCategories = categories.map((category) => {
-    const categoryWorks = works.filter((work) => work.category === category.id);
-    const workCount = categoryWorks.length;
+function calculateCategorySize(workCount) {
+	if (workCount === 0) return new Vector3();
 
-    if (workCount === 0) {
-      console.error(`Category with id ${category.id} has no works.`);
-      return { ...category, works: categoryWorks, size: new Vector3() };
-    }
+	const baseArea = Math.ceil(Math.sqrt(workCount));
+	const height = Math.ceil(workCount / baseArea);
+	return new Vector3(
+		baseArea * cellSize * spacingFactor,
+		height * cellSize * spacingFactor,
+		baseArea * cellSize * spacingFactor
+	);
+}
 
-    const baseArea = Math.ceil(Math.sqrt(workCount));
-    const height = Math.ceil(workCount / baseArea);
+function updateCategoriesWithSizeAndWorks() {
+	return categories.map(category => {
+		const categoryWorks = works.filter(work => work.category === category.id);
+		const workCount = categoryWorks.length;
 
-    const scaledSize = new Vector3(
-      baseArea * cellSize * spacingFactor,
-      height * cellSize * spacingFactor,
-      baseArea * cellSize * spacingFactor
-    );
+		if (workCount === 0) {
+			console.error(`Category with id ${category.id} has no works.`);
+		} else {
+			console.log(`Category id ${category.id} size:`, calculateCategorySize(workCount));
+		}
 
-    // Log the size to see if it contains NaN values
-    console.log(`Category id ${category.id} size:`, scaledSize);
+		return { ...category, works: categoryWorks, size: calculateCategorySize(workCount) };
+	});
+}
 
-    return { ...category, works: categoryWorks, size: scaledSize };
-  });
+const updatedCategories = updateCategoriesWithSizeAndWorks();
+const categoryPositions = new Map();
 
-	// Generate random positions for each category and store them in a map.
-	const categoryPositions = new Map();
-
-	function calculateRange(categories, baseSize, padding = 1.05) {
-		// Reduced padding for tighter spacing
-		let maxScaledSize = new Vector3();
-
-		// Calculate the maximum scaled size among all categories
-		categories.forEach((category) => {
-			const workCount = countWorksPerCategory(works, category.id);
-			const scaleFactor = 1 + workCount;
-			const scaledSize = calculateScaledSize(baseSize.clone(), scaleFactor);
-			maxScaledSize.x = Math.max(maxScaledSize.x, scaledSize.x);
-			maxScaledSize.y = Math.max(maxScaledSize.y, scaledSize.y);
-			maxScaledSize.z = Math.max(maxScaledSize.z, scaledSize.z);
-		});
-
-		// Calculate the arrangement of the boxes in a grid layout
+function calculateMaxScaledSize(categories) {
+	return categories.reduce((maxSize, category) => {
+		const workCount = countWorksPerCategory(works, category.id);
+		const scaleFactor = 1 + workCount;
+		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
+		return {
+			x: Math.max(maxSize.x, scaledSize.x),
+			y: Math.max(maxSize.y, scaledSize.y),
+			z: Math.max(maxSize.z, scaledSize.z)
+		};
+	}, new Vector3());
+}
+	function calculateRange(categories, maxScaledSize, padding = 1.05) {
 		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
-
-		// Calculate total volume needed with padding
-		const totalVolume =
-			(maxScaledSize.x * numBoxesPerSide + (numBoxesPerSide - 1) * padding) *
-			(maxScaledSize.y * numBoxesPerSide + (numBoxesPerSide - 1) * padding) *
-			(maxScaledSize.z * numBoxesPerSide + (numBoxesPerSide - 1) * padding);
-
-		// Derive range from total volume (for a cubic distribution)
-		const sideLength = Math.cbrt(totalVolume);
+		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
+		const volume = ['x', 'y', 'z'].reduce(
+			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
+			1
+		);
+		const sideLength = Math.cbrt(volume);
 		return new Vector3(sideLength, sideLength, sideLength);
 	}
-	// Use the range for generateUniquePositions
-	const dynamicRange = calculateRange(updatedCategories, size);
 
+	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
+	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
 </script>
 
