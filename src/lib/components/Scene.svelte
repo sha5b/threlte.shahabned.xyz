@@ -14,6 +14,10 @@
 	let cameraFOV = 25;
 	let cameraRotation = writable([0, 0, 0]);
 
+  // Define your fog color and density
+  let fogColor = 'black'; // white fog
+  let density = 0.25; // The density of the fog. Default is 0.00025.
+	
 	// Handle Mouse Events
 
 	function onBoxClick(event) {
@@ -52,7 +56,7 @@
 		autoRotateSpeed={0.25}
 	/>
 </T.PerspectiveCamera>
-
+<T.FogExp2 color={fogColor} density={density} />
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 

@@ -26,7 +26,7 @@
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
 	const createBoxLines = (size) => {
-		const halfSize = size.clone().multiplyScalar(0.50);
+		const halfSize = size.clone().multiplyScalar(0.5);
 		const corners = [
 			new Vector3(-1, -1, -1),
 			new Vector3(1, -1, -1),
@@ -142,17 +142,12 @@
 		<T.BoxGeometry args={[size.x, size.y, size.z]} />
 		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe />
 	</T.Mesh>
-	{#each gridLines as line}
-		<T.LineSegments renderOrder={0}>
-			<MeshLineGeometry points={line} />
-			<MeshLineMaterial
-				{color}
-				opacity={0.1}
-				width={0.1}
-				transparent={true}
-				dashArray={0.1}
-				dashRatio={0.2}
-			/>
-		</T.LineSegments>
-	{/each}
+	{#if active}
+		{#each gridLines as line}
+			<T.LineSegments renderOrder={0}>
+				<MeshLineGeometry points={line} />
+				<MeshLineMaterial {color} opacity={0.1} width={0.1} transparent={true} />
+			</T.LineSegments>
+		{/each}
+	{/if}
 </T.Group>
