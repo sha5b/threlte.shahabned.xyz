@@ -31,48 +31,48 @@
 	// Define a spacing factor; 2 will double the size, providing ample space
 	const spacingFactor = 2;
 	// Updated Category function
-function calculateCategorySize(workCount) {
-	if (workCount === 0) return new Vector3();
+	function calculateCategorySize(workCount) {
+		if (workCount === 0) return new Vector3();
 
-	const baseArea = Math.ceil(Math.sqrt(workCount));
-	const height = Math.ceil(workCount / baseArea);
-	return new Vector3(
-		baseArea * cellSize * spacingFactor,
-		height * cellSize * spacingFactor,
-		baseArea * cellSize * spacingFactor
-	);
-}
+		const baseArea = Math.ceil(Math.sqrt(workCount));
+		const height = Math.ceil(workCount / baseArea);
+		return new Vector3(
+			baseArea * cellSize * spacingFactor,
+			height * cellSize * spacingFactor,
+			baseArea * cellSize * spacingFactor
+		);
+	}
 
-function updateCategoriesWithSizeAndWorks() {
-	return categories.map(category => {
-		const categoryWorks = works.filter(work => work.category === category.id);
-		const workCount = categoryWorks.length;
+	function updateCategoriesWithSizeAndWorks() {
+		return categories.map((category) => {
+			const categoryWorks = works.filter((work) => work.category === category.id);
+			const workCount = categoryWorks.length;
 
-		if (workCount === 0) {
-			console.error(`Category with id ${category.id} has no works.`);
-		} else {
-			console.log(`Category id ${category.id} size:`, calculateCategorySize(workCount));
-		}
+			if (workCount === 0) {
+				console.error(`Category with id ${category.id} has no works.`);
+			} else {
+				console.log(`Category id ${category.id} size:`, calculateCategorySize(workCount));
+			}
 
-		return { ...category, works: categoryWorks, size: calculateCategorySize(workCount) };
-	});
-}
+			return { ...category, works: categoryWorks, size: calculateCategorySize(workCount) };
+		});
+	}
 
-const updatedCategories = updateCategoriesWithSizeAndWorks();
-const categoryPositions = new Map();
+	const updatedCategories = updateCategoriesWithSizeAndWorks();
+	const categoryPositions = new Map();
 
-function calculateMaxScaledSize(categories) {
-	return categories.reduce((maxSize, category) => {
-		const workCount = countWorksPerCategory(works, category.id);
-		const scaleFactor = 1 + workCount;
-		const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
-		return {
-			x: Math.max(maxSize.x, scaledSize.x),
-			y: Math.max(maxSize.y, scaledSize.y),
-			z: Math.max(maxSize.z, scaledSize.z)
-		};
-	}, new Vector3());
-}
+	function calculateMaxScaledSize(categories) {
+		return categories.reduce((maxSize, category) => {
+			const workCount = countWorksPerCategory(works, category.id);
+			const scaleFactor = 1 + workCount;
+			const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
+			return {
+				x: Math.max(maxSize.x, scaledSize.x),
+				y: Math.max(maxSize.y, scaledSize.y),
+				z: Math.max(maxSize.z, scaledSize.z)
+			};
+		}, new Vector3());
+	}
 	function calculateRange(categories, maxScaledSize, padding = 1.05) {
 		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
 		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
