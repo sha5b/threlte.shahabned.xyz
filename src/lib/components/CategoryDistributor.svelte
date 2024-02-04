@@ -17,6 +17,7 @@
 	export let categories = [];
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
+	let color = 'white';
 
 	let cellSize = 500;
 	// Event Dispatcher
@@ -98,6 +99,7 @@
 		active={activeBoxId === category.id}
 		on:boxclick={handleBoxClick}
 		workCount={countWorksPerCategory(works, category.id)}
+		{color}
 	>
 		<T.Mesh
 			position={[
@@ -106,7 +108,7 @@
 				category.size.z / 2 // Assuming you want it aligned with the front of the box
 			]}
 		>
-			<Text text={category.title} fontSize={400} color="black" anchorX="left" anchorY="bottom" />
+			<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color}/>
 		</T.Mesh>
 		{category.works}
 		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />

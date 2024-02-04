@@ -11,7 +11,8 @@
 	import { tick } from 'svelte';
 
 	export let data; //Pasted data from the Database
-
+	let manualControl = false;
+	
 	let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
 		easing: cubicOut

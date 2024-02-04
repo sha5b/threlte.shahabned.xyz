@@ -9,7 +9,7 @@
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
 	export let width = 25;
-	export let color = 'black';
+	export let color = 'white';
 	export let workCount;
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
