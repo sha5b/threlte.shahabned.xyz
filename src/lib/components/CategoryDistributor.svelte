@@ -78,7 +78,7 @@
 
 	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
 	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
-	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
+	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
 </script>
 
 

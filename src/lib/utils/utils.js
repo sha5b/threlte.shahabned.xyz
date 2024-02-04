@@ -3,24 +3,8 @@
 import { Vector3 } from 'three';
 
 /**
- * Generates a random position on a grid within a given range, aligned to a specified size.
- * 
- * @param {Vector3} range - The range of the grid in x, y, and z directions.
- * @param {Vector3} size - The size of the grid cell to align the position to.
- * @returns {Vector3} A Vector3 object representing the random position on the grid.
- */
-export function getRandomGridPosition(range, size) {
-	const step = Math.max(size.x, size.y, size.z);
-	return new Vector3(
-		Math.floor(Math.random() * ((range.x - size.x) / step)) * step - (range.x - size.x) / 2,
-		Math.floor(Math.random() * ((range.y - size.y) / step)) * step - (range.y - size.y) / 2,
-		Math.floor(Math.random() * ((range.z - size.z) / step)) * step - (range.z - size.z) / 2
-	);
-}
-
-/**
  * Checks if a given position overlaps with any existing positions in a collection.
- * 
+ *
  * @param {Vector3} position - The position to check for overlap.
  * @param {Vector3} size - The size of the grid cell to use for checking overlap.
  * @param {Map} categoryPositions - A collection of other positions to check against.
@@ -44,19 +28,38 @@ export function isOverlapping(position, size, categoryPositions) {
 
 /**
  * Generates unique positions for each category on a grid within a given range, ensuring no overlaps.
- * 
+ *
  * @param {Array} categories - An array of category objects, each with an id and size property.
  * @param {Vector3} range - The range of the grid in x, y, and z directions.
  * @param {Map} categoryPositions - A Map to store generated positions indexed by category id.
  */
-export function generateUniquePositions(categories, range, categoryPositions) {
+export function generateUniquePositions(categories, range, categoryPositions, cellSize) {
 	categories.forEach((category) => {
 		let pos = getRandomGridPosition(range, category.size);
+		// Round the position to the nearest cell size
+		pos = roundVectorToCellSize(pos, cellSize);
 		while (isOverlapping(pos, category.size, categoryPositions)) {
 			pos = getRandomGridPosition(range, category.size);
+			pos = roundVectorToCellSize(pos, cellSize); // Round again after getting a new position
 		}
 		categoryPositions.set(category.id, pos);
 	});
+}
+
+/**
+ * Generates a random position on a grid within a given range, aligned to a specified size.
+ *
+ * @param {Vector3} range - The range of the grid in x, y, and z directions.
+ * @param {Vector3} size - The size of the grid cell to align the position to.
+ * @returns {Vector3} A Vector3 object representing the random position on the grid.
+ */
+export function getRandomGridPosition(range, size) {
+	const step = Math.max(size.x, size.y, size.z);
+	return new Vector3(
+		Math.floor(Math.random() * ((range.x - size.x) / step)) * step - (range.x - size.x) / 2,
+		Math.floor(Math.random() * ((range.y - size.y) / step)) * step - (range.y - size.y) / 2,
+		Math.floor(Math.random() * ((range.z - size.z) / step)) * step - (range.z - size.z) / 2
+	);
 }
 
 /**
@@ -83,7 +86,7 @@ export function calculateScaledSize(baseSize, scaleFactor) {
 
 /**
  * Rounds the components of a vector to the nearest multiple of a given cell size.
- * 
+ *
  * @param {Vector3} vector - The vector to be rounded.
  * @param {number} cellSize - The cell size to round each component of the vector to.
  * @returns {Vector3} A new vector with each component rounded to the nearest cell size.
@@ -109,7 +112,7 @@ export function roundToCellSize(value, cellSize) {
 
 /**
  * Creates an event handler function for box click events.
- * 
+ *
  * @param {Function} dispatch - The dispatch function to emit custom events.
  * @param {Function} activeBoxSetter - A setter function to update the active box ID.
  * @returns {Function} A function to handle box click events.

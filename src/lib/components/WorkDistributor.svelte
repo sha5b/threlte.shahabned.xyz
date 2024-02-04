@@ -23,7 +23,7 @@
 	// Assuming works have an 'id' property
 	// We are using a size object with the same dimensions as cellSize for all works
 	const workSize = new Vector3(cellSize, cellSize, cellSize);
-	generateUniquePositions(works.map(work => ({ ...work, size: workSize })), range, workPositions);
+	generateUniquePositions(works.map(work => ({ ...work, size: workSize })), range, workPositions, cellSize);
 
 </script>
 
