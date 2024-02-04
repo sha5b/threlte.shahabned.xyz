@@ -140,7 +140,7 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x, size.y, size.z]} />
-		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} color='black'/>
+		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} color='black' wireframe/>
 	</T.Mesh>
 	{#if active}
 		{#each gridLines as line}

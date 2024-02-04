@@ -11,15 +11,15 @@
 
 	export let data; //Pasted data from the Database
 
-	$: cameraPosition = tweened([-25000, 25000, 25000], {
+	let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
 		easing: cubicOut
 	});
-	$: cameraTarget = tweened([0, 0, 0], {
+	let cameraTarget = tweened([0, 0, 0], {
 		duration: 2500,
 		easing: cubicOut
 	});
-	let cameraFOV = 25;
+	let cameraFOV = 45;
 	let cameraRotation = writable([0, 0, 0]);
 
 	// Handle Mouse Events
@@ -41,7 +41,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={50000}>
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={75000}>
 	<OrbitControls
 		bind:target={$cameraTarget}
 		autoRotate
