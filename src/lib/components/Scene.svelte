@@ -2,7 +2,7 @@
 	//@ts-nocheck
 
 	import { T } from '@threlte/core';
-	import { OrbitControls } from '@threlte/extras';
+	import { OrbitControls, Grid } from '@threlte/extras';
 	import { Vector3 } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
@@ -10,6 +10,8 @@
 	import { cubicOut } from 'svelte/easing';
 
 	export let data; //Pasted data from the Database
+	let cellSize = 1000;
+	let gridSize = 75000;
 
 	let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
@@ -25,8 +27,6 @@
 	// Handle Mouse Events
 
 	function onBoxClick(event) {
-
-
 		const { position, size, rotation, id } = event.detail;
 		const extraSpaceFactor = 1.2;
 		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
@@ -39,7 +39,16 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-		console.log('Clicked on CategoryBox with id:', id, 'position:', position, 'size:', size, 'rotation:', rotation); ;
+		console.log(
+			'Clicked on CategoryBox with id:',
+			id,
+			'position:',
+			position,
+			'size:',
+			size,
+			'rotation:',
+			rotation
+		);
 	}
 </script>
 
@@ -56,3 +65,44 @@
 <T.AmbientLight intensity={0.2} />
 
 <CategoryDistributor categories={data.categories} works={data.works} on:boxclick={onBoxClick} />
+<T.Group >
+	<Grid
+		plane="xz"
+		cellColor="white"
+		opacity={0.2}
+		cellThickness={0.25}
+		{cellSize}
+		sectionColor="white"
+		sectionThickness={0.5}
+		sectionSize={cellSize * 5}
+		infiniteGrid
+		fadeDistance={75000}
+		followCamera
+	/>
+	<Grid
+		plane="xy"
+		cellColor="white"
+		opacity={0.2}
+		cellThickness={0.25}
+		{cellSize}
+		sectionColor="white"
+		sectionThickness={0.5}
+		sectionSize={cellSize * 5}
+		infiniteGrid
+		fadeDistance={75000}
+		followCamera
+	/>
+	<Grid
+		plane="zy"
+		cellColor="white"
+		opacity={0.2}
+		cellThickness={0.25}
+		{cellSize}
+		sectionColor="white"
+		sectionThickness={0.5}
+		sectionSize={cellSize * 5}
+		infiniteGrid
+		fadeDistance={75000}
+		followCamera
+	/>
+</T.Group>

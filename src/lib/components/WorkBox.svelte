@@ -2,7 +2,8 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Group, Vector3 } from 'three';
-	import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras';
+	import { MeshLineGeometry, MeshLineMaterial, interactivity} from '@threlte/extras';
+	import { createEventDispatcher } from 'svelte';
 
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
@@ -44,14 +45,29 @@
 
 	$: lines = createBoxLines(size);
 
+	export let id; // Export id to set it from the parent component
+	export let active; // Add this line to accept an 'active' prop
+
+	// Handling the Interactivity of the CategoryBox
+	const { target } = interactivity();
+
+	const dispatch = createEventDispatcher();
+
+	function handleClick(event) {
+		if (!active) {
+			event.stopPropagation();
+			dispatch('boxclick', { position, size, id, active: false });
+
+		}
+	}
 </script>
 
-<T.Group position={[position.x, position.y, position.z]} >
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} >
 	<T.Mesh renderOrder={2}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
-				<MeshLineMaterial {width} {color} opacity={1} transparent={true}  />
+				<MeshLineMaterial {width} {color} opacity={1} transparent={true} />
 			</T.Mesh>
 		{/each}
 	</T.Mesh>
@@ -60,6 +76,12 @@
 	</T.Mesh>
 	<T.Mesh>
 		<T.BoxGeometry args={[size.x, size.y, size.z]} />
-		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} wireframe color="black"/>
+		<T.MeshBasicMaterial
+			opacity={0}
+			transparent={true}
+			doubleSided={true}
+			wireframe
+			color="black"
+		/>
 	</T.Mesh>
 </T.Group>
