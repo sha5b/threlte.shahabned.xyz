@@ -25,7 +25,8 @@
 	// Handle Mouse Events
 
 	function onBoxClick(event) {
-		 event.stopPropagation(); // Prevent event bubbling
+
+
 		const { position, size, rotation } = event.detail;
 		const extraSpaceFactor = 1.2;
 		const direction = new Vector3(...$cameraPosition).sub(position).normalize();

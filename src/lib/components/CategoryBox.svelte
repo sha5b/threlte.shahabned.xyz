@@ -111,8 +111,9 @@
 
 	const dispatch = createEventDispatcher();
 
-	function handleClick() {
+	function handleClick(event) {
 		if (!active) {
+			event.stopPropagation();
 			dispatch('boxclick', { position: position, size: size, rotation: rotation, id: id });
 			console.log('Clicked on CategoryBox with id:', id);
 		}

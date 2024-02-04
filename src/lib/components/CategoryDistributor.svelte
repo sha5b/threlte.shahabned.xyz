@@ -88,6 +88,7 @@
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions);
 </script>
 
+
 {#each updatedCategories as category (category.id)}
 	<CategoryBox
 		position={categoryPositions.get(category.id)}
