@@ -114,7 +114,7 @@
 	function handleClick(event) {
 		if (!active) {
 			event.stopPropagation();
-			dispatch('boxclick', { position: position, size: size, rotation: rotation, id: id });
+			dispatch('boxclick', { position, size, rotation, id, active: false });
 			console.log('Clicked on CategoryBox with id:', id);
 		}
 	}
@@ -139,10 +139,18 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
-	<T.Mesh>
-		<T.BoxGeometry args={[size.x, size.y, size.z]} />
-		<T.MeshBasicMaterial opacity={0} transparent={true} doubleSided={true} color='black' wireframe/>
-	</T.Mesh>
+	{#if active}
+		<T.Mesh>
+			<T.BoxGeometry args={[size.x, size.y, size.z]} />
+			<T.MeshBasicMaterial
+				opacity={0}
+				transparent={true}
+				doubleSided={true}
+				color="black"
+				wireframe
+			/>
+		</T.Mesh>
+	{/if}
 	{#if active}
 		{#each gridLines as line}
 			<T.LineSegments renderOrder={0}>
