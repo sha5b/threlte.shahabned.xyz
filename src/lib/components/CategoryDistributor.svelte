@@ -17,8 +17,9 @@
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
 	let color = 'white';
-
+	const spacingFactor = 2; // 2 will double the size, providing ample space
 	let cellSize = 500;
+
 	// Event Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
@@ -29,7 +30,7 @@
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
 	// Define a spacing factor; 2 will double the size, providing ample space
-	const spacingFactor = 2;
+
 	// Updated Category function
 	function calculateCategorySize(workCount) {
 		if (workCount === 0) return new Vector3();
@@ -81,7 +82,6 @@
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
 </script>
 
-
 {#each updatedCategories as category (category.id)}
 	<CategoryBox
 		position={categoryPositions.get(category.id)}
@@ -100,7 +100,7 @@
 				category.size.z / 2 // Assuming you want it aligned with the front of the box
 			]}
 		>
-			<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color}/>
+			<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
 		</T.Mesh>
 		{category.works}
 		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />
