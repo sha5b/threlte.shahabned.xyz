@@ -11,12 +11,12 @@
 
 	export let data; //Pasted data from the Database
 
-	let cameraPosition = tweened([-25000, 25000, 25000], {
-		duration: 2000,
+	$: cameraPosition = tweened([-25000, 25000, 25000], {
+		duration: 2500,
 		easing: cubicOut
 	});
-	let cameraTarget = tweened([0, 0, 0], {
-		duration: 2000,
+	$: cameraTarget = tweened([0, 0, 0], {
+		duration: 2500,
 		easing: cubicOut
 	});
 	let cameraFOV = 25;
@@ -25,15 +25,12 @@
 	// Handle Mouse Events
 
 	function onBoxClick(event) {
-		event.stopPropagation(); // Prevent event bubbling
-
+		 event.stopPropagation(); // Prevent event bubbling
 		const { position, size, rotation } = event.detail;
 		const extraSpaceFactor = 1.2;
-		const direction = new Vector3(...$cameraPosition).sub(new Vector3(...position)).normalize();
+		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
 		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
-		const newCameraPosition = direction
-			.multiplyScalar(-adjustedDistance)
-			.add(new Vector3(...position));
+		const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(position);
 		newCameraPosition.x += (Math.random() - 0.5) * 6000;
 		newCameraPosition.y += (Math.random() - 0.5) * 6000;
 		newCameraPosition.z += (Math.random() - 0.5) * 6000;
@@ -44,7 +41,7 @@
 	}
 </script>
 
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000}>
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={50000}>
 	<OrbitControls
 		bind:target={$cameraTarget}
 		autoRotate
