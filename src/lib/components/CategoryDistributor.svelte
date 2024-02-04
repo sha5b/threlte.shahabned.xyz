@@ -12,7 +12,7 @@
 		roundVectorToCellSize,
 		createBoxClickHandler,
 		generateUniquePositions
-	} from '$lib/utils/categoryUtils';
+	} from '$lib/utils/utils';
 
 	export let categories = [];
 	export let works = [];

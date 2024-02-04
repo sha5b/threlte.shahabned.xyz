@@ -5,7 +5,7 @@
 		getRandomGridPosition,
 		isOverlapping,
 		generateUniquePositions
-	} from '$lib/utils/categoryUtils';
+	} from '$lib/utils/utils';
 	import { Vector3 } from 'three';
 
 	export let works;

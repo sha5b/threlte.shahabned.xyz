@@ -139,14 +139,14 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
-	{#if active}
+	{#if !active}
 		<T.Mesh>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
 			<T.MeshBasicMaterial
-				opacity={0}
+				opacity={1}
 				transparent={true}
 				doubleSided={true}
-				color="black"
+				color="white"
 				wireframe
 			/>
 		</T.Mesh>
@@ -155,7 +155,7 @@
 		{#each gridLines as line}
 			<T.LineSegments renderOrder={0}>
 				<MeshLineGeometry points={line} />
-				<MeshLineMaterial {color} opacity={0.1} width={0.1} transparent={true} />
+				<MeshLineMaterial {color} opacity={0.1} width={0.25} transparent={true} act/>
 			</T.LineSegments>
 		{/each}
 	{/if}
