@@ -1,40 +1,50 @@
 <script>
 	//@ts-nocheck
-	
+
 	import { T } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import { Vector3 } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
 
 	export let data; //Pasted data from the Database
 
-	let cameraPosition = writable([-25000, 25000, 25000]); // Store for camera position
-	let cameraTarget = writable([0, 0, 0]); // Store for camera targets
+	let cameraPosition = tweened([-25000, 25000, 25000], {
+		duration: 2000,
+		easing: cubicOut
+	});
+	let cameraTarget = tweened([0, 0, 0], {
+		duration: 2000,
+		easing: cubicOut
+	});
 	let cameraFOV = 25;
 	let cameraRotation = writable([0, 0, 0]);
 
-
-	
 	// Handle Mouse Events
 
-function onBoxClick(event) {
-	const { position, size } = event.detail;
-	const extraSpaceFactor = 1.2;
-	const direction = new Vector3(...$cameraPosition).sub(position).normalize();
-	const adjustedDistance = (size.y / Math.tan(cameraFOV * Math.PI / 360)) * extraSpaceFactor;
-	const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(position);
-	newCameraPosition.x += (Math.random() - 0.5) * 6000;
-	newCameraPosition.y += (Math.random() - 0.5) * 6000;
-	newCameraPosition.z += (Math.random() - 0.5) * 6000;
+	function onBoxClick(event) {
+		event.stopPropagation(); // Prevent event bubbling
 
-	cameraTarget.set(position);
-	cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-	cameraRotation.set(event.detail.rotation);
-}
+		const { position, size, rotation } = event.detail;
+		const extraSpaceFactor = 1.2;
+		const direction = new Vector3(...$cameraPosition).sub(new Vector3(...position)).normalize();
+		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
+		const newCameraPosition = direction
+			.multiplyScalar(-adjustedDistance)
+			.add(new Vector3(...position));
+		newCameraPosition.x += (Math.random() - 0.5) * 6000;
+		newCameraPosition.y += (Math.random() - 0.5) * 6000;
+		newCameraPosition.z += (Math.random() - 0.5) * 6000;
+
+		cameraTarget.set([position.x, position.y, position.z]);
+		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+		cameraRotation.set(rotation);
+	}
 </script>
 
-<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000} >
+<T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={500000}>
 	<OrbitControls
 		bind:target={$cameraTarget}
 		autoRotate
