@@ -103,7 +103,7 @@ export function roundVectorToCellSize(vector, cellSize) {
  * @param {number} cellSize - The cell size to round the value to.
  * @returns {number} The rounded value.
  */
-function roundToCellSize(value, cellSize) {
+export function roundToCellSize(value, cellSize) {
 	return Math.round(value / cellSize) * cellSize;
 }
 

@@ -9,7 +9,6 @@
 	import {
 		countWorksPerCategory,
 		calculateScaledSize,
-		roundVectorToCellSize,
 		createBoxClickHandler,
 		generateUniquePositions
 	} from '$lib/utils/utils';
