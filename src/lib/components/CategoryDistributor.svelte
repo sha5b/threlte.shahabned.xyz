@@ -47,13 +47,6 @@
 		return categories.map((category) => {
 			const categoryWorks = works.filter((work) => work.category === category.id);
 			const workCount = categoryWorks.length;
-
-			if (workCount === 0) {
-				console.error(`Category with id ${category.id} has no works.`);
-			} else {
-				console.log(`Category id ${category.id} size:`, calculateCategorySize(workCount));
-			}
-
 			return { ...category, works: categoryWorks, size: calculateCategorySize(workCount) };
 		});
 	}

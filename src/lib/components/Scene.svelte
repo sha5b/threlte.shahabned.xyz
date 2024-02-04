@@ -8,7 +8,6 @@
 	import { writable } from 'svelte/store';
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
-	import { tick } from 'svelte';
 
 	export let data; //Pasted data from the Database
 
@@ -28,7 +27,7 @@
 	function onBoxClick(event) {
 
 
-		const { position, size, rotation } = event.detail;
+		const { position, size, rotation, id } = event.detail;
 		const extraSpaceFactor = 1.2;
 		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
 		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
@@ -40,6 +39,7 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
+		console.log('Clicked on CategoryBox with id:', id, 'position:', position, 'size:', size, 'rotation:', rotation); ;
 	}
 </script>
 

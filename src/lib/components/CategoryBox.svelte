@@ -115,7 +115,7 @@
 		if (!active) {
 			event.stopPropagation();
 			dispatch('boxclick', { position, size, rotation, id, active: false });
-			console.log('Clicked on CategoryBox with id:', id);
+
 		}
 	}
 </script>
