@@ -34,12 +34,11 @@
 	function calculateCategorySize(workCount) {
 		if (workCount === 0) return new Vector3();
 
-		const baseArea = Math.ceil(Math.sqrt(workCount));
-		const height = Math.ceil(workCount / baseArea);
+		const baseSize = Math.ceil(Math.sqrt(workCount));
 		return new Vector3(
-			baseArea * cellSize * spacingFactor,
-			height * cellSize * spacingFactor,
-			baseArea * cellSize * spacingFactor
+			baseSize * cellSize * spacingFactor,
+			baseSize * cellSize * spacingFactor,
+			baseSize * cellSize * spacingFactor
 		);
 	}
 
