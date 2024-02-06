@@ -2,7 +2,7 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Group, Vector3 } from 'three';
-	import { MeshLineGeometry, MeshLineMaterial, interactivity} from '@threlte/extras';
+	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 
 	export let position = new Vector3(0, 0, 0);
@@ -54,15 +54,16 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick(event) {
-		if (!active) {
-			event.stopPropagation();
-			dispatch('boxclick', { position, size, id, active: false });
-
-		}
+		// Prevent the event from bubbling up
+		event.stopPropagation();
+		// Dispatch a custom event with the work details
+		dispatch('workclick', { position, size, id, active: false });
+		
 	}
+
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} >
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
 	<T.Mesh renderOrder={2}>
 		{#each lines as points}
 			<T.Mesh>

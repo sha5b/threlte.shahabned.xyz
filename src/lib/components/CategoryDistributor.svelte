@@ -29,6 +29,11 @@
 	}
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
+	const handleWorkClick = (event) => {
+		// Re-dispatch the event to bubble it up to the parent
+		dispatch('workclick', event.detail);
+		console.log("Workbox clicked", event.detail.position)
+	};
 	// Define a spacing factor; 2 will double the size, providing ample space
 
 	// Updated Category function
@@ -103,6 +108,11 @@
 			<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
 		</T.Mesh>
 		{category.works}
-		<WorkDistributor works={category.works} categorySize={category.size} {cellSize} />
+		<WorkDistributor
+			works={category.works}
+			categorySize={category.size}
+			{cellSize}
+			on:workclick={handleWorkClick}
+		/>
 	</CategoryBox>
 {/each}

@@ -65,7 +65,8 @@
 <T.AmbientLight intensity={0.2} />
 
 <CategoryDistributor categories={data.categories} works={data.works} on:boxclick={onBoxClick} />
-<T.Group >
+
+<!-- <T.Group >
 	<Grid
 		plane="xz"
 		cellColor="white"
@@ -105,4 +106,4 @@
 		fadeDistance={75000}
 		followCamera
 	/>
-</T.Group>
+</T.Group> -->
