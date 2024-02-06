@@ -29,13 +29,6 @@
 	}
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
-	const handleWorkClick = (event) => {
-		// Re-dispatch the event to bubble it up to the parent
-		dispatch('workclick', event.detail);
-		console.log("Workbox clicked", event.detail.position)
-	};
-	// Define a spacing factor; 2 will double the size, providing ample space
-
 	// Updated Category function
 	function calculateCategorySize(workCount) {
 		if (workCount === 0) return new Vector3();
@@ -112,7 +105,7 @@
 			works={category.works}
 			categorySize={category.size}
 			{cellSize}
-			on:workclick={handleWorkClick}
+			active={activeBoxId === category.id}
 		/>
 	</CategoryBox>
 {/each}

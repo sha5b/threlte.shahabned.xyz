@@ -50,6 +50,19 @@
 			rotation
 		);
 	}
+	
+	function onWorkClick(event) {
+		const { position, size, id } = event.detail;
+		const extraSpaceFactor = 1;
+		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
+		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
+		const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(position);
+
+		cameraTarget.set([position.x, position.y, position.z]);
+		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+		// You can use the id here to perform actions
+		console.log(position,id);
+	}
 </script>
 
 <T.PerspectiveCamera bind:position={$cameraPosition} makeDefault fov={cameraFOV} far={75000}>
@@ -64,7 +77,12 @@
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
-<CategoryDistributor categories={data.categories} works={data.works} on:boxclick={onBoxClick} />
+<CategoryDistributor
+	categories={data.categories}
+	works={data.works}
+	on:boxclick={onBoxClick}
+	on:workclick={onWorkClick}
+/>
 
 <!-- <T.Group >
 	<Grid

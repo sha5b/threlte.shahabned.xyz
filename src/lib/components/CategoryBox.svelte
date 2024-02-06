@@ -115,7 +115,6 @@
 		if (!active) {
 			event.stopPropagation();
 			dispatch('boxclick', { position, size, rotation, id, active: false });
-
 		}
 	}
 </script>

@@ -13,14 +13,7 @@
 	export let works;
 	export let cellSize;
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
-
-	// Event Dispatcher
-	const dispatch = createEventDispatcher();
-
-	const handleBoxClick = (event) => {
-		// Re-dispatch the event to bubble it up to the parent
-		dispatch('workclick', event.detail);
-	};
+	export let active;
 
 	// Define the range within which you want to place the WorkBoxes
 	const range = categorySize.clone();
@@ -41,5 +34,5 @@
 </script>
 
 {#each works as work (work.id)}
-	<WorkBox position={workPositions.get(work.id)} {cellSize} on:workclick={handleBoxClick} />
+	<WorkBox position={workPositions.get(work.id)} {cellSize} {active}/>
 {/each}

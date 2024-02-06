@@ -54,17 +54,15 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick(event) {
-		// Prevent the event from bubbling up
+		console.log('handleClick called', event.type);
 		event.stopPropagation();
-		// Dispatch a custom event with the work details
 		dispatch('workclick', { position, size, id, active: false });
-		
 	}
-
+	$: console.log(active);
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
-	<T.Mesh renderOrder={2}>
+	<T.Mesh >
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -75,14 +73,16 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
-	<T.Mesh>
-		<T.BoxGeometry args={[size.x, size.y, size.z]} />
-		<T.MeshBasicMaterial
-			opacity={0}
-			transparent={true}
-			doubleSided={true}
-			wireframe
-			color="black"
-		/>
-	</T.Mesh>
+	{#if active}
+		<T.Mesh>
+			<T.BoxGeometry args={[size.x, size.y, size.z]} />
+			<T.MeshBasicMaterial
+				opacity={1}
+				transparent={true}
+				doubleSided={true}
+				color="white"
+				wireframe
+			/>
+		</T.Mesh>
+	{/if}
 </T.Group>
