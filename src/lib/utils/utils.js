@@ -124,3 +124,11 @@ export function createBoxClickHandler(dispatch, activeBoxSetter) {
 		dispatch('boxclick', event.detail);
 	};
 }
+
+export function createWorkClickHandler(dispatch, activeBoxSetter) {
+	return function handleBoxClick(event) {
+		const { id } = event.detail;
+		activeBoxSetter(id); // Call the setter function with the new active box ID
+		dispatch('workclick', event.detail);
+	};
+}

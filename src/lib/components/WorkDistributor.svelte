@@ -4,7 +4,7 @@
 	import {
 		countWorksPerCategory,
 		calculateScaledSize,
-		createBoxClickHandler,
+		createWorkClickHandler,
 		generateUniquePositions
 	} from '$lib/utils/utils';
 	import { Vector3 } from 'three';
@@ -14,6 +14,15 @@
 	export let cellSize;
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
+
+
+	const dispatch = createEventDispatcher();
+	let activeBoxId = null; // This will store the ID of the currently active box
+
+	function setActiveBoxId(id) {
+		activeBoxId = id;
+	}
+	const handleBoxClick = createWorkClickHandler(dispatch, setActiveBoxId);
 
 	// Define the range within which you want to place the WorkBoxes
 	const range = categorySize.clone();
@@ -34,5 +43,12 @@
 </script>
 
 {#each works as work (work.id)}
-	<WorkBox position={workPositions.get(work.id)} {cellSize} {active}/>
+	<WorkBox
+		position={workPositions.get(work.id)}
+		{cellSize}
+		activeCategory={active}
+		activeWork={activeBoxId === work.id}
+		id={work.id}
+		on:workclick={handleBoxClick}
+	/>
 {/each}

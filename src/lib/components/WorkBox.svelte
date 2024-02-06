@@ -46,7 +46,8 @@
 	$: lines = createBoxLines(size);
 
 	export let id; // Export id to set it from the parent component
-	export let active; // Add this line to accept an 'active' prop
+	export let activeCategory; // Add this line to accept an 'active' prop
+	export let activeWork; // Add this line to accept an 'active' prop
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
@@ -54,15 +55,15 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick(event) {
-		console.log('handleClick called', event.type);
 		event.stopPropagation();
-		dispatch('workclick', { position, size, id, active: false });
+		console.log(id);
+		dispatch('workclick', { position, size, id, activeWork: false, activeCategory: false });
+		console.log(activeWork)
 	}
-	$: console.log(active);
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
-	<T.Mesh >
+	<T.Mesh>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -73,16 +74,18 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
-	{#if active}
-		<T.Mesh>
-			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial
-				opacity={1}
-				transparent={true}
-				doubleSided={true}
-				color="white"
-				wireframe
-			/>
-		</T.Mesh>
+	{#if activeCategory}
+		{#if activeWork}
+			<T.Mesh>
+				<T.BoxGeometry args={[size.x, size.y, size.z]} />
+				<T.MeshBasicMaterial
+					opacity={1}
+					transparent={true}
+					doubleSided={true}
+					color="white"
+					wireframe
+				/>
+			</T.Mesh>
+		{/if}
 	{/if}
 </T.Group>
