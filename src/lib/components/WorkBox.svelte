@@ -47,7 +47,7 @@
 
 	export let id; // Export id to set it from the parent component
 	export let activeCategory; // Add this line to accept an 'active' prop
-	export let activeWork; // Add this line to accept an 'active' prop
+	export let activeWork;
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
@@ -56,9 +56,8 @@
 
 	function handleClick(event) {
 		event.stopPropagation();
-		console.log(id);
-		dispatch('workclick', { position, size, id, activeWork: false, activeCategory: false });
-		console.log(activeWork)
+		dispatch('workclick', { id, active: false });
+		console.log('Clicked Work', id);
 	}
 </script>
 
@@ -75,7 +74,7 @@
 		<slot />
 	</T.Mesh>
 	{#if activeCategory}
-		{#if activeWork}
+		{#if !activeWork}
 			<T.Mesh>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
 				<T.MeshBasicMaterial
