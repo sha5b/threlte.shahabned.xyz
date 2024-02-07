@@ -56,7 +56,7 @@
 
 	function handleClick(event) {
 		event.stopPropagation();
-		dispatch('workclick', { id, active: false });
+		dispatch('workclick', { position, size, id, active: false });
 		console.log('Clicked Work', id);
 	}
 </script>

@@ -33,12 +33,24 @@
 	// Assuming works have an 'id' property
 	// We are using a size object with the same dimensions as cellSize for all works
 	const workSize = new Vector3(cellSize, cellSize, cellSize);
+
 	generateUniquePositions(
 		works.map((work) => ({ ...work, size: workSize })),
 		range,
 		workPositions,
 		cellSize
 	);
+	// Snap each work position to the grid cell to ensure no overlap
+	works.forEach((work) => {
+		const position = workPositions.get(work.id);
+		// Align position to the bottom-left corner of the grid cell
+		position.x = Math.floor(position.x / cellSize) * cellSize;
+		position.y = Math.floor(position.y / cellSize) * cellSize;
+		position.z = Math.floor(position.z / cellSize) * cellSize;
+		// Offset by half the cell size to center within the cell
+		position.add(new Vector3(cellSize / 2, cellSize / 2, cellSize / 2));
+		workPositions.set(work.id, position);
+	});
 </script>
 
 {#each works as work (work.id)}

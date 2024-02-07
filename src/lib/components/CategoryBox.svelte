@@ -131,6 +131,7 @@
 					transparent={true}
 					dashArray={0.1}
 					dashRatio={0.3}
+					attenuate={true}
 				/>
 			</T.Mesh>
 		{/each}
@@ -154,7 +155,7 @@
 		{#each gridLines as line}
 			<T.LineSegments renderOrder={0}>
 				<MeshLineGeometry points={line} />
-				<MeshLineMaterial {color} opacity={0.1} width={0.25} transparent={true} act/>
+				<MeshLineMaterial {color} opacity={.25} width={1} transparent={true} />
 			</T.LineSegments>
 		{/each}
 	{/if}
