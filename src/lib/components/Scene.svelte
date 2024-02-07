@@ -54,25 +54,6 @@
 
 	function onWorkClick(event) {
 		const { position, size, id } = event.detail;
-
-		// Set the new camera target to the work item's position (the center of the item)
-		const newCameraTarget = new Vector3(position.x, position.y, position.z);
-
-		// Calculate the distance required to view the entire work item
-		// This distance calculation ensures the entire height of the item fits in view
-		// If the width or depth is larger, you might need to take those into account separately
-		const distance = size.y / (2 * Math.tan((cameraFOV * Math.PI) / 360));
-
-		// Calculate the new position relative to the current camera position
-		// The new position should be on the line from the camera through the target, at the calculated distance
-		const direction = new Vector3(...$cameraPosition).sub(newCameraTarget).normalize();
-		const newCameraPosition = direction.multiplyScalar(-distance).add(newCameraTarget);
-
-		// Set the new camera target and position
-		cameraTarget.set([newCameraTarget.x, newCameraTarget.y, newCameraTarget.z]);
-		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-
-		// Log the action
 		console.log('Camera target and position set to center and zoom out to view the work item:', id);
 	}
 </script>

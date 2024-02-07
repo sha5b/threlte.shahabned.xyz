@@ -14,6 +14,7 @@
 	export let cellSize;
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
+	export let categoryPosition;
 
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
@@ -54,6 +55,7 @@
 </script>
 
 {#each works as work (work.id)}
+{console.log(categoryPosition)}
 	<WorkBox
 		position={workPositions.get(work.id)}
 		{cellSize}

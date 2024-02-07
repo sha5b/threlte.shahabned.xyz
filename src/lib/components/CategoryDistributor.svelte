@@ -107,6 +107,7 @@
 		</T.Mesh>
 		{category.works}
 		<WorkDistributor
+			categoryPosition={categoryPositions.get(category.id)}
 			works={category.works}
 			categorySize={category.size}
 			{cellSize}
