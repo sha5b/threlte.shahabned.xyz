@@ -36,11 +36,11 @@ export function isOverlapping(position, size, categoryPositions) {
 export function generateUniquePositions(categories, range, categoryPositions, cellSize) {
 	categories.forEach((category) => {
 		let pos = getRandomGridPosition(range, category.size);
-		// Round the position to the nearest cell size
 		pos = roundVectorToCellSize(pos, cellSize);
 		while (isOverlapping(pos, category.size, categoryPositions)) {
+			console.log(`Overlap detected for category ID ${category.id} at position`, pos);
 			pos = getRandomGridPosition(range, category.size);
-			pos = roundVectorToCellSize(pos, cellSize); // Round again after getting a new position
+			pos = roundVectorToCellSize(pos, cellSize);
 		}
 		categoryPositions.set(category.id, pos);
 	});
