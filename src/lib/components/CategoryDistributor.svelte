@@ -29,6 +29,11 @@
 	}
 	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
+	function handleWorkClick(event) {
+		// Re-dispatch the event with the same detail
+		dispatch('workclick', event.detail);
+	}
+
 	// Updated Category function
 	function calculateCategorySize(workCount) {
 		if (workCount === 0) return new Vector3();
@@ -106,6 +111,7 @@
 			categorySize={category.size}
 			{cellSize}
 			active={activeBoxId === category.id}
+			on:workclick={handleWorkClick}
 		/>
 	</CategoryBox>
 {/each}

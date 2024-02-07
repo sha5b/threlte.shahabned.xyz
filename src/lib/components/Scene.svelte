@@ -12,6 +12,7 @@
 	export let data; //Pasted data from the Database
 	let cellSize = 1000;
 	let gridSize = 75000;
+	const worldPosition = writable(new Vector3()); // Store for world position
 
 	let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
@@ -50,18 +51,29 @@
 			rotation
 		);
 	}
-	
+
 	function onWorkClick(event) {
 		const { position, size, id } = event.detail;
-		const extraSpaceFactor = 1;
-		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
-		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
-		const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(position);
 
-		cameraTarget.set([position.x, position.y, position.z]);
+		// Set the new camera target to the work item's position (the center of the item)
+		const newCameraTarget = new Vector3(position.x, position.y, position.z);
+
+		// Calculate the distance required to view the entire work item
+		// This distance calculation ensures the entire height of the item fits in view
+		// If the width or depth is larger, you might need to take those into account separately
+		const distance = size.y / (2 * Math.tan((cameraFOV * Math.PI) / 360));
+
+		// Calculate the new position relative to the current camera position
+		// The new position should be on the line from the camera through the target, at the calculated distance
+		const direction = new Vector3(...$cameraPosition).sub(newCameraTarget).normalize();
+		const newCameraPosition = direction.multiplyScalar(-distance).add(newCameraTarget);
+
+		// Set the new camera target and position
+		cameraTarget.set([newCameraTarget.x, newCameraTarget.y, newCameraTarget.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-		// You can use the id here to perform actions
-		console.log(position,id);
+
+		// Log the action
+		console.log('Camera target and position set to center and zoom out to view the work item:', id);
 	}
 </script>
 
