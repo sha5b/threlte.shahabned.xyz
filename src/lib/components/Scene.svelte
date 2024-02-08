@@ -15,14 +15,13 @@
 	const worldPosition = writable(new Vector3()); // Store for world position
 
 	let cameraPosition = tweened([-25000, 25000, 25000], {
-		duration: 1000,
+		duration: 2500,
 		easing: cubicOut
 	});
 	let cameraTarget = tweened([0, 0, 0], {
-		duration: 1000,
+		duration: 2500,
 		easing: cubicOut
 	});
-
 
 	let cameraFOV = 45;
 	let cameraRotation = writable([0, 0, 0]);
@@ -54,18 +53,29 @@
 		);
 	}
 	function onWorkClick(event) {
-		const { position, id, absolutePosition} = event.detail;
+		const { position, id, absolutePosition } = event.detail;
 
+		// Calculate the direction from the camera to the work item
+		const direction = new Vector3(...$cameraPosition)
+			.sub(new Vector3(...absolutePosition))
+			.normalize();
 
-		// Set the camera target to the new absolute center of the WorkBox
+		// Calculate a suitable distance from the camera to the work item
+		const distance = 1000; // Adjust this value as needed
+		const newCameraPosition = direction
+			.multiplyScalar(-distance)
+			.add(new Vector3(...absolutePosition));
+
+		// Update the camera's target and position
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
+		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 
 		console.log('Camera target set to WorkBox id:', id);
 
 		console.log('Relative center of WorkBox:', position);
 
 		console.log('Aboslute center of WorkBox from variable:', absolutePosition);
-		console.log($cameraTarget)
+		console.log($cameraTarget);
 	}
 </script>
 
@@ -88,8 +98,8 @@
 	on:workclick={onWorkClick}
 />
 <T.Mesh position={$cameraTarget}>
-	<T.BoxGeometry args={[500, 500, 500]} />
-	<T.MeshBasicMaterial opacity={1} transparent={true} doubleSided={true} color="red" />
+	<T.BoxGeometry args={[250, 250, 250]} />
+	<T.MeshBasicMaterial opacity={.25} transparent={true} doubleSided={true} color="red" />
 </T.Mesh>
 <!-- <T.Group >
 	<Grid
