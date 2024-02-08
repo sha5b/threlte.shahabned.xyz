@@ -20,7 +20,7 @@
 		easing: cubicOut
 	});
 
-	let cameraFOV = 45;
+	let cameraFOV = 25;
 	let cameraRotation = writable([0, 0, 0]);
 	let camera;
 	let orbitControls;
@@ -52,7 +52,7 @@
 			.normalize();
 
 		// Calculate a suitable distance from the camera to the work item
-		const distance = 1000; // Adjust this value as needed
+		const distance = 2000; // Adjust this value as needed
 		const newCameraPosition = direction
 			.multiplyScalar(-distance)
 			.add(new Vector3(...absolutePosition));
@@ -89,7 +89,7 @@
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
 />
-<T.Mesh position={$cameraTarget}>
+<!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />
 	<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />
-</T.Mesh>
+</T.Mesh> -->
