@@ -5,6 +5,7 @@
 	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 
+
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
@@ -58,7 +59,14 @@
 
 	function handleClick(event) {
 		event.stopPropagation();
-		dispatch('workclick', { position, size, id, active: false, categoryPosition, absolutePosition });
+		dispatch('workclick', {
+			position,
+			size,
+			id,
+			active: false,
+			categoryPosition,
+			absolutePosition
+		});
 	}
 </script>
 
@@ -79,7 +87,7 @@
 			<T.Mesh>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
 				<T.MeshBasicMaterial
-					opacity={1}
+					opacity={0}
 					transparent={true}
 					doubleSided={true}
 					color="white"

@@ -143,7 +143,7 @@
 		<T.Mesh>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
 			<T.MeshBasicMaterial
-				opacity={1}
+				opacity={0}
 				transparent={true}
 				doubleSided={true}
 				color="white"

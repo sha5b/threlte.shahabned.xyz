@@ -9,6 +9,7 @@
 	} from '$lib/utils/utils';
 	import { Vector3 } from 'three';
 	import { createEventDispatcher } from 'svelte';
+	import { OrbitControls, Grid } from '@threlte/extras';
 
 	export let works;
 	export let cellSize;
