@@ -101,6 +101,8 @@
 	<T.BoxGeometry args={[250, 250, 250]} />
 	<T.MeshBasicMaterial opacity={.25} transparent={true} doubleSided={true} color="red" />
 </T.Mesh>
+
+
 <!-- <T.Group >
 	<Grid
 		plane="xz"

@@ -56,16 +56,6 @@
 		workPositions.set(work.id, position);
 	});
 
-	// works.forEach((work) => {
-	// 	const position = workPositions.get(work.id);
-	// 	// Align position to the bottom-left corner of the grid cell
-	// 	position.x = Math.floor(position.x / cellSize) * cellSize;
-	// 	position.y = Math.floor(position.y / cellSize) * cellSize;
-	// 	position.z = Math.floor(position.z / cellSize) * cellSize;
-	// 	// Offset by half the cell size to center within the cell
-	// 	position.add(new Vector3(cellSize / 2, cellSize / 2, cellSize / 2));
-	// 	workPositions.set(work.id, position);
-	// });
 </script>
 
 {#each works as work (work.id)}
