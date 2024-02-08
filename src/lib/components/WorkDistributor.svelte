@@ -1,5 +1,6 @@
 <script>
 	//@ts-nocheck
+	import { T } from '@threlte/core';
 	import WorkBox from '$lib/components/WorkBox.svelte';
 	import {
 		countWorksPerCategory,
@@ -7,9 +8,10 @@
 		createWorkClickHandler,
 		generateUniquePositions
 	} from '$lib/utils/utils';
-	import { Vector3 } from 'three';
+	import { PlaneGeometry, Vector3 } from 'three';
 	import { createEventDispatcher } from 'svelte';
 	import { OrbitControls, Grid } from '@threlte/extras';
+	import { onMount } from 'svelte';
 
 	export let works;
 	export let cellSize;
@@ -18,6 +20,7 @@
 	export let categoryPosition;
 	const absoluteWorkPositions = new Map();
 
+	// Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
@@ -57,6 +60,7 @@
 		workPositions.set(work.id, position);
 	});
 
+
 </script>
 
 {#each works as work (work.id)}
@@ -69,5 +73,14 @@
 		activeWork={activeBoxId === work.id}
 		id={work.id}
 		on:workclick={handleBoxClick}
-	/>
+	>
+		<T.Mesh rotation={[Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2]}>
+			<T.PlaneGeometry args={[cellSize, cellSize]} />
+			<T.MeshBasicMaterial
+				opacity={1}
+				doubleSided
+				color="white"
+			/></T.Mesh
+		></WorkBox
+	>
 {/each}

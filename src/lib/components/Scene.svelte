@@ -30,14 +30,14 @@
 
 	function onBoxClick(event) {
 		const { position, size, rotation, id } = event.detail;
-		
+
 		const extraSpaceFactor = 1.2;
 		const direction = new Vector3(...$cameraPosition).sub(position).normalize();
 		const adjustedDistance = (size.y / Math.tan((cameraFOV * Math.PI) / 360)) * extraSpaceFactor;
 		const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(position);
-		newCameraPosition.x += (Math.random() - 0.5) ;
-		newCameraPosition.y += (Math.random() - 0.5) ;
-		newCameraPosition.z += (Math.random() - 0.5) ;
+		newCameraPosition.x += Math.random() - 0.5;
+		newCameraPosition.y += Math.random() - 0.5;
+		newCameraPosition.z += Math.random() - 0.5;
 
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
@@ -63,6 +63,7 @@
 	}
 </script>
 
+<!-- <T.PointLight position={$cameraPosition} castShadow intensity={0.8} distance={0} /> -->
 <T.PerspectiveCamera
 	bind:this={camera}
 	bind:position={$cameraPosition}

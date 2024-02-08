@@ -136,9 +136,9 @@
 			</T.Mesh>
 		{/each}
 	</T.Mesh>
-	<T.Mesh>
-		<slot />
-	</T.Mesh>
+
+	<slot />
+
 	{#if !active}
 		<T.Mesh>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
@@ -155,7 +155,7 @@
 		{#each gridLines as line}
 			<T.LineSegments renderOrder={0}>
 				<MeshLineGeometry points={line} />
-				<MeshLineMaterial {color} opacity={.25} width={1} transparent={true} />
+				<MeshLineMaterial {color} opacity={0.25} width={1} transparent={true} />
 			</T.LineSegments>
 		{/each}
 	{/if}
