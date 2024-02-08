@@ -1,7 +1,7 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { Group, Vector3 } from 'three';
+	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 
@@ -10,6 +10,8 @@
 	export let size = new Vector3(cellSize, cellSize, cellSize);
 	export let width = 10;
 	export let color = 'white';
+	export let categoryPosition;
+	export let absolutePosition;
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -56,7 +58,7 @@
 
 	function handleClick(event) {
 		event.stopPropagation();
-		dispatch('workclick', { position, size, id, active: false });
+		dispatch('workclick', { position, size, id, active: false, categoryPosition, absolutePosition });
 	}
 </script>
 

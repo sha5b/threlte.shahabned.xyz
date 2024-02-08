@@ -86,33 +86,36 @@
 </script>
 
 {#each updatedCategories as category (category.id)}
-	<CategoryBox
-		position={categoryPositions.get(category.id)}
-		size={category.size}
-		{cellSize}
-		id={category.id}
-		active={activeBoxId === category.id}
-		on:boxclick={handleBoxClick}
-		workCount={countWorksPerCategory(works, category.id)}
-		{color}
-	>
-		<T.Mesh
-			position={[
-				category.size.x / 2 + 125, // Half the size to the right
-				-category.size.y / 2 - 125, // Half the size down
-				category.size.z / 2 // Assuming you want it aligned with the front of the box
-			]}
-		>
-			<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
-		</T.Mesh>
-		{category.works}
-		<WorkDistributor
-			categoryPosition={categoryPositions.get(category.id)}
-			works={category.works}
-			categorySize={category.size}
+	<T.Group>
+		<CategoryBox
+			position={categoryPositions.get(category.id)}
+			size={category.size}
 			{cellSize}
+			id={category.id}
 			active={activeBoxId === category.id}
-			on:workclick={handleWorkClick}
-		/>
-	</CategoryBox>
+			on:boxclick={handleBoxClick}
+			workCount={countWorksPerCategory(works, category.id)}
+			{color}
+		>
+			<T.Mesh
+				position={[
+					category.size.x / 2 + 125, // Half the size to the right
+					-category.size.y / 2 - 125, // Half the size down
+					category.size.z / 2 // Assuming you want it aligned with the front of the box
+				]}
+			>
+				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
+			</T.Mesh></CategoryBox
+		>
+		<T.Mesh>
+			<WorkDistributor
+				categoryPosition={categoryPositions.get(category.id)}
+				works={category.works}
+				categorySize={category.size}
+				{cellSize}
+				active={activeBoxId === category.id}
+				on:workclick={handleWorkClick}
+			/>
+		</T.Mesh>
+	</T.Group>
 {/each}
