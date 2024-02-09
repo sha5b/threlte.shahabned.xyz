@@ -1,7 +1,7 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { Vector3 } from 'three';
+	import { Vector3, BufferGeometry, LineBasicMaterial, Float32BufferAttribute } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity, Grid } from '@threlte/extras';
 	import { createEventDispatcher, onMount } from 'svelte';
 
@@ -15,11 +15,7 @@
 
 	onMount(() => {
 		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
-		rotation = [
-			(Math.floor(Math.random() * 4) * Math.PI) / 2,
-			(Math.floor(Math.random() * 4) * Math.PI) / 2,
-			(Math.floor(Math.random() * 4) * Math.PI) / 2
-		];
+		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 	});
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
@@ -56,52 +52,63 @@
 
 	$: lines = createBoxLines(size);
 
-	// Calculate the number of cells in each dimension
-	$: cellCount = {
-		x: Math.floor(size.x / cellSize),
-		y: Math.floor(size.y / cellSize),
-		z: Math.floor(size.z / cellSize)
-	};
+	// Function to create buffer geometry for a 3D grid with fixed cell size steps
+	function createGridLinesGeometry(size, cellSize) {
+		const points = [];
+		const divisionsX = Math.floor(size.x / cellSize);
+		const divisionsY = Math.floor(size.y / cellSize);
+		const divisionsZ = Math.floor(size.z / cellSize);
 
-	// Create grid lines based on the calculated cell count
-	function createGridLines(cellCount, cellSize) {
-		const lines = [];
-		const halfSize = size.clone().multiplyScalar(0.5);
-
-		// Add lines along the X axis
-		for (let x = 0; x <= cellCount.x; x++) {
-			for (let y = 0; y < cellCount.y; y++) {
-				lines.push([
-					new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, -halfSize.z),
-					new Vector3(-halfSize.x + x * cellSize, -halfSize.y + y * cellSize, halfSize.z)
-				]);
+		// Lines parallel to X-axis
+		for (let i = 0; i <= divisionsY; i++) {
+			for (let j = 0; j <= divisionsZ; j++) {
+				points.push(
+					-size.x / 2,
+					i * cellSize - size.y / 2,
+					j * cellSize - size.z / 2,
+					size.x / 2,
+					i * cellSize - size.y / 2,
+					j * cellSize - size.z / 2
+				);
 			}
 		}
 
-		// Add lines along the Y axis
-		for (let y = 0; y <= cellCount.y; y++) {
-			for (let z = 0; z < cellCount.z; z++) {
-				lines.push([
-					new Vector3(-halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize),
-					new Vector3(halfSize.x, -halfSize.y + y * cellSize, -halfSize.z + z * cellSize)
-				]);
+		// Lines parallel to Y-axis
+		for (let i = 0; i <= divisionsX; i++) {
+			for (let j = 0; j <= divisionsZ; j++) {
+				points.push(
+					i * cellSize - size.x / 2,
+					-size.y / 2,
+					j * cellSize - size.z / 2,
+					i * cellSize - size.x / 2,
+					size.y / 2,
+					j * cellSize - size.z / 2
+				);
 			}
 		}
 
-		// Add lines along the Z axis
-		for (let z = 0; z <= cellCount.z; z++) {
-			for (let x = 0; x < cellCount.x; x++) {
-				lines.push([
-					new Vector3(-halfSize.x + x * cellSize, -halfSize.y, -halfSize.z + z * cellSize),
-					new Vector3(-halfSize.x + x * cellSize, halfSize.y, -halfSize.z + z * cellSize)
-				]);
+		// Lines parallel to Z-axis
+		for (let i = 0; i <= divisionsX; i++) {
+			for (let j = 0; j <= divisionsY; j++) {
+				points.push(
+					i * cellSize - size.x / 2,
+					j * cellSize - size.y / 2,
+					-size.z / 2,
+					i * cellSize - size.x / 2,
+					j * cellSize - size.y / 2,
+					size.z / 2
+				);
 			}
 		}
 
-		return lines;
+		const geometry = new BufferGeometry();
+		const vertices = new Float32Array(points);
+		geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
+		return geometry;
 	}
 
-	$: gridLines = createGridLines(cellCount, cellSize);
+	const gridGeometry = createGridLinesGeometry(size, cellSize);
+	const gridMaterial = new LineBasicMaterial({ color: color, transparent: true, opacity: .2, linewidth: 1});
 
 	export let id; // Export id to set it from the parent component
 	export let active; // Add this line to accept an 'active' prop
@@ -117,10 +124,15 @@
 			dispatch('boxclick', { position, size, rotation, id, active: false });
 		}
 	}
+	function handleMeshClick(event) {
+		event.stopPropagation();
+		// Handle the mesh click event, if necessary
+	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
-	<T.Mesh renderOrder={1}>
+	<T.LineSegments geometry={gridGeometry} material={gridMaterial} />
+	<!-- <T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -135,10 +147,9 @@
 				/>
 			</T.Mesh>
 		{/each}
-	</T.Mesh>
+	</T.Mesh> -->
 
 	<slot />
-
 	{#if !active}
 		<T.Mesh>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
@@ -151,12 +162,12 @@
 			/>
 		</T.Mesh>
 	{/if}
-	{#if active}
+	<!-- {#if active}
 		{#each gridLines as line}
 			<T.LineSegments renderOrder={0}>
 				<MeshLineGeometry points={line} />
-				<MeshLineMaterial {color} opacity={0.25} width={1} transparent={true} />
+				<MeshLineMaterial {color} opacity={0.25} width={0.5} transparent={true} />
 			</T.LineSegments>
 		{/each}
-	{/if}
+	{/if} -->
 </T.Group>

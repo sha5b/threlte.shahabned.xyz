@@ -5,7 +5,6 @@
 	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 
-
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
@@ -13,6 +12,8 @@
 	export let color = 'white';
 	export let categoryPosition;
 	export let absolutePosition;
+
+	interactivity();
 
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
@@ -68,6 +69,14 @@
 			absolutePosition
 		});
 	}
+
+	function handleMeshClick(event) {
+		if (activeWork) {
+			event.stopPropagation();
+		} else {
+			// Handle the click event when not active, if necessary
+		}
+	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
@@ -75,7 +84,14 @@
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
-				<MeshLineMaterial {width} {color} opacity={1} transparent={true} />
+				<MeshLineMaterial
+					{width}
+					{color}
+					opacity={1}
+					transparent={true}
+					dashArray={0.1}
+					dashRatio={0.3}
+				/>
 			</T.Mesh>
 		{/each}
 	</T.Mesh>
@@ -84,7 +100,7 @@
 	</T.Mesh>
 	{#if activeCategory}
 		{#if !activeWork}
-			<T.Mesh>
+			<T.Mesh on:click={handleMeshClick}>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
 				<T.MeshBasicMaterial
 					opacity={0}

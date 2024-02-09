@@ -69,7 +69,7 @@
 	bind:position={$cameraPosition}
 	makeDefault
 	fov={cameraFOV}
-	far={75000}
+	far={100000}
 >
 	<OrbitControls
 		bind:this={orbitControls}
@@ -79,6 +79,8 @@
 		enableZoom={true}
 		enableDamping
 		autoRotateSpeed={0.25}
+		minPolarAngle={0}
+		maxPolarAngle={6}
 	/>
 </T.PerspectiveCamera>
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
@@ -94,3 +96,4 @@
 	<T.BoxGeometry args={[250, 250, 250]} />
 	<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />
 </T.Mesh> -->
+

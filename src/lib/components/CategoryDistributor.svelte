@@ -69,7 +69,7 @@
 			};
 		}, new Vector3());
 	}
-	function calculateRange(categories, maxScaledSize, padding = 1.05) {
+	function calculateRange(categories, maxScaledSize, padding =  0) {
 		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
 		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
 		const volume = ['x', 'y', 'z'].reduce(
