@@ -69,7 +69,8 @@
 	bind:position={$cameraPosition}
 	makeDefault
 	fov={cameraFOV}
-	far={100000}
+	far={75000}
+	focus={$cameraTarget}
 >
 	<OrbitControls
 		bind:this={orbitControls}
@@ -78,9 +79,9 @@
 		autoRotate
 		enableZoom={true}
 		enableDamping
-		autoRotateSpeed={0.25}
+		autoRotateSpeed={0.5}
 		minPolarAngle={0}
-		maxPolarAngle={6}
+		maxPolarAngle={180}
 	/>
 </T.PerspectiveCamera>
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />

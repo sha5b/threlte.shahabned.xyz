@@ -12,17 +12,20 @@ import { Vector3 } from 'three';
  */
 export function isOverlapping(position, size, categoryPositions) {
 	for (let [otherPosition] of categoryPositions) {
-		if (
+		const isOverlapping =
 			position.x < otherPosition.x + size.x &&
 			position.x + size.x > otherPosition.x &&
 			position.y < otherPosition.y + size.y &&
 			position.y + size.y > otherPosition.y &&
 			position.z < otherPosition.z + size.z &&
-			position.z + size.z > otherPosition.z
-		) {
+			position.z + size.z > otherPosition.z;
+
+		if (isOverlapping) {
+			console.log(`Overlap detected: ${JSON.stringify({ position, otherPosition, size })}`);
 			return true;
 		}
 	}
+	console.log('No overlap detected.');
 	return false;
 }
 
@@ -35,14 +38,20 @@ export function isOverlapping(position, size, categoryPositions) {
  */
 export function generateUniquePositions(categories, range, categoryPositions, cellSize) {
 	categories.forEach((category) => {
+		let attempts = 0;
 		let pos = getRandomGridPosition(range, category.size);
 		pos = roundVectorToCellSize(pos, cellSize);
 		while (isOverlapping(pos, category.size, categoryPositions)) {
 			console.log(`Overlap detected for category ID ${category.id} at position`, pos);
+			if (++attempts > 100) {
+				// Prevent infinite loops
+				throw new Error('Too many attempts to find a non-overlapping position');
+			}
 			pos = getRandomGridPosition(range, category.size);
 			pos = roundVectorToCellSize(pos, cellSize);
 		}
 		categoryPositions.set(category.id, pos);
+		console.log(`Position for category ID ${category.id} set to:`, pos);
 	});
 }
 

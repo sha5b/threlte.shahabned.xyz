@@ -60,7 +60,7 @@
 	function calculateMaxScaledSize(categories) {
 		return categories.reduce((maxSize, category) => {
 			const workCount = countWorksPerCategory(works, category.id);
-			const scaleFactor = 1 + workCount;
+			const scaleFactor = workCount; // change the value to bring them closer toegehtrer
 			const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
 			return {
 				x: Math.max(maxSize.x, scaledSize.x),
@@ -70,15 +70,15 @@
 		}, new Vector3());
 	}
 	function calculateRange(categories, maxScaledSize, padding = 0) {
-		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
-		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
-		const volume = ['x', 'y', 'z'].reduce(
-			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
-			1
-		);
-		const sideLength = Math.cbrt(volume);
-		return new Vector3(sideLength, sideLength, sideLength);
-	}
+    const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
+    const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
+    const volume = ['x', 'y', 'z'].reduce(
+        (vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
+        1
+    );
+    const sideLength = Math.cbrt(volume);
+    return new Vector3(sideLength, sideLength, sideLength);
+}
 
 	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
 	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
@@ -107,7 +107,7 @@
 				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
 			</T.Mesh></CategoryBox
 		>
-		<T.Mesh >
+		<T.Mesh>
 			<WorkDistributor
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
