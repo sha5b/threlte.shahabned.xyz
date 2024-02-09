@@ -2,16 +2,11 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import WorkBox from '$lib/components/WorkBox.svelte';
-	import {
-		countWorksPerCategory,
-		calculateScaledSize,
-		createWorkClickHandler,
-		generateUniquePositions
-	} from '$lib/utils/utils';
-	import { PlaneGeometry, Vector3 } from 'three';
+	import { createWorkClickHandler, generateUniquePositions } from '$lib/utils/utils';
+	import { Vector3 } from 'three';
 	import * as THREE from 'three';
 	import { createEventDispatcher } from 'svelte';
-	import { OrbitControls, Grid, useTexture } from '@threlte/extras';
+	import { useTexture, Text } from '@threlte/extras';
 	import { onMount } from 'svelte';
 	import { getImageURL } from '$lib/utils/getURL';
 
@@ -71,6 +66,12 @@
 		event.stopPropagation();
 		// Handle the mesh click event, if necessary
 	}
+	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
+
+	onMount(() => {
+		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
+		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
+	});
 </script>
 
 {#each works as work (work.id)}
@@ -85,21 +86,64 @@
 			id={work.id}
 			on:workclick={handleBoxClick}
 		>
+			{console.log(work)}
 			{#if texture}
 				{@const textureAspectRatio = texture.source.data.height / texture.source.data.width}
 				{@const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75}
 				{@const geometryHeight = geometryWidth * textureAspectRatio}
-				<T.Mesh
-					on:click={handleMeshClick}
-					rotation={[
-						0,
-						Math.random() * Math.PI * 2,
-						0
-					]}
-				>q
-					<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
-					<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} flatShading={true} /></T.Mesh
-				>
+				<T.Group>
+					<T.Group {rotation}>
+						<T.Mesh
+							on:click={handleMeshClick}
+							position={[
+								-225, // Half the size to the right
+								225, // Half the size down
+								225 // Assuming you want it aligned with the front of the box
+							]}
+						>
+							<Text text={work.title} fontSize={40} />
+						</T.Mesh>
+						<T.Mesh
+							on:click={handleMeshClick}
+							position={[
+								-225, // Half the size to the right
+								-225, // Half the size down
+								225 // Assuming you want it aligned with the front of the box
+							]}
+						>
+							<Text
+								text={work.expand.category.title}
+								fontSize={20}
+								anchorX="left"
+								anchorY="bottom"
+							/>
+						</T.Mesh>
+						<T.Mesh
+						on:click={handleMeshClick}
+						position={[
+							225, // Half the size to the right
+							-225, // Half the size down
+							225 // Assuming you want it aligned with the front of the box
+						]}
+					>
+						<Text
+							text={work.type}
+							fontSize={20}
+							anchorX="right"
+							anchorY="bottom"
+						/>
+					</T.Mesh>
+					</T.Group>
+					<T.Mesh on:click={handleMeshClick} rotation={[0, Math.random() * Math.PI * 4, 0]}>
+						<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
+						<T.MeshBasicMaterial
+							side={THREE.DoubleSide}
+							map={texture}
+							opacity={1}
+							flatShading={true}
+						/>
+					</T.Mesh>
+				</T.Group>
 			{/if}</WorkBox
 		>
 	{/await}

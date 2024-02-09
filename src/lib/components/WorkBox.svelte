@@ -4,7 +4,7 @@
 	import { Vector3 } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
-
+	import { onMount } from 'svelte';
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
@@ -12,6 +12,13 @@
 	export let color = 'white';
 	export let categoryPosition;
 	export let absolutePosition;
+
+	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
+
+	onMount(() => {
+		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
+		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
+	});
 
 	interactivity();
 
@@ -79,7 +86,7 @@
 	}
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick}>
+<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
 	<T.Mesh>
 		{#each lines as points}
 			<T.Mesh>

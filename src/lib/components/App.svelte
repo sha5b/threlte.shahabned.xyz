@@ -23,21 +23,27 @@
 			window.removeEventListener('resize', handleResize);
 		};
 	});
-	
 </script>
 
-<flex>
+
+<Canvas>
+	<Scene {data} />
+</Canvas>
+
+
+<!-- <flex>
 	<flex-item>
-		<Canvas size={{ width: 1000, height: canvasHeight }} >
+		<Canvas size={{ width: 1000, height: canvasHeight }}>
 			<Scene {data} />
 		</Canvas>
 	</flex-item>
-	<flex-item style='background-color: white'>
+	<flex-item style="background-color: white">
 		<p>Hi</p>
 	</flex-item>
-</flex>
+</flex> -->
 
-<style>
+<style global>
+	
 	flex {
 		display: flex;
 		align-items: stretch;
@@ -46,4 +52,5 @@
 	flex-item {
 		flex: 1;
 	}
+
 </style>

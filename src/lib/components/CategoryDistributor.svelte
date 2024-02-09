@@ -69,7 +69,7 @@
 			};
 		}, new Vector3());
 	}
-	function calculateRange(categories, maxScaledSize, padding =  0) {
+	function calculateRange(categories, maxScaledSize, padding = 0) {
 		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
 		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
 		const volume = ['x', 'y', 'z'].reduce(
@@ -107,7 +107,7 @@
 				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
 			</T.Mesh></CategoryBox
 		>
-		<T.Mesh>
+		<T.Mesh >
 			<WorkDistributor
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
