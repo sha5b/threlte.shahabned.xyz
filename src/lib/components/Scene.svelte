@@ -1,7 +1,7 @@
 <script>
 	//@ts-nocheck
 
-	import { T } from '@threlte/core';
+	import { T} from '@threlte/core';
 	import { OrbitControls, Grid } from '@threlte/extras';
 	import { Vector3, MathUtils, Quaternion, Euler } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
@@ -96,4 +96,3 @@
 	<T.BoxGeometry args={[250, 250, 250]} />
 	<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />
 </T.Mesh> -->
-

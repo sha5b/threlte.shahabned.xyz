@@ -132,7 +132,7 @@
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
 	<T.LineSegments geometry={gridGeometry} material={gridMaterial} />
-	<!-- <T.Mesh renderOrder={1}>
+	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -147,7 +147,7 @@
 				/>
 			</T.Mesh>
 		{/each}
-	</T.Mesh> -->
+	</T.Mesh>
 
 	<slot />
 	{#if !active}

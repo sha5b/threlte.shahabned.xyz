@@ -87,7 +87,7 @@
 		>
 			{#if texture}
 				{@const textureAspectRatio = texture.source.data.height / texture.source.data.width}
-				{@const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.9}
+				{@const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75}
 				{@const geometryHeight = geometryWidth * textureAspectRatio}
 				<T.Mesh
 					on:click={handleMeshClick}
@@ -96,15 +96,12 @@
 						Math.random() * Math.PI * 2,
 						0
 					]}
-				>
-				<Grid/>
+				>q
 					<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 					<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} flatShading={true} /></T.Mesh
 				>
 			{/if}</WorkBox
 		>
-		{console.log(texture)}
-		{console.log(texture.source.data.width)}
 	{/await}
 {/each}
 
