@@ -4,19 +4,26 @@
 	export let data;
 </script>
 
-<div>
-	<App {data} />
-</div>
+<flex>
+	<div>
+		<App {data} />
+	</div>
+</flex>
 
 <style>
-
 	:global(body) {
-		margin: 0;
+		margin: 0px;
 	}
-
+	flex {
+		padding: 25px;
+		display: flex;
+		align-items: stretch;
+		justify-content: center;
+		flex-direction: column;
+	}
 	div {
-		width: 100vw;
-		height: 100vh;
+		flex-grow: 1;
+		min-height: 100vh;
 		background: rgb(13, 19, 32);
 		background: linear-gradient(180deg, rgb(229, 65, 80) 0%, rgb(199, 57, 69) 100%);
 	}
