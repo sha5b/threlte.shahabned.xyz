@@ -109,6 +109,7 @@
 		>
 		<T.Mesh>
 			<WorkDistributor
+			{color}
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
 				categorySize={category.size}

@@ -76,14 +76,6 @@
 			absolutePosition
 		});
 	}
-
-	function handleMeshClick(event) {
-		if (activeWork) {
-			event.stopPropagation();
-		} else {
-			// Handle the click event when not active, if necessary
-		}
-	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
@@ -107,13 +99,13 @@
 	</T.Mesh>
 	{#if activeCategory}
 		{#if !activeWork}
-			<T.Mesh on:click={handleMeshClick}>
+			<T.Mesh>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
 				<T.MeshBasicMaterial
 					opacity={0}
 					transparent={true}
 					doubleSided={true}
-					color="white"
+					color={color}
 					wireframe
 				/>
 			</T.Mesh>

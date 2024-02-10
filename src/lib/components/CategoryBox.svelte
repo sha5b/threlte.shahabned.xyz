@@ -9,7 +9,7 @@
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
 	export let width = 25;
-	export let color = 'white';
+	export let color = '#c8aaad';
 	export let workCount;
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
@@ -124,10 +124,6 @@
 			dispatch('boxclick', { position, size, rotation, id, active: false });
 		}
 	}
-	function handleMeshClick(event) {
-		event.stopPropagation();
-		// Handle the mesh click event, if necessary
-	}
 </script>
 
 <T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
@@ -157,7 +153,7 @@
 				opacity={0}
 				transparent={true}
 				doubleSided={true}
-				color="white"
+				color={color}
 				wireframe
 			/>
 		</T.Mesh>

@@ -12,6 +12,7 @@
 
 	export let works;
 	export let cellSize;
+	export let color = '#c8aaad';
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
 	export let categoryPosition;
@@ -85,6 +86,7 @@
 			activeWork={activeBoxId === work.id}
 			id={work.id}
 			on:workclick={handleBoxClick}
+			{color}
 		>
 			{console.log(work)}
 			{#if texture}
@@ -101,7 +103,7 @@
 								225 // Assuming you want it aligned with the front of the box
 							]}
 						>
-							<Text text={work.title} fontSize={40} />
+							<Text text={work.title} fontSize={40} {color} />
 						</T.Mesh>
 						<T.Mesh
 							on:click={handleMeshClick}
@@ -114,29 +116,26 @@
 							<Text
 								text={work.expand.category.title}
 								fontSize={20}
+								{color}
 								anchorX="left"
 								anchorY="bottom"
 							/>
 						</T.Mesh>
 						<T.Mesh
-						on:click={handleMeshClick}
-						position={[
-							225, // Half the size to the right
-							-225, // Half the size down
-							225 // Assuming you want it aligned with the front of the box
-						]}
-					>
-						<Text
-							text={work.type}
-							fontSize={20}
-							anchorX="right"
-							anchorY="bottom"
-						/>
-					</T.Mesh>
+							on:click={handleMeshClick}
+							position={[
+								225, // Half the size to the right
+								-225, // Half the size down
+								225 // Assuming you want it aligned with the front of the box
+							]}
+						>
+							<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
+						</T.Mesh>
 					</T.Group>
 					<T.Mesh on:click={handleMeshClick} rotation={[0, Math.random() * Math.PI * 4, 0]}>
 						<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 						<T.MeshBasicMaterial
+							billboard={true}
 							side={THREE.DoubleSide}
 							map={texture}
 							opacity={1}
