@@ -17,37 +17,36 @@
 		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 	});
-
-	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
-	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
-
+	// Refactored function to create box lines with reduced redundancy
 	const createBoxLines = (size) => {
 		const halfSize = size.clone().multiplyScalar(0.5);
 		const corners = [
-			new Vector3(-1, -1, -1),
-			new Vector3(1, -1, -1),
-			new Vector3(1, -1, 1),
-			new Vector3(-1, -1, 1),
-			new Vector3(-1, 1, -1),
-			new Vector3(1, 1, -1),
-			new Vector3(1, 1, 1),
-			new Vector3(-1, 1, 1)
-		].map((corner) => corner.multiply(halfSize));
-
-		return [
-			[corners[0], corners[1]],
-			[corners[1], corners[2]],
-			[corners[2], corners[3]],
-			[corners[3], corners[0]],
-			[corners[4], corners[5]],
-			[corners[5], corners[6]],
-			[corners[6], corners[7]],
-			[corners[7], corners[4]],
-			[corners[0], corners[4]],
-			[corners[1], corners[5]],
-			[corners[2], corners[6]],
-			[corners[3], corners[7]]
+			new Vector3(-halfSize.x, -halfSize.y, -halfSize.z),
+			new Vector3(halfSize.x, -halfSize.y, -halfSize.z),
+			new Vector3(halfSize.x, -halfSize.y, halfSize.z),
+			new Vector3(-halfSize.x, -halfSize.y, halfSize.z),
+			new Vector3(-halfSize.x, halfSize.y, -halfSize.z),
+			new Vector3(halfSize.x, halfSize.y, -halfSize.z),
+			new Vector3(halfSize.x, halfSize.y, halfSize.z),
+			new Vector3(-halfSize.x, halfSize.y, halfSize.z)
 		];
+
+		const pairs = [
+			[0, 1],
+			[1, 2],
+			[2, 3],
+			[3, 0],
+			[4, 5],
+			[5, 6],
+			[6, 7],
+			[7, 4],
+			[0, 4],
+			[1, 5],
+			[2, 6],
+			[3, 7]
+		];
+
+		return pairs.map(([start, end]) => [corners[start], corners[end]]);
 	};
 
 	$: lines = createBoxLines(size);
@@ -55,63 +54,57 @@
 	// Function to create buffer geometry for a 3D grid with fixed cell size steps
 	function createGridLinesGeometry(size, cellSize) {
 		const points = [];
-		const divisionsX = Math.floor(size.x / cellSize);
-		const divisionsY = Math.floor(size.y / cellSize);
-		const divisionsZ = Math.floor(size.z / cellSize);
+		const halfSize = size.clone().divideScalar(2);
+		const divisions = size.clone().divideScalar(cellSize).floor();
+
+		const addLine = (start, end) => {
+			points.push(start.x, start.y, start.z, end.x, end.y, end.z);
+		};
 
 		// Lines parallel to X-axis
-		for (let i = 0; i <= divisionsY; i++) {
-			for (let j = 0; j <= divisionsZ; j++) {
-				points.push(
-					-size.x / 2,
-					i * cellSize - size.y / 2,
-					j * cellSize - size.z / 2,
-					size.x / 2,
-					i * cellSize - size.y / 2,
-					j * cellSize - size.z / 2
+		for (let y = 0; y <= divisions.y; y++) {
+			for (let z = 0; z <= divisions.z; z++) {
+				addLine(
+					new Vector3(-halfSize.x, y * cellSize - halfSize.y, z * cellSize - halfSize.z),
+					new Vector3(halfSize.x, y * cellSize - halfSize.y, z * cellSize - halfSize.z)
 				);
 			}
 		}
 
 		// Lines parallel to Y-axis
-		for (let i = 0; i <= divisionsX; i++) {
-			for (let j = 0; j <= divisionsZ; j++) {
-				points.push(
-					i * cellSize - size.x / 2,
-					-size.y / 2,
-					j * cellSize - size.z / 2,
-					i * cellSize - size.x / 2,
-					size.y / 2,
-					j * cellSize - size.z / 2
+		for (let x = 0; x <= divisions.x; x++) {
+			for (let z = 0; z <= divisions.z; z++) {
+				addLine(
+					new Vector3(x * cellSize - halfSize.x, -halfSize.y, z * cellSize - halfSize.z),
+					new Vector3(x * cellSize - halfSize.x, halfSize.y, z * cellSize - halfSize.z)
 				);
 			}
 		}
 
 		// Lines parallel to Z-axis
-		for (let i = 0; i <= divisionsX; i++) {
-			for (let j = 0; j <= divisionsY; j++) {
-				points.push(
-					i * cellSize - size.x / 2,
-					j * cellSize - size.y / 2,
-					-size.z / 2,
-					i * cellSize - size.x / 2,
-					j * cellSize - size.y / 2,
-					size.z / 2
+		for (let x = 0; x <= divisions.x; x++) {
+			for (let y = 0; y <= divisions.y; y++) {
+				addLine(
+					new Vector3(x * cellSize - halfSize.x, y * cellSize - halfSize.y, -halfSize.z),
+					new Vector3(x * cellSize - halfSize.x, y * cellSize - halfSize.y, halfSize.z)
 				);
 			}
 		}
 
-		const geometry = new BufferGeometry();
-		const vertices = new Float32Array(points);
-		geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-		return geometry;
+		return new BufferGeometry().setAttribute('position', new Float32BufferAttribute(points, 3));
 	}
 
 	const gridGeometry = createGridLinesGeometry(size, cellSize);
-	const gridMaterial = new LineBasicMaterial({ color: color, transparent: true, opacity: .2, linewidth: 1});
+	const gridMaterial = new LineBasicMaterial({
+		color: color,
+		transparent: true,
+		opacity: 0.2,
+		linewidth: 1
+	});
 
 	export let id; // Export id to set it from the parent component
 	export let active; // Add this line to accept an 'active' prop
+	export let activeWork;
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
@@ -120,15 +113,14 @@
 
 	function handleClick(event) {
 		if (!active) {
-			event.stopPropagation();
 			dispatch('boxclick', { position, size, rotation, id, active: false });
 		}
 	}
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
+<T.Group position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
 	<T.LineSegments geometry={gridGeometry} material={gridMaterial} />
-	<T.Mesh renderOrder={1}>
+	<T.Mesh>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -147,23 +139,9 @@
 
 	<slot />
 	{#if !active}
-		<T.Mesh>
+		<T.Mesh renderOrder={1} {target}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial
-				opacity={0}
-				transparent={true}
-				doubleSided={true}
-				color={color}
-				wireframe
-			/>
+			<T.MeshBasicMaterial opacity={0.5} transparent={true} {color} />
 		</T.Mesh>
 	{/if}
-	<!-- {#if active}
-		{#each gridLines as line}
-			<T.LineSegments renderOrder={0}>
-				<MeshLineGeometry points={line} />
-				<MeshLineMaterial {color} opacity={0.25} width={0.5} transparent={true} />
-			</T.LineSegments>
-		{/each}
-	{/if} -->
 </T.Group>

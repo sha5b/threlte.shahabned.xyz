@@ -25,7 +25,6 @@ export function isOverlapping(position, size, categoryPositions) {
 			return true;
 		}
 	}
-	console.log('No overlap detected.');
 	return false;
 }
 
@@ -42,7 +41,7 @@ export function generateUniquePositions(categories, range, categoryPositions, ce
 		let pos = getRandomGridPosition(range, category.size);
 		pos = roundVectorToCellSize(pos, cellSize);
 		while (isOverlapping(pos, category.size, categoryPositions)) {
-			console.log(`Overlap detected for category ID ${category.id} at position`, pos);
+			// console.log(`Overlap detected for category ID ${category.id} at position`, pos);
 			if (++attempts > 100) {
 				// Prevent infinite loops
 				throw new Error('Too many attempts to find a non-overlapping position');
@@ -51,7 +50,7 @@ export function generateUniquePositions(categories, range, categoryPositions, ce
 			pos = roundVectorToCellSize(pos, cellSize);
 		}
 		categoryPositions.set(category.id, pos);
-		console.log(`Position for category ID ${category.id} set to:`, pos);
+		// console.log(`Position for category ID ${category.id} set to:`, pos);
 	});
 }
 
@@ -135,7 +134,7 @@ export function createBoxClickHandler(dispatch, activeBoxSetter) {
 }
 
 export function createWorkClickHandler(dispatch, activeBoxSetter) {
-	return function handleBoxClick(event) {
+	return function handleWorkClick(event) {
 		const { id } = event.detail;
 		activeBoxSetter(id); // Call the setter function with the new active box ID
 		dispatch('workclick', event.detail);

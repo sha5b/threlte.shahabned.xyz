@@ -20,8 +20,6 @@
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 	});
 
-	interactivity();
-
 	const roundToCellSize = (value) => Math.round(value / cellSize) * cellSize;
 	$: size.set(roundToCellSize(size.x), roundToCellSize(size.y), roundToCellSize(size.z));
 
@@ -66,7 +64,6 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick(event) {
-		event.stopPropagation();
 		dispatch('workclick', {
 			position,
 			size,
@@ -78,10 +75,10 @@
 	}
 </script>
 
-<T.Group {target} position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
+<T.Group position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
 	<T.Mesh>
 		{#each lines as points}
-			<T.Mesh>
+			<T.Mesh renderOrder={2} >
 				<MeshLineGeometry {points} />
 				<MeshLineMaterial
 					{width}
@@ -99,14 +96,13 @@
 	</T.Mesh>
 	{#if activeCategory}
 		{#if !activeWork}
-			<T.Mesh>
+			<T.Mesh renderOrder={2} {target}>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
 				<T.MeshBasicMaterial
-					opacity={0}
+					opacity={.5}
 					transparent={true}
-					doubleSided={true}
 					color={color}
-					wireframe
+
 				/>
 			</T.Mesh>
 		{/if}

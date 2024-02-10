@@ -30,7 +30,7 @@
 	function setActiveBoxId(id) {
 		activeBoxId = id;
 	}
-	const handleBoxClick = createWorkClickHandler(dispatch, setActiveBoxId);
+	const handleWorkClick = createWorkClickHandler(dispatch, setActiveBoxId);
 
 	// Define the range within which you want to place the WorkBoxes
 	const range = categorySize.clone();
@@ -85,10 +85,9 @@
 			activeCategory={active}
 			activeWork={activeBoxId === work.id}
 			id={work.id}
-			on:workclick={handleBoxClick}
+			on:workclick={handleWorkClick}
 			{color}
 		>
-			{console.log(work)}
 			{#if texture}
 				{@const textureAspectRatio = texture.source.data.height / texture.source.data.width}
 				{@const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75}
@@ -102,6 +101,7 @@
 								225, // Half the size down
 								225 // Assuming you want it aligned with the front of the box
 							]}
+							overflowWrap={'break-word'}
 						>
 							<Text text={work.title} fontSize={40} {color} />
 						</T.Mesh>
@@ -132,7 +132,7 @@
 							<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
 						</T.Mesh>
 					</T.Group>
-					<T.Mesh on:click={handleMeshClick} rotation={[0, Math.random() * Math.PI * 4, 0]}>
+					<T.Mesh renderOrder={1} on:click={handleMeshClick} rotation={[0, Math.random() * Math.PI * 4, 0]}>
 						<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 						<T.MeshBasicMaterial
 							billboard={true}
