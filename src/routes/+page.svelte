@@ -23,7 +23,7 @@
 	}
 	div {
 		flex-grow: 1;
-		min-height: 100vh;
+		min-height: 95vh;
 		background: rgb(13, 19, 32);
 		background: linear-gradient(180deg, rgb(229, 65, 80) 0%, rgb(199, 57, 69) 100%);
 	}

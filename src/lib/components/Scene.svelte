@@ -109,6 +109,7 @@
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
 />
+
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />
 	<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />

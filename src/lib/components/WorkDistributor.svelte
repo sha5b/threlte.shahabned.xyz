@@ -2,6 +2,7 @@
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import WorkBox from '$lib/components/WorkBox.svelte';
+	import WorkDisplay from './WorkDisplay.svelte';
 	import { createWorkClickHandler, generateUniquePositions } from '$lib/utils/utils';
 	import { Vector3 } from 'three';
 	import * as THREE from 'three';
@@ -38,8 +39,6 @@
 	// Create a Map to store the positions of the WorkBoxes
 	let workPositions = new Map();
 
-	// Generate unique positions for each work
-	// Assuming works have an 'id' property
 	// We are using a size object with the same dimensions as cellSize for all works
 	const workSize = new Vector3(cellSize, cellSize, cellSize);
 
@@ -63,10 +62,6 @@
 		workPositions.set(work.id, position);
 	});
 
-	function handleMeshClick(event) {
-		event.stopPropagation();
-		// Handle the mesh click event, if necessary
-	}
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
 	onMount(() => {
@@ -89,60 +84,7 @@
 			{color}
 		>
 			{#if texture}
-				{@const textureAspectRatio = texture.source.data.height / texture.source.data.width}
-				{@const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75}
-				{@const geometryHeight = geometryWidth * textureAspectRatio}
-				<T.Group>
-					<T.Group {rotation}>
-						<T.Mesh
-							on:click={handleMeshClick}
-							position={[
-								-225, // Half the size to the right
-								225, // Half the size down
-								225 // Assuming you want it aligned with the front of the box
-							]}
-							overflowWrap={'break-word'}
-						>
-							<Text text={work.title} fontSize={40} {color} />
-						</T.Mesh>
-						<T.Mesh
-							on:click={handleMeshClick}
-							position={[
-								-225, // Half the size to the right
-								-225, // Half the size down
-								225 // Assuming you want it aligned with the front of the box
-							]}
-						>
-							<Text
-								text={work.expand.category.title}
-								fontSize={20}
-								{color}
-								anchorX="left"
-								anchorY="bottom"
-							/>
-						</T.Mesh>
-						<T.Mesh
-							on:click={handleMeshClick}
-							position={[
-								225, // Half the size to the right
-								-225, // Half the size down
-								225 // Assuming you want it aligned with the front of the box
-							]}
-						>
-							<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
-						</T.Mesh>
-					</T.Group>
-					<T.Mesh renderOrder={1} on:click={handleMeshClick} rotation={[0, Math.random() * Math.PI * 4, 0]}>
-						<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
-						<T.MeshBasicMaterial
-							billboard={true}
-							side={THREE.DoubleSide}
-							map={texture}
-							opacity={1}
-							flatShading={true}
-						/>
-					</T.Mesh>
-				</T.Group>
+				<WorkDisplay {work} {texture} {rotation} {cellSize} {color}/>
 			{/if}</WorkBox
 		>
 	{/await}
