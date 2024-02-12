@@ -1,4 +1,5 @@
 <script>
+
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
@@ -11,21 +12,28 @@
 		calculateScaledSize,
 		generateUniquePositions
 	} from '$lib/utils/utils';
-
+	import { onMount } from 'svelte';
 	export let categories = [];
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
+	
+
+
+
+
+
 	let color = 'white';
 	const spacingFactor = 2; // 2 will double the size, providing ample space
 	let cellSize = 500;
+
+
 
 	// Event Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
-
 	function handleBoxClick(event) {
-		const { id } = event.detail;
+		const { id, position } = event.detail;
 		activeBoxId = id;
 		dispatch('boxclick', event.detail);
 	}
@@ -33,7 +41,7 @@
 	function handleWorkClick(event) {
 		// Re-dispatch the event with the same detail
 		dispatch('workclick', event.detail);
-		console.log(event.detail);
+
 	}
 	// Updated Category function
 	function calculateCategorySize(workCount) {
@@ -56,7 +64,8 @@
 	}
 
 	const updatedCategories = updateCategoriesWithSizeAndWorks();
-	const categoryPositions = new Map();
+
+	let categoryPositions = new Map();
 
 	function calculateMaxScaledSize(categories) {
 		return categories.reduce((maxSize, category) => {
@@ -85,6 +94,11 @@
 	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
 	
+	onMount (() => {
+		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
+		dispatch('categorypositions', categoryPositions)
+	});
+
 </script>
 
 {#each updatedCategories as category (category.id)}

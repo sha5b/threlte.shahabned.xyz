@@ -19,6 +19,7 @@
 	export let categoryPosition;
 	const absoluteWorkPositions = new Map();
 
+
 	function loadTextureForWork(work) {
 		const imageUrl = getImageURL(work.collectionId, work.id, work.thump);
 		return useTexture(imageUrl);

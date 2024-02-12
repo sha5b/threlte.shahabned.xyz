@@ -29,28 +29,13 @@
 	let tweenDuration = 2500;
 
 	// Handle Mouse Events
-	export let currentId;
 
 	let workDistance = writable(0);
 	let categoryDistance = writable(0);
 	const dispatch = createEventDispatcher();
 
-	$: if (currentId !== null && data) {
-		// Check if the currentId matches any category id
-		const category = data.categories.find((c) => c.id === currentId);
-		if (category) {
-			console.log('i reached to here Category', category);
-		} else {
-			// If not found in categories, check the works
-			const work = data.works.find((w) => w.id === currentId);
-			if (work) {
-				console.log('i reached to here Work', work);
-			}
-		}
-	}
-
 	function onBoxClick(event) {
-		const { position, size, rotation, id } = event.detail;
+		const { position, size, rotation, id } = event.detail || {};
 		event.stopPropagation();
 
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
@@ -68,8 +53,7 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-		dispatch('boxclick', { id, position, newCameraPosition });
-
+		dispatch('boxclick', { id });
 	}
 
 	function onWorkClick(event) {
@@ -94,14 +78,58 @@
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
-		dispatch('workclick', { id, absolutePosition, newCameraPosition });
 
+		dispatch('workclick', { id });
 	}
 
+	export let currentId;
+	let previousId = null;
+	let categoryPositions = null;
 
+	function handleCategoryPositions(event) {
+		categoryPositions = event.detail;
+		console.log('i reached to here Category Position', categoryPositions);
+	}
+
+	$: if (currentId !== previousId && currentId !== null && data && categoryPositions) {
+		previousId = currentId; // Update the previousId to the new value
+
+		const categoryPosition = categoryPositions.get(currentId);
+		if (categoryPosition) {
+			console.log(`Category Position for ${currentId}:`, categoryPosition);
+
+			// If you want to see the entire item, you may want to adjust the camera distance
+			// based on the size of the item or a fixed distance that works well for your scene.
+			const targetDistance = 1000; // Adjust this value as needed
+			const direction = new Vector3(...$cameraPosition).sub(categoryPosition).normalize();
+			const newCameraPosition = direction.multiplyScalar(-targetDistance).add(categoryPosition);
+
+			// Set the camera position and target to center on the categoryPosition
+			cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+			cameraTarget.set([categoryPosition.x, categoryPosition.y, categoryPosition.z]);
+		}
+	}
 </script>
 
-<!-- <T.PointLight position={$cameraPosition} castShadow intensity={0.8} distance={0} /> -->
+<!-- <T.PointLight position={$cameraPosition} cas	$: if (currentId !== null && data && categoryPositions) {
+		const category = data.categories.find((c) => c.id === currentId);
+		if (category) {
+			const categoryPosition = categoryPositions.get(currentId);
+			if (categoryPosition) {
+				console.log(`Category Position for ${currentId}:`, categoryPosition);
+				const extraSpaceFactor = 1.2;
+				const direction = new Vector3(...$cameraPosition).sub(categoryPosition).normalize();
+
+				const adjustedDistance = Math.tan((cameraFOV * Math.PI) / 360) * extraSpaceFactor;
+				const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(categoryPosition);
+				newCameraPosition.x += Math.random() - 0.5;
+				newCameraPosition.y += Math.random() - 0.5;
+				newCameraPosition.z += Math.random() - 0.5;
+				cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+				cameraTarget.set([categoryPosition.x, categoryPosition.y, categoryPosition.z]);
+			}
+		}
+	}tShadow intensity={0.8} distance={0} /> -->
 <T.PerspectiveCamera
 	bind:this={camera}
 	bind:position={$cameraPosition}
@@ -130,6 +158,7 @@
 	works={data.works}
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
+	on:categorypositions={handleCategoryPositions}
 />
 
 <!-- <T.Mesh position={$cameraTarget}>

@@ -37,7 +37,7 @@ export function isOverlapping(position, size, categoryPositions) {
  */
 export function generateUniquePositions(categories, range, categoryPositions, cellSize) {
 	categories.forEach((category) => {
-		let attempts = 0;
+		let attempts = 100;
 		let pos = getRandomGridPosition(range, category.size);
 		pos = roundVectorToCellSize(pos, cellSize);
 		while (isOverlapping(pos, category.size, categoryPositions)) {

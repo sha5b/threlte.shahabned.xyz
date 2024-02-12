@@ -12,21 +12,21 @@
 	function handleBoxClick(event) {
 		const { position , newCameraPosition, id } = event.detail;
 		selectedCategoryId = id;
-		console.log('+page recvied', selectedCategoryId);
 	}
 
 	function handleWorkClick(event) {
 		const { id, absolutePosition, newCameraPosition } = event.detail;
 		selectedWorkId = id;
-		console.log('+page recvied', selectedWorkId);
+
 
 		// Handle work ID as needed
 	}
 	
 	function setId(id) {
 		currentId = id
-		console.log("Button clicked", currentId)
+
 	}
+	
 </script>
 
 <nav>
