@@ -2,11 +2,25 @@
 	//@ts-nocheck
 	import App from '$lib/components/App.svelte';
 	export let data;
+	
+
+	function handleBoxClick(event) {
+    const categoryId = event.detail.id;
+	console.log("+page recvied", categoryId)
+    // Handle category ID as needed
+  }
+
+  function handleWorkClick(event) {
+    const workId = event.detail.id;
+	console.log("+page recvied", workId)
+    // Handle work ID as needed
+  }
+
 </script>
 
 <flex>
 	<div>
-		<App {data} />
+		<App {data}  on:boxclick={handleBoxClick} on:workclick={handleWorkClick}/>
 	</div>
 </flex>
 

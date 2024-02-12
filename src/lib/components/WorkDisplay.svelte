@@ -34,7 +34,7 @@
 		</T.Mesh>
 		<T.Group>
 			<T.Mesh
-				on:click={handleMeshClick}
+				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
 					225, // Half the size down
@@ -45,7 +45,7 @@
 				<Text text={work.title} fontSize={40} {color} />
 			</T.Mesh>
 			<T.Mesh
-				on:click={handleMeshClick}
+				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
 					-225, // Half the size down
@@ -61,7 +61,7 @@
 				/>
 			</T.Mesh>
 			<T.Mesh
-				on:click={handleMeshClick}
+				on:workclick={handleMeshClick}
 				position={[
 					225, // Half the size to the right
 					-225, // Half the size down

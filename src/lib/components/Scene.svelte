@@ -2,6 +2,7 @@
 	//@ts-nocheck
 
 	import { T } from '@threlte/core';
+	import { createEventDispatcher } from 'svelte';
 	import { OrbitControls, Grid, interactivity } from '@threlte/extras';
 	import { Vector3, MathUtils, Quaternion, Euler } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
@@ -30,6 +31,8 @@
 	// Handle Mouse Events
 	let workDistance = writable(0);
 	let categoryDistance = writable(0);
+	const dispatch = createEventDispatcher();
+
 
 	function onBoxClick(event) {
 		const { position, size, rotation, id } = event.detail;
@@ -50,7 +53,8 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-		console.log('Category Clicked')
+		dispatch('boxclick', { id });
+		console.log('Category Clicked', id)
 	}
 
 	function onWorkClick(event) {
@@ -75,7 +79,8 @@
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
-		console.log('Work Clicked')
+		dispatch('workclick', { id });
+		console.log('Work Clicked', id)
 	}
 </script>
 
