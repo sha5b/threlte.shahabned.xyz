@@ -97,6 +97,8 @@
 		dispatch('workclick', { id, absolutePosition, newCameraPosition });
 
 	}
+
+
 </script>
 
 <!-- <T.PointLight position={$cameraPosition} castShadow intensity={0.8} distance={0} /> -->

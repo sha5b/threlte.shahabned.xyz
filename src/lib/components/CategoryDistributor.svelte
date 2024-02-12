@@ -23,6 +23,7 @@
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
+
 	function handleBoxClick(event) {
 		const { id } = event.detail;
 		activeBoxId = id;
@@ -34,7 +35,6 @@
 		dispatch('workclick', event.detail);
 		console.log(event.detail);
 	}
-
 	// Updated Category function
 	function calculateCategorySize(workCount) {
 		if (workCount === 0) return new Vector3();
@@ -84,6 +84,7 @@
 	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
 	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
+	
 </script>
 
 {#each updatedCategories as category (category.id)}

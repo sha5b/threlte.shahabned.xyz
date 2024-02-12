@@ -27,6 +27,7 @@
 	// Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
+	let categoryPositions = null;
 
 	function handleWorkClick(event) {
 		const { id } = event.detail;
@@ -49,6 +50,7 @@
 		workPositions,
 		cellSize
 	);
+
 	// Snap each work position to the grid cell to ensure no overlap
 	works.forEach((work) => {
 		const position = workPositions.get(work.id);
@@ -69,11 +71,11 @@
 		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 	});
+
 </script>
 
 {#each works as work (work.id)}
 	{#await loadTextureForWork(work) then texture}
-		{console.log(absoluteWorkPositions)}
 		<WorkBox
 			absolutePosition={absoluteWorkPositions.get(work.id)}
 			{categoryPosition}
