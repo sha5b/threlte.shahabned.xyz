@@ -3,7 +3,7 @@
 	import { T } from '@threlte/core';
 	import WorkBox from '$lib/components/WorkBox.svelte';
 	import WorkDisplay from './WorkDisplay.svelte';
-	import { createWorkClickHandler, generateUniquePositions } from '$lib/utils/utils';
+	import { generateUniquePositions } from '$lib/utils/utils';
 	import { Vector3 } from 'three';
 	import * as THREE from 'three';
 	import { createEventDispatcher } from 'svelte';
@@ -28,10 +28,11 @@
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
-	function setActiveBoxId(id) {
+	function handleWorkClick(event) {
+		const { id } = event.detail;
 		activeBoxId = id;
+		dispatch('workclick', event.detail);
 	}
-	const handleWorkClick = createWorkClickHandler(dispatch, setActiveBoxId);
 
 	// Define the range within which you want to place the WorkBoxes
 	const range = categorySize.clone();
@@ -72,6 +73,7 @@
 
 {#each works as work (work.id)}
 	{#await loadTextureForWork(work) then texture}
+		{console.log(absoluteWorkPositions)}
 		<WorkBox
 			absolutePosition={absoluteWorkPositions.get(work.id)}
 			{categoryPosition}
@@ -84,7 +86,7 @@
 			{color}
 		>
 			{#if texture}
-				<WorkDisplay {work} {texture} {rotation} {cellSize} {color}/>
+				<WorkDisplay {work} {texture} {rotation} {cellSize} {color} />
 			{/if}</WorkBox
 		>
 	{/await}

@@ -1,34 +1,46 @@
 <script>
 	//@ts-nocheck
 	import App from '$lib/components/App.svelte';
+	import { writable } from 'svelte/store';
 	export let data;
 
-	$: selectedCategoryId = null;
+	let selectedCategoryId = null;
 	let selectedWorkId = null;
+	let currentId = null;
+
 
 	function handleBoxClick(event) {
-		const selectedCategoryId = event.detail.id;
+		const { position , newCameraPosition, id } = event.detail;
+		selectedCategoryId = id;
 		console.log('+page recvied', selectedCategoryId);
 	}
 
 	function handleWorkClick(event) {
-		selectedWorkId = event.detail.id;
+		const { id, absolutePosition, newCameraPosition } = event.detail;
+		selectedWorkId = id;
 		console.log('+page recvied', selectedWorkId);
+
 		// Handle work ID as needed
+	}
+	
+	function setId(id) {
+		currentId = id
+		console.log("Button clicked", currentId)
 	}
 </script>
 
 <nav>
 	<h1>shahab nedaei</h1>
 	{#each data.categories as category}
-		<button>{category.title}</button>
+		<button on:click={(setId(category.id))}>{category.title} {category.id}</button>
 	{/each}
 	<h1>{selectedCategoryId}</h1>
 	<h1>{selectedWorkId}</h1>
+
 </nav>
 <flex>
 	<scene>
-		<App {data} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
+		<App {data} {currentId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
 	</scene>
 </flex>
 
@@ -37,12 +49,10 @@
 		margin: 0px;
 	}
 	flex {
-
 		padding: 25px;
 		display: flex;
 		align-items: stretch;
 		justify-content: center;
-
 	}
 	scene {
 		flex-grow: 1;

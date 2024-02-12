@@ -125,18 +125,3 @@ export function roundToCellSize(value, cellSize) {
  * @param {Function} activeBoxSetter - A setter function to update the active box ID.
  * @returns {Function} A function to handle box click events.
  */
-export function createBoxClickHandler(dispatch, activeBoxSetter) {
-	return function handleBoxClick(event) {
-		const { id } = event.detail;
-		activeBoxSetter(id); // Call the setter function with the new active box ID
-		dispatch('boxclick', event.detail);
-	};
-}
-
-export function createWorkClickHandler(dispatch, activeBoxSetter) {
-	return function handleWorkClick(event) {
-		const { id } = event.detail;
-		activeBoxSetter(id); // Call the setter function with the new active box ID
-		dispatch('workclick', event.detail);
-	};
-}

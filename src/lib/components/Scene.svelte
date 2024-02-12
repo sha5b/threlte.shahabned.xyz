@@ -13,11 +13,11 @@
 
 	export let data; //Pasted data from the Database
 
-	let cameraPosition = tweened([-25000, 25000, 25000], {
+	export let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
 		easing: cubicOut
 	});
-	let cameraTarget = tweened([0, 0, 0], {
+	export let cameraTarget = tweened([0, 0, 0], {
 		duration: 2500,
 		easing: cubicOut
 	});
@@ -29,10 +29,25 @@
 	let tweenDuration = 2500;
 
 	// Handle Mouse Events
+	export let currentId;
+
 	let workDistance = writable(0);
 	let categoryDistance = writable(0);
 	const dispatch = createEventDispatcher();
 
+	$: if (currentId !== null && data) {
+		// Check if the currentId matches any category id
+		const category = data.categories.find((c) => c.id === currentId);
+		if (category) {
+			console.log('i reached to here Category', category);
+		} else {
+			// If not found in categories, check the works
+			const work = data.works.find((w) => w.id === currentId);
+			if (work) {
+				console.log('i reached to here Work', work);
+			}
+		}
+	}
 
 	function onBoxClick(event) {
 		const { position, size, rotation, id } = event.detail;
@@ -53,8 +68,8 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-		dispatch('boxclick', { id });
-		console.log('Category Clicked', id)
+		dispatch('boxclick', { id, position, newCameraPosition });
+
 	}
 
 	function onWorkClick(event) {
@@ -79,8 +94,8 @@
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
-		dispatch('workclick', { id });
-		console.log('Work Clicked', id)
+		dispatch('workclick', { id, absolutePosition, newCameraPosition });
+
 	}
 </script>
 

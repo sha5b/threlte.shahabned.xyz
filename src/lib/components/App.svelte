@@ -4,6 +4,7 @@
 	import { Canvas } from '@threlte/core';
 	import Scene from './Scene.svelte';
 	import { createEventDispatcher } from 'svelte';
+	export let currentId;
 
 	export let data;
 
@@ -16,9 +17,8 @@
 	function handleWorkClick(event) {
 		dispatch('workclick', event.detail);
 	}
-
 </script>
 
 <Canvas>
-	<Scene {data} on:boxclick={handleBoxClick} on:workclick={handleWorkClick}/>
+	<Scene {data} {currentId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
 </Canvas>

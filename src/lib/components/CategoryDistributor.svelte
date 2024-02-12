@@ -9,7 +9,6 @@
 	import {
 		countWorksPerCategory,
 		calculateScaledSize,
-		createBoxClickHandler,
 		generateUniquePositions
 	} from '$lib/utils/utils';
 
@@ -24,14 +23,16 @@
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
-	function setActiveBoxId(id) {
+	function handleBoxClick(event) {
+		const { id } = event.detail;
 		activeBoxId = id;
+		dispatch('boxclick', event.detail);
 	}
-	const handleBoxClick = createBoxClickHandler(dispatch, setActiveBoxId);
 
 	function handleWorkClick(event) {
 		// Re-dispatch the event with the same detail
 		dispatch('workclick', event.detail);
+		console.log(event.detail);
 	}
 
 	// Updated Category function
@@ -70,15 +71,15 @@
 		}, new Vector3());
 	}
 	function calculateRange(categories, maxScaledSize, padding = 0) {
-    const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
-    const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
-    const volume = ['x', 'y', 'z'].reduce(
-        (vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
-        1
-    );
-    const sideLength = Math.cbrt(volume);
-    return new Vector3(sideLength, sideLength, sideLength);
-}
+		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
+		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
+		const volume = ['x', 'y', 'z'].reduce(
+			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
+			1
+		);
+		const sideLength = Math.cbrt(volume);
+		return new Vector3(sideLength, sideLength, sideLength);
+	}
 
 	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
 	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
@@ -109,7 +110,7 @@
 		>
 		<T.Mesh>
 			<WorkDistributor
-			{color}
+				{color}
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
 				categorySize={category.size}
