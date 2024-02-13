@@ -37,7 +37,7 @@
 	function onBoxClick(event) {
 		const { position, size, rotation, id } = event.detail || {};
 		event.stopPropagation();
-
+		
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
 		$categoryDistance = distance;
 
@@ -87,7 +87,9 @@
 	let categoryPositions = null;
 
 	function handleCategoryPositions(event) {
-		categoryPositions = event.detail;
+		categoryPositions = event.detail.categoryPositions;
+		const size = event.detail.size;
+		console.log('Size of category positions:', categoryPositions.size);
 		console.log('i reached to here Category Position', categoryPositions);
 	}
 
@@ -96,11 +98,10 @@
 
 		const categoryPosition = categoryPositions.get(currentId);
 		if (categoryPosition) {
-			console.log(`Category Position for ${currentId}:`, categoryPosition);
 
 			// If you want to see the entire item, you may want to adjust the camera distance
 			// based on the size of the item or a fixed distance that works well for your scene.
-			const targetDistance = 1000; // Adjust this value as needed
+			const targetDistance = 10000; // Adjust this value as needed
 			const direction = new Vector3(...$cameraPosition).sub(categoryPosition).normalize();
 			const newCameraPosition = direction.multiplyScalar(-targetDistance).add(categoryPosition);
 
@@ -111,25 +112,6 @@
 	}
 </script>
 
-<!-- <T.PointLight position={$cameraPosition} cas	$: if (currentId !== null && data && categoryPositions) {
-		const category = data.categories.find((c) => c.id === currentId);
-		if (category) {
-			const categoryPosition = categoryPositions.get(currentId);
-			if (categoryPosition) {
-				console.log(`Category Position for ${currentId}:`, categoryPosition);
-				const extraSpaceFactor = 1.2;
-				const direction = new Vector3(...$cameraPosition).sub(categoryPosition).normalize();
-
-				const adjustedDistance = Math.tan((cameraFOV * Math.PI) / 360) * extraSpaceFactor;
-				const newCameraPosition = direction.multiplyScalar(-adjustedDistance).add(categoryPosition);
-				newCameraPosition.x += Math.random() - 0.5;
-				newCameraPosition.y += Math.random() - 0.5;
-				newCameraPosition.z += Math.random() - 0.5;
-				cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-				cameraTarget.set([categoryPosition.x, categoryPosition.y, categoryPosition.z]);
-			}
-		}
-	}tShadow intensity={0.8} distance={0} /> -->
 <T.PerspectiveCamera
 	bind:this={camera}
 	bind:position={$cameraPosition}
