@@ -103,8 +103,6 @@
     dispatch('combinedWorkpositions', { combinedWorkPositions });
 }
 
-$: console.log(selectedCategoryId)
-$: console.log(selectedWorkId)
 
 </script>
 
@@ -130,7 +128,7 @@ $: console.log(selectedWorkId)
 				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
 			</T.Mesh></CategoryBox
 		>
-		<T.Mesh>
+		<T.Mesh renderOrder={2}>
 			<WorkDistributor
 			{selectedWorkId}
 				{color}

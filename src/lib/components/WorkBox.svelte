@@ -75,10 +75,10 @@
 	}
 </script>
 
-<T.Group position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
-	<T.Mesh>
+<T.Group position={[position.x, position.y, position.z]} {rotation}>
+	<T.Mesh renderOrder={2}>
 		{#each lines as points}
-			<T.Mesh renderOrder={2} >
+			<T.Mesh renderOrder={2}>
 				<MeshLineGeometry {points} />
 				<MeshLineMaterial
 					{width}
@@ -96,14 +96,9 @@
 	</T.Mesh>
 	{#if activeCategory}
 		{#if !activeWork}
-			<T.Mesh renderOrder={2} {target}>
+			<T.Mesh renderOrder={2} {target} on:click={handleClick}>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
-				<T.MeshBasicMaterial
-					opacity={.5}
-					transparent={true}
-					color={color}
-
-				/>
+				<T.MeshBasicMaterial opacity={0.5} transparent={true} {color} />
 			</T.Mesh>
 		{/if}
 	{/if}

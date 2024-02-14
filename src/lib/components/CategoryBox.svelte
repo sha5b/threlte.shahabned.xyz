@@ -99,7 +99,7 @@
 		color: color,
 		transparent: true,
 		opacity: 0.2,
-		linewidth: 1
+		linewidth: 1,
 	});
 
 	export let id; // Export id to set it from the parent component
@@ -114,12 +114,13 @@
 		if (!active) {
 			dispatch('boxclick', { position, size, rotation, id, active: false });
 		}
+		event.stopPropagation();
 	}
 </script>
 
-<T.Group position={[position.x, position.y, position.z]} on:click={handleClick} {rotation}>
+<T.Group  position={[position.x, position.y, position.z]} {rotation}>
 	<T.LineSegments geometry={gridGeometry} material={gridMaterial} />
-	<T.Mesh>
+	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
 				<MeshLineGeometry {points} />
@@ -138,7 +139,7 @@
 
 	<slot />
 	{#if !active}
-		<T.Mesh renderOrder={1} {target}>
+		<T.Mesh renderOrder={1} {target} on:click={handleClick} >
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
 			<T.MeshBasicMaterial opacity={0.5} transparent={true} {color} />
 		</T.Mesh>

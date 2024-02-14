@@ -34,7 +34,15 @@
 	let categoryDistance = writable(0);
 	const dispatch = createEventDispatcher();
 
+	let workClicked = false;
+
 	function onBoxClick(event) {
+		if (workClicked) {
+			// Reset the flag
+			workClicked = false;
+			// Early return if onWorkClick was triggered
+			return;
+		}
 		const { position, size, rotation, id } = event.detail || {};
 		event.stopPropagation();
 
@@ -54,9 +62,16 @@
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
 		dispatch('boxclick', { id });
+		console.log('Box clicked: ' + id);
+
+		// Reset the flag after a delay to allow for any boxclick event to be cancelled
+		setTimeout(() => {
+			workClicked = false;
+		}, 250); // Adjust delay as needed
 	}
 
 	function onWorkClick(event) {
+		workClicked = true;
 		const { position, id, absolutePosition } = event.detail;
 
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
@@ -79,6 +94,7 @@
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
 
 		dispatch('workclick', { id });
+		console.log('Work item clicked: ' + id);
 	}
 
 	export let currentId;

@@ -72,7 +72,6 @@
 	onMount(() => {
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 		dispatch('workpositions', { absoluteWorkPositions });
-		console.log('Dispatched')
 	});
 
 </script>

@@ -20,8 +20,8 @@
 	}
 </script>
 
-<T.Group> 
-	<T.Group {rotation}>
+<T.Group on:click={stopPropagation}> 
+	<T.Group {rotation} on:click={stopPropagation}>
 		<T.Mesh 
 		rotation={[0, Math.random() * Math.PI * 4, 0]}>
 			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
