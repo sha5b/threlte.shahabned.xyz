@@ -40,19 +40,14 @@ export function isOverlapping(position, size, categoryPositions) {
 }
 
 export function generateUniquePositions(categories, range, categoryPositions, cellSize) {
-	categories.forEach((category) => {
-		let attempts = 0;
-		let pos;
-		do {
-			pos = roundVectorToCellSize(getRandomGridPosition(range, category.size), cellSize);
-			attempts++;
-			if (attempts > 100) {
-				throw new Error('Too many attempts to find a non-overlapping position');
-			}
-		} while (isOverlapping(pos, category.size, categoryPositions));
+    categories.forEach((category) => {
+        let pos;
+        do {
+            pos = roundVectorToCellSize(getRandomGridPosition(range, category.size), cellSize);
+        } while (isOverlapping(pos, category.size, categoryPositions));
 
-		categoryPositions.set(category.id, pos);
-	});
+        categoryPositions.set(category.id, pos);
+    });
 }
 
 export function countWorksPerCategory(works, categoryId) {
