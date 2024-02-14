@@ -22,12 +22,11 @@
 
 	function setId(id) {
 		currentId = id;
-		selectedCategoryId = id;
 	}
 
 	// This computed variable will reactively update whenever `selectedCategoryId` or `data.works` changes.
 	$: filteredWorks = selectedCategoryId
-		? data.works.filter((work) => work.category === selectedCategoryId)
+		? data.works.filter((work) => work.categoryId === selectedCategoryId)
 		: [];
 
 </script>
@@ -84,3 +83,28 @@
 	}
 </style>
 
+// Function to be called when a category button is clicked
+function setId(id) {
+	selectedCategoryId = id;
+	currentId = id;
+	// Filter works based on the selected category
+	filteredWorks = data.works.filter((work) => work.category === selectedCategoryId);
+}
+</script>
+
+<nav>
+<h1>shahab nedaei</h1>
+<h1>{selectedCategoryId}</h1>
+{#each data.categories as category}
+	<button on:click={setId(category.id)}>{category.title} {category.id}</button>
+{/each}
+<h1>{selectedWorkId}</h1>
+{#if selectedCategoryId}
+<h2>Works for Selected Category:</h2>
+{#each filteredWorks as work}
+	<button on:click={() => selectedWorkId = work.id}>
+		{work.title} - {work.id}
+		<!-- Render additional work details here -->
+	</button>
+{/each}
+{/if}
