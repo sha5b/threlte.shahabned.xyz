@@ -112,9 +112,10 @@
 
 	function handleClick(event) {
 		if (!active) {
-			dispatch('boxclick', { position, size, rotation, id, active: false });
+			dispatch('boxclick', { position, size, rotation, id});
 		}
 		event.stopPropagation();
+		active = true;
 	}
 </script>
 
@@ -141,7 +142,8 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick} >
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} transparent={true} {color} wireframe/>
+			<T.MeshBasicMaterial opacity={1} transparent={true} {color} wireframe/>
 		</T.Mesh>
+		{console.log(active)}
 	{/if}
 </T.Group>

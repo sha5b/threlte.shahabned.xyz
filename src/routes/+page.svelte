@@ -22,11 +22,13 @@
 
 	function setCategoryId(id) {
 		currentId = id;
-		selectedCategoryId = id;
+		selectedCategoryId = id
+
 	}
 	function setWorkId(id) {
 		currentId = id;
 		selectedWorkId = id;
+		
 	}
 
 
