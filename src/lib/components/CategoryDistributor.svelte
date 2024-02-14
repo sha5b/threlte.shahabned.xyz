@@ -69,7 +69,7 @@
 		}, new Vector3());
 	}
 
-	function calculateContainerRange(categories, maxScaledSize, padding = 0) {
+	function calculateContainerRange(categories, maxScaledSize, padding = .1) {
 		const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length));
 		const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes - 1) * padding;
 		const volume = ['x', 'y', 'z'].reduce(
