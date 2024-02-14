@@ -20,10 +20,15 @@
 		// Handle work ID as needed
 	}
 
-	function setId(id) {
+	function setCategoryId(id) {
 		currentId = id;
 		selectedCategoryId = id;
 	}
+	function setWorkId(id) {
+		currentId = id;
+		selectedWorkId = id;
+	}
+
 
 	// This computed variable will reactively update whenever `selectedCategoryId` or `data.works` changes.
 	$: filteredWorks = selectedCategoryId
@@ -35,13 +40,13 @@
 	<h1>shahab nedaei</h1>
 	<h1>{selectedCategoryId}</h1>
 	{#each data.categories as category}
-		<button on:click={setId(category.id)}>{category.title} {category.id}</button>
+		<button on:click={setCategoryId(category.id)}>{category.title} {category.id}</button>
 	{/each}
 	<h1>{selectedWorkId}</h1>
 	{#if selectedCategoryId}
 		<h2>Works for Selected Category:</h2>
 		{#each filteredWorks as work}
-			<button on:click={setId(work.id)}>
+			<button on:click={setWorkId(work.id)}>
 				{work.title} - {work.id}
 				<!-- Render additional work details here -->
 			</button>
