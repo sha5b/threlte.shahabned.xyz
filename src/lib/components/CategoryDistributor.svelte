@@ -1,5 +1,4 @@
 <script>
-
 	//@ts-nocheck
 	import { T } from '@threlte/core';
 	import { Vector3 } from 'three';
@@ -13,23 +12,15 @@
 		generateUniquePositions
 	} from '$lib/utils/utils';
 	import { onMount } from 'svelte';
+
 	export let categories = [];
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
 
-	
-
-
-
-
-
 	let color = 'white';
-	const spacingFactor = 2; // 2 will double the size, providing ample space
+	const spacingFactor = 2; // Used to scale the size
 	let cellSize = 500;
 
-
-
-	// Event Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
@@ -42,12 +33,10 @@
 	function handleWorkClick(event) {
 		// Re-dispatch the event with the same detail
 		dispatch('workclick', event.detail);
-
 	}
-	// Updated Category function
-	function calculateCategorySize(workCount) {
-		if (workCount === 0) return new Vector3();
 
+	function calculateScaledCategorySize(workCount) {
+		if (workCount === 0) return new Vector3();
 		const baseSize = Math.ceil(Math.sqrt(workCount));
 		return new Vector3(
 			baseSize * cellSize * spacingFactor,
@@ -56,24 +45,17 @@
 		);
 	}
 
-	function updateCategoriesWithSizeAndWorks() {
+	function enrichCategories(categories, works) {
 		return categories.map((category) => {
 			const categoryWorks = works.filter((work) => work.category === category.id);
 			const workCount = categoryWorks.length;
-			return { ...category, works: categoryWorks, size: calculateCategorySize(workCount) };
+			return { ...category, works: categoryWorks, size: calculateScaledCategorySize(workCount) };
 		});
 	}
 
-	const updatedCategories = updateCategoriesWithSizeAndWorks();
-
-	let categoryPositions = new Map();
-	
-	let cateogorySizes = new Map();
-
-	function calculateMaxScaledSize(categories) {
+	function getMaxScaledSize(categories) {
 		return categories.reduce((maxSize, category) => {
-			const workCount = countWorksPerCategory(works, category.id);
-			const scaleFactor = workCount; // change the value to bring them closer toegehtrer
+			const scaleFactor = countWorksPerCategory(works, category.id);
 			const scaledSize = calculateScaledSize(size.clone(), scaleFactor);
 			return {
 				x: Math.max(maxSize.x, scaledSize.x),
@@ -82,27 +64,26 @@
 			};
 		}, new Vector3());
 	}
-	
-	function calculateRange(categories, maxScaledSize, padding = 0) {
-		const numBoxesPerSide = Math.ceil(Math.cbrt(categories.length));
-		const paddedSize = (size, numBoxes) => size * numBoxes + (numBoxes - 1) * padding;
+
+	function calculateContainerRange(categories, maxScaledSize, padding = 0) {
+		const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length));
+		const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes - 1) * padding;
 		const volume = ['x', 'y', 'z'].reduce(
-			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numBoxesPerSide),
+			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numCategoriesPerSide),
 			1
 		);
-		const sideLength = Math.cbrt(volume);
-		return new Vector3(sideLength, sideLength, sideLength);
+		return new Vector3(...Array(3).fill(Math.cbrt(volume)));
 	}
 
-	const maxScaledSize = calculateMaxScaledSize(updatedCategories, size);
-	const dynamicRange = calculateRange(updatedCategories, maxScaledSize);
+	const updatedCategories = enrichCategories(categories, works);
+	const categoryPositions = new Map();
+	const maxScaledSize = getMaxScaledSize(updatedCategories);
+	const dynamicRange = calculateContainerRange(updatedCategories, maxScaledSize);
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
-	
-	onMount (() => {
 
-		dispatch('categorypositions', { categoryPositions, size : maxScaledSize})
+	onMount(() => {
+		dispatch('categorypositions', { categoryPositions, size: maxScaledSize });
 	});
-
 </script>
 
 {#each updatedCategories as category (category.id)}
