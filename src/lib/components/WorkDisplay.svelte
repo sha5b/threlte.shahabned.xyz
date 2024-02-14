@@ -24,16 +24,11 @@
 	<T.Group {rotation}>
 		<T.Mesh rotation={[0, Math.random() * Math.PI * 4, 0]}>
 			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
-			<T.MeshBasicMaterial
-				billboard={true}
-				side={THREE.DoubleSide}
-				map={texture}
-				opacity={1}
-				flatShading={true}
-			/>
+			<T.MeshBasicMaterial billboard={true} side={THREE.DoubleSide} map={texture} opacity={1} />
 		</T.Mesh>
 		<T.Group>
 			<T.Mesh
+				
 				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
@@ -41,6 +36,7 @@
 					225 // Assuming you want it aligned with the front of the box
 				]}
 				overflowWrap={'break-word'}
+				maxWidth={cellSize}
 			>
 				<Text text={work.title} fontSize={40} {color} />
 			</T.Mesh>

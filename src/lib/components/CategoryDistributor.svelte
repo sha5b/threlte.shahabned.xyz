@@ -22,7 +22,7 @@
 	let cellSize = 500;
 
 	const dispatch = createEventDispatcher();
-	let activeBoxId = null; // This will store the ID of the currently active box
+	export let activeBoxId = null; // This will store the ID of the currently active box
 
 	function handleBoxClick(event) {
 		const { id, position } = event.detail;

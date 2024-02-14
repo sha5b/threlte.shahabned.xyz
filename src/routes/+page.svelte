@@ -8,9 +8,8 @@
 	let selectedWorkId = null;
 	let currentId = null;
 
-
 	function handleBoxClick(event) {
-		const { position , newCameraPosition, id } = event.detail;
+		const { position, newCameraPosition, id } = event.detail;
 		selectedCategoryId = id;
 	}
 
@@ -18,25 +17,21 @@
 		const { id, absolutePosition, newCameraPosition } = event.detail;
 		selectedWorkId = id;
 
-
 		// Handle work ID as needed
 	}
-	
-	function setId(id) {
-		currentId = id
 
+	function setId(id) {
+		currentId = id;
 	}
-	
 </script>
 
 <nav>
 	<h1>shahab nedaei</h1>
 	{#each data.categories as category}
-		<button on:click={(setId(category.id))}>{category.title} {category.id}</button>
+		<button on:click={setId(category.id)}>{category.title} {category.id}</button>
 	{/each}
 	<h1>{selectedCategoryId}</h1>
 	<h1>{selectedWorkId}</h1>
-
 </nav>
 <flex>
 	<scene>
@@ -62,6 +57,8 @@
 	}
 
 	nav {
+		padding: 25px;
+		width: 500px;
 		background: rgb(255, 255, 255);
 		position: absolute;
 		right: 0px;

@@ -86,6 +86,7 @@
 	let previousId = null;
 	let categoryPositions = null;
 
+
 	function handleCategoryPositions(event) {
 		categoryPositions = event.detail.categoryPositions;
 		const size = event.detail.size;
@@ -138,6 +139,7 @@
 <CategoryDistributor
 	categories={data.categories}
 	works={data.works}
+	bind:activeBoxId={currentId}
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
 	on:categorypositions={handleCategoryPositions}
