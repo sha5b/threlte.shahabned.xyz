@@ -29,7 +29,6 @@
 	$: filteredWorks = selectedCategoryId
 		? data.works.filter((work) => work.category === selectedCategoryId)
 		: [];
-
 </script>
 
 <nav>
@@ -42,13 +41,12 @@
 	{#if selectedCategoryId}
 		<h2>Works for Selected Category:</h2>
 		{#each filteredWorks as work}
-			<div>
+			<button on:click={setId(work.id)}>
 				{work.title} - {work.id}
 				<!-- Render additional work details here -->
-			</div>
+			</button>
 		{/each}
 	{/if}
-
 </nav>
 
 <flex>
@@ -83,4 +81,3 @@
 		bottom: 0px;
 	}
 </style>
-

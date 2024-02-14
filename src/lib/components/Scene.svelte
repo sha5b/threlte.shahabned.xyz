@@ -37,7 +37,7 @@
 	function onBoxClick(event) {
 		const { position, size, rotation, id } = event.detail || {};
 		event.stopPropagation();
-		
+
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
 		$categoryDistance = distance;
 
@@ -84,30 +84,37 @@
 	export let currentId;
 	let previousId = null;
 	let categoryPositions = null;
-
+	let combinedWorkPositions = null;
 
 	function handleCategoryPositions(event) {
 		categoryPositions = event.detail.categoryPositions;
 		const size = event.detail.size;
-		console.log('Size of category positions:', categoryPositions.size);
-		console.log('i reached to here Category Position', categoryPositions);
+	}
+	function handleWorkPositions(event) {
+		combinedWorkPositions = event.detail.combinedWorkPositions;
+		console.log('combinedWorkPositions', combinedWorkPositions);
 	}
 
-	$: if (currentId !== previousId && currentId !== null && data && categoryPositions) {
+	$: if (currentId !== previousId && currentId !== null && data) {
 		previousId = currentId; // Update the previousId to the new value
+		let targetDistance = 10000;
+		let newPosition;
+		if (categoryPositions.has(currentId)) {
+			newPosition = categoryPositions.get(currentId);
+			targetDistance = 10000;
+		} else if (combinedWorkPositions.has(currentId)) {
+			newPosition = combinedWorkPositions.get(currentId);
+			targetDistance = 2000;
+		}
 
-		const categoryPosition = categoryPositions.get(currentId);
-		if (categoryPosition) {
+		if (newPosition) {
+			// Adjust the camera distance as needed
+			const direction = new Vector3(...$cameraPosition).sub(newPosition).normalize();
+			const newCameraPosition = direction.multiplyScalar(-targetDistance).add(newPosition);
 
-			// If you want to see the entire item, you may want to adjust the camera distance
-			// based on the size of the item or a fixed distance that works well for your scene.
-			const targetDistance = 10000; // Adjust this value as needed
-			const direction = new Vector3(...$cameraPosition).sub(categoryPosition).normalize();
-			const newCameraPosition = direction.multiplyScalar(-targetDistance).add(categoryPosition);
-
-			// Set the camera position and target to center on the categoryPosition
+			// Set the camera position and target to center on the newPosition
 			cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-			cameraTarget.set([categoryPosition.x, categoryPosition.y, categoryPosition.z]);
+			cameraTarget.set([newPosition.x, newPosition.y, newPosition.z]);
 		}
 	}
 </script>
@@ -142,6 +149,7 @@
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
 	on:categorypositions={handleCategoryPositions}
+	on:combinedWorkpositions={handleWorkPositions}
 />
 
 <!-- <T.Mesh position={$cameraTarget}>

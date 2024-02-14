@@ -81,9 +81,24 @@
 	const dynamicRange = calculateContainerRange(updatedCategories, maxScaledSize);
 	generateUniquePositions(updatedCategories, dynamicRange, categoryPositions, cellSize);
 
+	let combinedWorkPositions = new Map();
+
 	onMount(() => {
 		dispatch('categorypositions', { categoryPositions, size: maxScaledSize });
 	});
+
+	function handleWorkPositions(event) {
+    const newPositions = event.detail.absoluteWorkPositions;
+
+    // Merge the new positions into the combinedWorkPositions map
+    newPositions.forEach((position, id) => {
+        combinedWorkPositions.set(id, position);
+    });
+
+    // Optionally, you can dispatch an event with the updated combined map
+    dispatch('combinedWorkpositions', { combinedWorkPositions });
+}
+
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -117,6 +132,7 @@
 				{cellSize}
 				active={activeBoxId === category.id}
 				on:workclick={handleWorkClick}
+				on:workpositions={handleWorkPositions}
 			/>
 		</T.Mesh>
 	</T.Group>

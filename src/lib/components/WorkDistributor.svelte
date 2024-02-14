@@ -36,13 +36,13 @@
 		dispatch('workclick', event.detail);
 	}
 
-	// Define the range within which you want to place the WorkBoxes
+
 	const range = categorySize.clone();
 
-	// Create a Map to store the positions of the WorkBoxes
+
 	let workPositions = new Map();
 
-	// We are using a size object with the same dimensions as cellSize for all works
+
 	const workSize = new Vector3(cellSize, cellSize, cellSize);
 
 	generateUniquePositions(
@@ -52,7 +52,7 @@
 		cellSize
 	);
 
-	// Snap each work position to the grid cell to ensure no overlap
+
 	works.forEach((work) => {
 		const position = workPositions.get(work.id);
 		// Align position to the bottom-left corner of the grid cell
@@ -66,11 +66,15 @@
 		workPositions.set(work.id, position);
 	});
 
-	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
+	let rotation = [0, 0, 0]; 
 
 	onMount(() => {
-		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
+		dispatch('workpositions', { absoluteWorkPositions });
+		console.log('Dispatched')
+	});
+	onMount(() => {
+		
 	});
 
 </script>
