@@ -58,7 +58,6 @@
 
 	function onWorkClick(event) {
 		const { position, id, absolutePosition } = event.detail;
-		event.stopPropagation();
 
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
 		$workDistance = distance;

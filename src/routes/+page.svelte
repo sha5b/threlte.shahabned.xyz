@@ -23,16 +23,34 @@
 	function setId(id) {
 		currentId = id;
 	}
+
+	// This computed variable will reactively update whenever `selectedCategoryId` or `data.works` changes.
+	$: filteredWorks = selectedCategoryId
+		? data.works.filter((work) => work.category === selectedCategoryId)
+		: [];
+
+
 </script>
 
 <nav>
 	<h1>shahab nedaei</h1>
+	<h1>{selectedCategoryId}</h1>
 	{#each data.categories as category}
 		<button on:click={setId(category.id)}>{category.title} {category.id}</button>
 	{/each}
-	<h1>{selectedCategoryId}</h1>
 	<h1>{selectedWorkId}</h1>
+	{#if selectedCategoryId}
+		<h2>Works for Selected Category:</h2>
+		{#each filteredWorks as work}
+			<div>
+				{work.title} - {work.id}
+				<!-- Render additional work details here -->
+			</div>
+		{/each}
+	{/if}
+
 </nav>
+
 <flex>
 	<scene>
 		<App {data} {currentId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />

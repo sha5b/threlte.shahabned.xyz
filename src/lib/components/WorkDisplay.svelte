@@ -20,15 +20,14 @@
 	}
 </script>
 
-<T.Group>
+<T.Group on:workclick={handleMeshClick}>
 	<T.Group {rotation}>
 		<T.Mesh rotation={[0, Math.random() * Math.PI * 4, 0]}>
 			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 			<T.MeshBasicMaterial billboard={true} side={THREE.DoubleSide} map={texture} opacity={1} />
 		</T.Mesh>
 		<T.Group>
-			<T.Mesh
-				
+			<T.Mesh	
 				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
