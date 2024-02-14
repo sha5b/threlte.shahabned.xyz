@@ -17,8 +17,8 @@
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
 	export let categoryPosition;
-	export let selectedWorkId;
 	const absoluteWorkPositions = new Map();
+	export let selectedWorkId
 
 
 	function loadTextureForWork(work) {
@@ -32,7 +32,8 @@
 	let categoryPositions = null;
 
 	function handleWorkClick(event) {
-
+		const { id } = event.detail;
+		activeBoxId = id;
 		dispatch('workclick', event.detail);
 	}
 

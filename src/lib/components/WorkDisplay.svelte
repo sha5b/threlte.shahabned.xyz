@@ -8,27 +8,27 @@
 	export let rotation;
 	export let cellSize;
 	export let color;
+	
 
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
 	const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75;
 	const geometryHeight = geometryWidth * textureAspectRatio;
 
-	function handleMeshClick(event) {
+	function stopPropagation(event) {
 		event.stopPropagation();
-		// Handle the mesh click event, if necessary
 	}
 </script>
 
-<T.Group on:workclick={handleMeshClick}>
+<T.Group> 
 	<T.Group {rotation}>
-		<T.Mesh rotation={[0, Math.random() * Math.PI * 4, 0]}>
+		<T.Mesh 
+		rotation={[0, Math.random() * Math.PI * 4, 0]}>
 			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 			<T.MeshBasicMaterial billboard={true} side={THREE.DoubleSide} map={texture} opacity={1} />
 		</T.Mesh>
 		<T.Group>
 			<T.Mesh	
-				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
 					225, // Half the size down
@@ -40,7 +40,6 @@
 				<Text text={work.title} fontSize={40} {color} />
 			</T.Mesh>
 			<T.Mesh
-				on:workclick={handleMeshClick}
 				position={[
 					-225, // Half the size to the right
 					-225, // Half the size down
@@ -56,7 +55,6 @@
 				/>
 			</T.Mesh>
 			<T.Mesh
-				on:workclick={handleMeshClick}
 				position={[
 					225, // Half the size to the right
 					-225, // Half the size down
