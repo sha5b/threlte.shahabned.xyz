@@ -17,6 +17,7 @@
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
 	export let categoryPosition;
+	export let selectedWorkId;
 	const absoluteWorkPositions = new Map();
 
 
@@ -31,8 +32,7 @@
 	let categoryPositions = null;
 
 	function handleWorkClick(event) {
-		const { id } = event.detail;
-		activeBoxId = id;
+
 		dispatch('workclick', event.detail);
 	}
 
@@ -73,9 +73,6 @@
 		dispatch('workpositions', { absoluteWorkPositions });
 		console.log('Dispatched')
 	});
-	onMount(() => {
-		
-	});
 
 </script>
 
@@ -87,7 +84,7 @@
 			position={absoluteWorkPositions.get(work.id)}
 			{cellSize}
 			activeCategory={active}
-			activeWork={activeBoxId === work.id}
+			activeWork={selectedWorkId === work.id}
 			id={work.id}
 			on:workclick={handleWorkClick}
 			{color}

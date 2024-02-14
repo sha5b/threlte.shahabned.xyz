@@ -85,6 +85,8 @@
 	let previousId = null;
 	let categoryPositions = null;
 	let combinedWorkPositions = null;
+	export let selectedCategoryId;
+	export let selectedWorkId;
 
 	function handleCategoryPositions(event) {
 		categoryPositions = event.detail.categoryPositions;
@@ -92,7 +94,6 @@
 	}
 	function handleWorkPositions(event) {
 		combinedWorkPositions = event.detail.combinedWorkPositions;
-		console.log('combinedWorkPositions', combinedWorkPositions);
 	}
 
 	$: if (currentId !== previousId && currentId !== null && data) {
@@ -146,6 +147,8 @@
 	categories={data.categories}
 	works={data.works}
 	bind:activeBoxId={currentId}
+	{selectedCategoryId}
+	{selectedWorkId}
 	on:boxclick={onBoxClick}
 	on:workclick={onWorkClick}
 	on:categorypositions={handleCategoryPositions}

@@ -56,7 +56,7 @@
 
 <flex>
 	<scene>
-		<App {data} {currentId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
+		<App {data} {currentId} {selectedCategoryId} {selectedWorkId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
 	</scene>
 </flex>
 

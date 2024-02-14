@@ -5,7 +5,8 @@
 	import Scene from './Scene.svelte';
 	import { createEventDispatcher } from 'svelte';
 	export let currentId;
-
+	export let selectedCategoryId;
+	export let selectedWorkId;
 	export let data;
 
 	const dispatch = createEventDispatcher();
@@ -20,5 +21,5 @@
 </script>
 
 <Canvas>
-	<Scene {data} {currentId} on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
+	<Scene {data} {currentId} {selectedCategoryId} {selectedWorkId}  on:boxclick={handleBoxClick} on:workclick={handleWorkClick} />
 </Canvas>

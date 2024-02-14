@@ -23,6 +23,9 @@
 
 	const dispatch = createEventDispatcher();
 	export let activeBoxId = null; // This will store the ID of the currently active box
+	export let selectedCategoryId;
+	export let selectedWorkId;
+
 
 	function handleBoxClick(event) {
 		const { id, position } = event.detail;
@@ -31,7 +34,8 @@
 	}
 
 	function handleWorkClick(event) {
-		// Re-dispatch the event with the same detail
+		const { id, position } = event.detail;
+		activeBoxId = id;
 		dispatch('workclick', event.detail);
 	}
 
@@ -99,6 +103,9 @@
     dispatch('combinedWorkpositions', { combinedWorkPositions });
 }
 
+$: console.log(selectedCategoryId)
+$: console.log(selectedWorkId)
+
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -108,7 +115,7 @@
 			size={category.size}
 			{cellSize}
 			id={category.id}
-			active={activeBoxId === category.id}
+			active={selectedCategoryId === category.id}
 			on:boxclick={handleBoxClick}
 			workCount={countWorksPerCategory(works, category.id)}
 			{color}
@@ -125,12 +132,13 @@
 		>
 		<T.Mesh>
 			<WorkDistributor
+			{selectedWorkId}
 				{color}
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
 				categorySize={category.size}
 				{cellSize}
-				active={activeBoxId === category.id}
+				active={selectedCategoryId === category.id}
 				on:workclick={handleWorkClick}
 				on:workpositions={handleWorkPositions}
 			/>
