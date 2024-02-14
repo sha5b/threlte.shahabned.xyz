@@ -104,7 +104,6 @@
 
 	export let id; // Export id to set it from the parent component
 	export let active; // Add this line to accept an 'active' prop
-	export let activeWork;
 
 	// Handling the Interactivity of the CategoryBox
 	const { target } = interactivity();
