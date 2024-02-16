@@ -16,6 +16,7 @@
 		calculateLines();
 	});
 
+
     function calculateLines() {
     works.forEach((work) => {
         if (work.expand && work.expand.reference) {
@@ -51,13 +52,14 @@
 	<T.Mesh>
 		<MeshLineGeometry points={[line.start, line.end]} />
 		<MeshLineMaterial
-			width={50}
+			width={25}
 			{color}
 			opacity={0.5}
 			transparent={true}
-			dashArray={0.05}
-			dashRatio={0.1}
-			attenuate={true}
+			dashArray={0.01}
+			dashRatio={0.5}
+            depthTest={false}
+            
 		/>
 	</T.Mesh>
 {/each}
