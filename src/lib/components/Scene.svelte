@@ -22,7 +22,7 @@
 		easing: cubicOut
 	});
 
-	let cameraFOV = 25;
+	let cameraFOV = 45;
 	let cameraRotation = writable([0, 0, 0]);
 	let camera;
 	let orbitControls;
@@ -125,6 +125,7 @@
 	bind:position={$cameraPosition}
 	makeDefault
 	fov={cameraFOV}
+	near={100}
 	far={75000}
 	focus={$cameraTarget}
 >
