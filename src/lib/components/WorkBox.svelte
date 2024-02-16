@@ -13,7 +13,7 @@
 	export let color = 'white';
 	export let categoryPosition;
 	export let absolutePosition;
-	export let works
+	export let works;
 
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
@@ -100,11 +100,11 @@
 	{#if activeCategory}
 		{#if !activeWork}
 			<T.Mesh renderOrder={2} {target} on:click={handleClick}>
-				<T.BoxGeometry args={[size.x-50, size.y-50, size.z-50]} />
-				<T.MeshBasicMaterial opacity={0} transparent={true} {color}  />
+				<T.BoxGeometry args={[size.x - 50, size.y - 50, size.z - 50]} />
+				<T.MeshBasicMaterial opacity={0} transparent={true} {color} />
 			</T.Mesh>
+		{:else}
+			<BackgroundGrid {size} cellSize={cellSize / 5} {color} linewidth={0.25} opacity={0.25} />
 		{/if}
 	{/if}
-
-
 </T.Group>

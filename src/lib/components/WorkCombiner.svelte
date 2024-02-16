@@ -54,8 +54,8 @@
 		<MeshLineGeometry points={[line.start, line.end]} />
 		<MeshLineMaterial
 			width={10}
-			color="aquamarine"
-			opacity={1}
+			{color}
+			opacity={.5}
 			transparent={true}
 			dashArray={0.01}
 			dashRatio={.5}

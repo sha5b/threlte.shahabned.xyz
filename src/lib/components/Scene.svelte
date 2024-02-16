@@ -164,7 +164,7 @@
 	on:combinedWorkpositions={handleWorkPositions}
 />
 
-<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={7500} {color} linewidth={.1} opacity={.1}/>
+<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={5000} {color} linewidth={.1} opacity={.1}/>
 
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />

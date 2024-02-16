@@ -78,8 +78,6 @@
 					{color}
 					opacity={1}
 					transparent={true}
-					dashArray={0.1}
-					dashRatio={0.3}
 					attenuate={true}
 				/>
 			</T.Mesh>
@@ -90,7 +88,7 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe/>
 		</T.Mesh>
 	{/if}
 

@@ -3,6 +3,9 @@
 	import { T } from '@threlte/core';
 	import { useTexture, Text, HTML } from '@threlte/extras';
 	import * as THREE from 'three';
+	import { tweened } from 'svelte/motion';
+	import { cubicOut } from 'svelte/easing';
+	import { onMount, onDestroy } from 'svelte';
 	export let work;
 	export let texture;
 	export let rotation;
@@ -11,23 +14,37 @@
 
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
-	const geometryWidth = Math.min(cellSize, texture.source.data.width) * 0.75;
+	const geometryWidth = Math.min(cellSize, texture.source.data.width);
 	const geometryHeight = geometryWidth * textureAspectRatio;
 
 	function stopPropagation(event) {
 		event.stopPropagation();
 	}
+	let planeRotation = [0, 0, 0];
+	let interval;
+
+	// Start the rotation when the component is first added to the DOM
+	onMount(() => {
+		interval = setInterval(() => {
+			// Update Y rotation over time
+			planeRotation = [0, planeRotation[1] + 0.001, 0];
+		}, 20); // Adjust time here to control the speed of rotation
+	});
+
+	// Clean up the interval when the component is destroyed
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 </script>
 
 <T.Group on:click={stopPropagation}>
 	<T.Group {rotation} on:click={stopPropagation}>
-		<T.Mesh rotation={[0, Math.random() * Math.PI * 4, 0]}>
-			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
-			<T.MeshBasicMaterial billboard={true} side={THREE.DoubleSide} map={texture} opacity={1} />
+		<T.Mesh rotation={planeRotation}>
+			<T.PlaneGeometry args={[geometryWidth /1.5, geometryHeight/1.5]} />
+			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} />
 		</T.Mesh>
-		<T.Group
-		>
-			<T.Mesh	
+		<T.Group>
+			<T.Mesh
 				position={[
 					-225, // Half the size to the right
 					225, // Half the size down
@@ -66,4 +83,3 @@
 		<!-- Add more text or other elements as needed -->
 	</T.Group>
 </T.Group>
-
