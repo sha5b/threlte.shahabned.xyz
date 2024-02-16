@@ -8,7 +8,7 @@ export const load = async () => {
 	})
 
 	const works = await pb.collection('works').getFullList({
-		sort: '-title',
+		sort: '-date',
 		expand: 'category, reference'
 	})
 
