@@ -4,6 +4,7 @@
 	import { Vector3, BufferGeometry, LineBasicMaterial, Float32BufferAttribute } from 'three';
 	import { MeshLineGeometry, MeshLineMaterial, interactivity, Grid } from '@threlte/extras';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import BackgroundGrid from './BackgroundGrid.svelte';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
@@ -50,57 +51,6 @@
 
 	$: lines = createBoxLines(size);
 
-	// Function to create buffer geometry for a 3D grid with fixed cell size steps
-	function createGridLinesGeometry(size, cellSize) {
-		const points = [];
-		const halfSize = size.clone().divideScalar(2);
-		const divisions = size.clone().divideScalar(cellSize).floor();
-
-		const addLine = (start, end) => {
-			points.push(start.x, start.y, start.z, end.x, end.y, end.z);
-		};
-
-		// Lines parallel to X-axis
-		for (let y = 0; y <= divisions.y; y++) {
-			for (let z = 0; z <= divisions.z; z++) {
-				addLine(
-					new Vector3(-halfSize.x, y * cellSize - halfSize.y, z * cellSize - halfSize.z),
-					new Vector3(halfSize.x, y * cellSize - halfSize.y, z * cellSize - halfSize.z)
-				);
-			}
-		}
-
-		// Lines parallel to Y-axis
-		for (let x = 0; x <= divisions.x; x++) {
-			for (let z = 0; z <= divisions.z; z++) {
-				addLine(
-					new Vector3(x * cellSize - halfSize.x, -halfSize.y, z * cellSize - halfSize.z),
-					new Vector3(x * cellSize - halfSize.x, halfSize.y, z * cellSize - halfSize.z)
-				);
-			}
-		}
-
-		// Lines parallel to Z-axis
-		for (let x = 0; x <= divisions.x; x++) {
-			for (let y = 0; y <= divisions.y; y++) {
-				addLine(
-					new Vector3(x * cellSize - halfSize.x, y * cellSize - halfSize.y, -halfSize.z),
-					new Vector3(x * cellSize - halfSize.x, y * cellSize - halfSize.y, halfSize.z)
-				);
-			}
-		}
-
-		return new BufferGeometry().setAttribute('position', new Float32BufferAttribute(points, 3));
-	}
-
-	const gridGeometry = createGridLinesGeometry(size, cellSize);
-	const gridMaterial = new LineBasicMaterial({
-		color: color,
-		transparent: true,
-		opacity: 0.2,
-		linewidth: 1,
-	});
-
 	export let id; // Export id to set it from the parent component
 	export let active; // Add this line to accept an 'active' prop
 
@@ -111,15 +61,14 @@
 
 	function handleClick(event) {
 		if (!active) {
-			dispatch('boxclick', { position, size, rotation, id});
+			dispatch('boxclick', { position, size, rotation, id });
 		}
 		event.stopPropagation();
 		active = true;
 	}
 </script>
 
-<T.Group  position={[position.x, position.y, position.z]} {rotation}>
-	<T.LineSegments geometry={gridGeometry} material={gridMaterial} />
+<T.Group position={[position.x, position.y, position.z]} {rotation}>
 	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
@@ -139,9 +88,11 @@
 
 	<slot />
 	{#if !active}
-		<T.Mesh renderOrder={1} {target} on:click={handleClick} >
+		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe />
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
 		</T.Mesh>
 	{/if}
+
+	<BackgroundGrid {size} {cellSize} {color} linewidth={.1} opacity={.1}/>
 </T.Group>

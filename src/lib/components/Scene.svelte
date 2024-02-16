@@ -10,10 +10,11 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { get } from 'svelte/store';
+	import BackgroundGrid from './BackgroundGrid.svelte';
 
 	export let data; //Pasted data from the Database
 
-	export let cameraPosition = tweened([-25000, 25000, 25000], {
+	export let cameraPosition = tweened([-2500, 2500, 2500], {
 		duration: 2500,
 		easing: cubicOut
 	});
@@ -27,6 +28,7 @@
 	let camera;
 	let orbitControls;
 	let tweenDuration = 2500;
+	let color = 'white';
 
 	// Handle Mouse Events
 
@@ -98,14 +100,14 @@
 
 	$: if (currentId !== previousId && currentId !== null && data) {
 		previousId = currentId; // Update the previousId to the new value
-		let targetDistance = 10000;
+		let targetDistance = 7500;
 		let newPosition;
 		if (categoryPositions.has(currentId)) {
 			newPosition = categoryPositions.get(currentId);
-			targetDistance = 10000;
+			targetDistance = 7500;
 		} else if (combinedWorkPositions.has(currentId)) {
 			newPosition = combinedWorkPositions.get(currentId);
-			targetDistance = 2000;
+			targetDistance = 1000;
 		}
 
 		if (newPosition) {
@@ -125,8 +127,8 @@
 	bind:position={$cameraPosition}
 	makeDefault
 	fov={cameraFOV}
-	near={100}
-	far={75000}
+	near={1}
+	far={50000}
 	focus={$cameraTarget}
 >
 	<OrbitControls
@@ -141,6 +143,12 @@
 		maxPolarAngle={180}
 	/>
 </T.PerspectiveCamera>
+<HTML transform renderOrder={3}>
+	<button>HELP ME I NEED TO BE RENDERED</button>
+	<div>
+		<p>Hi</p>
+	</div>
+</HTML>
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
@@ -155,6 +163,8 @@
 	on:categorypositions={handleCategoryPositions}
 	on:combinedWorkpositions={handleWorkPositions}
 />
+
+<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={7500} {color} linewidth={.1} opacity={.1}/>
 
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />

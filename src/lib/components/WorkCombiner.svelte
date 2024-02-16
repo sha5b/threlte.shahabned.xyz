@@ -39,6 +39,7 @@
                     startPos = startPos.clone().addScaledVector(direction, cellSize / 2);
                     endPos = endPos.clone().addScaledVector(direction, -cellSize / 2);
 
+                    
                     linesToDraw.push({ start: startPos, end: endPos });
                     linesToDraw = linesToDraw
                 }
@@ -52,13 +53,13 @@
 	<T.Mesh>
 		<MeshLineGeometry points={[line.start, line.end]} />
 		<MeshLineMaterial
-			width={25}
-			{color}
-			opacity={0.5}
+			width={10}
+			color="aquamarine"
+			opacity={1}
 			transparent={true}
 			dashArray={0.01}
-			dashRatio={0.5}
-            depthTest={false}
+			dashRatio={.5}
+
             
 		/>
 	</T.Mesh>

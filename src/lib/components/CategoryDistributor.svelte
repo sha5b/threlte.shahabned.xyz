@@ -71,15 +71,15 @@
 		}, new Vector3());
 	}
 
-	function calculateContainerRange(categories, maxScaledSize, padding = .1) {
-		const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length));
-		const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes - 1) * padding;
-		const volume = ['x', 'y', 'z'].reduce(
-			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numCategoriesPerSide),
-			1
-		);
-		return new Vector3(...Array(3).fill(Math.cbrt(volume)));
-	}
+function calculateContainerRange(categories, maxScaledSize, padding = .1) {
+	const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length) / 2); // Halving the number of categories per side
+	const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes + 1) * padding; // Adjusted formula
+	const volume = ['x', 'y', 'z'].reduce(
+		(vol, axis) => vol * paddedSize(maxScaledSize[axis], numCategoriesPerSide),
+		1
+	);
+	return new Vector3(...Array(3).fill(Math.cbrt(volume)));
+}
 
 	const updatedCategories = enrichCategories(categories, works);
 	const categoryPositions = new Map();
@@ -126,7 +126,7 @@
 					category.size.z / 2 // Assuming you want it aligned with the front of the box
 				]}
 			>
-				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" {color} />
+				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" />
 			</T.Mesh></CategoryBox
 		>
 		<T.Mesh renderOrder={2}>

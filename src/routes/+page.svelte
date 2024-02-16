@@ -73,10 +73,11 @@
 		justify-content: center;
 	}
 	scene {
+		display: block;
 		flex-grow: 1;
 		min-height: 95vh;
 		background: rgb(13, 19, 32);
-		background: linear-gradient(180deg, rgb(229, 65, 80) 0%, rgb(199, 57, 69) 100%);
+		background: linear-gradient(180deg, rgb(8, 18, 31) 0%, rgb(4, 12, 19) 100%);
 	}
 
 	nav {
