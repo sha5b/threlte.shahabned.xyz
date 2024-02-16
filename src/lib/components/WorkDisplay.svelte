@@ -8,7 +8,6 @@
 	export let rotation;
 	export let cellSize;
 	export let color;
-	
 
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
@@ -20,14 +19,14 @@
 	}
 </script>
 
-<T.Group on:click={stopPropagation}> 
+<T.Group on:click={stopPropagation}>
 	<T.Group {rotation} on:click={stopPropagation}>
-		<T.Mesh 
-		rotation={[0, Math.random() * Math.PI * 4, 0]}>
+		<T.Mesh rotation={[0, Math.random() * Math.PI * 4, 0]}>
 			<T.PlaneGeometry args={[geometryWidth, geometryHeight]} />
 			<T.MeshBasicMaterial billboard={true} side={THREE.DoubleSide} map={texture} opacity={1} />
 		</T.Mesh>
-		<T.Group>
+		<T.Group
+		>
 			<T.Mesh	
 				position={[
 					-225, // Half the size to the right
@@ -63,10 +62,8 @@
 			>
 				<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
 			</T.Mesh>
-			<HTML>
-				<div>Hi</div>
-			</HTML>
 		</T.Group>
 		<!-- Add more text or other elements as needed -->
 	</T.Group>
 </T.Group>
+

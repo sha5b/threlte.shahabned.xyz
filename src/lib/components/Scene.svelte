@@ -3,7 +3,7 @@
 
 	import { T } from '@threlte/core';
 	import { createEventDispatcher } from 'svelte';
-	import { OrbitControls, Grid, interactivity } from '@threlte/extras';
+	import { OrbitControls, HTML } from '@threlte/extras';
 	import { Vector3, MathUtils, Quaternion, Euler } from 'three';
 	import CategoryDistributor from '$lib/components/CategoryDistributor.svelte';
 	import { writable } from 'svelte/store';

@@ -81,6 +81,7 @@
 		<WorkBox
 			absolutePosition={absoluteWorkPositions.get(work.id)}
 			{categoryPosition}
+			{works}
 			position={absoluteWorkPositions.get(work.id)}
 			{cellSize}
 			activeCategory={active}

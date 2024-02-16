@@ -4,6 +4,7 @@
 	import { Vector3 } from 'three';
 	import CategoryBox from '$lib/components/CategoryBox.svelte';
 	import WorkDistributor from './WorkDistributor.svelte';
+	import WorkCombiner from './WorkCombiner.svelte';
 	import { Text, HTML } from '@threlte/extras';
 	import { createEventDispatcher } from 'svelte';
 	import {
@@ -12,6 +13,7 @@
 		generateUniquePositions
 	} from '$lib/utils/utils';
 	import { onMount } from 'svelte';
+
 
 	export let categories = [];
 	export let works = [];
@@ -140,5 +142,6 @@
 				on:workpositions={handleWorkPositions}
 			/>
 		</T.Mesh>
+		<WorkCombiner {cellSize} {color} {works} {combinedWorkPositions}/>
 	</T.Group>
 {/each}
