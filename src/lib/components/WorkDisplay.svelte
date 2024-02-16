@@ -1,7 +1,7 @@
 <script>
 	//@ts-nocheck
 	import { T } from '@threlte/core';
-	import { useTexture, Text } from '@threlte/extras';
+	import { useTexture, Text, HTML } from '@threlte/extras';
 	import * as THREE from 'three';
 	export let work;
 	export let texture;
@@ -63,6 +63,9 @@
 			>
 				<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
 			</T.Mesh>
+			<HTML>
+				<div>Hi</div>
+			</HTML>
 		</T.Group>
 		<!-- Add more text or other elements as needed -->
 	</T.Group>

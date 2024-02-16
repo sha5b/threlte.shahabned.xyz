@@ -99,7 +99,7 @@
 		{#if !activeWork}
 			<T.Mesh renderOrder={2} {target} on:click={handleClick}>
 				<T.BoxGeometry args={[size.x, size.y, size.z]} />
-				<T.MeshBasicMaterial opacity={1} transparent={true} {color} wireframe/>
+				<T.MeshBasicMaterial opacity={0} transparent={true} {color} wireframe/>
 			</T.Mesh>
 		{/if}
 	{/if}

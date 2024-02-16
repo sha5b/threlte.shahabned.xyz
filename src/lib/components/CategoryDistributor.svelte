@@ -115,7 +115,6 @@
 			id={category.id}
 			active={selectedCategoryId === category.id}
 			on:boxclick={handleBoxClick}
-			workCount={countWorksPerCategory(works, category.id)}
 			{color}
 		>
 			<T.Mesh

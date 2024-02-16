@@ -10,7 +10,6 @@
 	export let cellSize = 500;
 	export let width = 25;
 	export let color = '#c8aaad';
-	export let workCount;
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
 	onMount(() => {
@@ -142,8 +141,7 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick} >
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={1} transparent={true} {color} wireframe/>
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe />
 		</T.Mesh>
-		{console.log(active)}
 	{/if}
 </T.Group>
