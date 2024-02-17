@@ -63,8 +63,8 @@
 		if (!active) {
 			dispatch('boxclick', { position, size, rotation, id });
 		}
-		event.stopPropagation();
 		active = true;
+		console.log('Clicked Category');
 	}
 </script>
 
@@ -90,9 +90,9 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
+			<T.MeshBasicMaterial opacity={0.5} {color} transparent={true} />
 		</T.Mesh>
 	{/if}
 
-	<BackgroundGrid {size} {cellSize} {color} linewidth={.1} opacity={.1}/>
+	<BackgroundGrid {size} {cellSize} {color} linewidth={0.1} opacity={0.1} />
 </T.Group>

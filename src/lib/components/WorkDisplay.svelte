@@ -36,6 +36,11 @@
 	onDestroy(() => {
 		clearInterval(interval);
 	});
+
+	const meshTextMaterial = new THREE.MeshBasicMaterial({
+		color: '#000000', // Set the color you want
+		side: THREE.DoubleSide // Render both sides of the material
+	});
 </script>
 
 <T.Group on:click={stopPropagation}>
@@ -49,58 +54,48 @@
 	</T.Group>
 </T.Group>
 {#if activeCategory}
-	<HTML position={[-50, 150, 250]} {rotation} transform pointerEvents="none" dep>
-		<div class='flex-container'>
-			<flex>
-				<h1
-					style=" font-size: 1500px; color: white; overflow: hidden; z-index: -1;"
-				>
-					{work.title}
-				</h1>
-				<h3
-				style="font-size: 500px; color: white; overflow: hidden; z-index: -1;"
-			>
-				{work.title}
-			</h3>
-			</flex>
-		</div></HTML
-	>
+	<T.Group>
+		<T.Mesh
+			position={[
+				-225, // Half the size to the right
+				225, // Half the size down
+				250 // Assuming you want it aligned with the front of the box
+			]}
+			overflowWrap={'break-word'}
+			maxWidth={cellSize}
+		>
+			<Text text={work.title} fontSize={40} {color} />
+		</T.Mesh>
+		<T.Mesh
+			position={[
+				-225, // Half the size to the right
+				-225, // Half the size down
+				225 // Assuming you want it aligned with the front of the box
+			]}
+		>
+			<Text
+				text={work.expand.category.title}
+				fontSize={20}
+				{color}
+				anchorX="left"
+				anchorY="bottom"
+			/>
+		</T.Mesh>
+		<T.Mesh
+			position={[
+				225, // Half the size to the right
+				-225, // Half the size down
+				225 // Assuming you want it aligned with the front of the box
+			]}
+		>
+			<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
+		</T.Mesh>
+	</T.Group>
 {/if}
-
-<!-- <T.Mesh
-	position={[
-		-225, // Half the size to the right
-		225, // Half the size down
-		250 // Assuming you want it aligned with the front of the box
-	]}
-	overflowWrap={'break-word'}
-	maxWidth={cellSize}
->
-	<Text text={work.title} fontSize={40} {color} />
-</T.Mesh>
-<T.Mesh
-	position={[
-		-225, // Half the size to the right
-		-225, // Half the size down
-		225 // Assuming you want it aligned with the front of the box
-	]}
->
-	<Text text={work.expand.category.title} fontSize={20} {color} anchorX="left" anchorY="bottom" />
-</T.Mesh>
-<T.Mesh
-	position={[
-		225, // Half the size to the right
-		-225, // Half the size down
-		225 // Assuming you want it aligned with the front of the box
-	]}
->
-	<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
-</T.Mesh> -->
 
 <style>
 	.flex-container {
 		width: 10000px;
-
 	}
 	flex {
 		width: 100%;

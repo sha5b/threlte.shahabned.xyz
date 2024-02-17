@@ -106,6 +106,20 @@
 
 {#each updatedCategories as category (category.id)}
 	<T.Group>
+		<T.Mesh renderOrder={2}>
+			<WorkDistributor
+				{selectedWorkId}
+				{color}
+				categoryPosition={categoryPositions.get(category.id)}
+				works={category.works}
+				categorySize={category.size}
+				{cellSize}
+				active={selectedCategoryId === category.id}
+				on:workclick={handleWorkClick}
+				on:workpositions={handleWorkPositions}
+			/>
+		</T.Mesh>
+		<WorkCombiner {cellSize} {color} {works} {combinedWorkPositions} />
 		<CategoryBox
 			position={categoryPositions.get(category.id)}
 			size={category.size}
@@ -125,19 +139,5 @@
 				<Text text={category.title} fontSize={300} anchorX="left" anchorY="bottom" />
 			</T.Mesh></CategoryBox
 		>
-		<T.Mesh renderOrder={2}>
-			<WorkDistributor
-				{selectedWorkId}
-				{color}
-				categoryPosition={categoryPositions.get(category.id)}
-				works={category.works}
-				categorySize={category.size}
-				{cellSize}
-				active={selectedCategoryId === category.id}
-				on:workclick={handleWorkClick}
-				on:workpositions={handleWorkPositions}
-			/>
-		</T.Mesh>
-		<WorkCombiner {cellSize} {color} {works} {combinedWorkPositions} />
 	</T.Group>
 {/each}
