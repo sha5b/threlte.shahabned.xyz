@@ -91,7 +91,7 @@
 			{color}
 		>
 			{#if texture}
-				<WorkDisplay activeCategory={active} {work} {texture} {rotation} {cellSize} {color} />
+				<WorkDisplay {work} {texture} {rotation} {cellSize} {color} />
 			{/if}</WorkBox
 		>
 	{/await}

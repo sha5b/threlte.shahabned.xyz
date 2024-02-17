@@ -27,8 +27,7 @@
 	let cameraRotation = writable([0, 0, 0]);
 	let camera;
 	let orbitControls;
-	let tweenDuration = 2500;
-	let color = 'white';
+
 
 	// Handle Mouse Events
 
@@ -36,10 +35,8 @@
 	let categoryDistance = writable(0);
 	const dispatch = createEventDispatcher();
 
-	let boxClickTimeout;
-	let workClickTriggered = false;
-
 	function onBoxClick(event) {
+		event.stopPropagation();
 		const { position, size, rotation, id } = event.detail || {};
 
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
@@ -57,21 +54,7 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-
-
-		// Set a flag to false initially
-		workClickTriggered = false;
-
-		// Clear any existing timeout to prevent multiple triggers
-		if (boxClickTimeout) clearTimeout(boxClickTimeout);
-
-		// Start a timeout that will trigger the boxclick event if workclick isn't clicked within the specified time
-		boxClickTimeout = setTimeout(() => {
-			if (!workClickTriggered) {
-				// Trigger the boxclick event if workclick hasn't happened
-				dispatch('boxclick', { id });
-			}
-		}, 500); // Replace 500 with the number of milliseconds you want to wait
+		dispatch('boxclick', { id });
 	}
 
 	function onWorkClick(event) {
@@ -96,11 +79,6 @@
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
 
-		// Set the flag to indicate that workclick has been triggered
-		workClickTriggered = true;
-
-		// Clear the boxClickTimeout as workclick has been triggered
-		clearTimeout(boxClickTimeout);
 		dispatch('workclick', { id });
 	}
 
@@ -165,6 +143,7 @@
 	/>
 </T.PerspectiveCamera>
 
+
 <T.AmbientLight intensity={2} />
 
 <CategoryDistributor
@@ -179,13 +158,7 @@
 	on:combinedWorkpositions={handleWorkPositions}
 />
 
-<BackgroundGrid
-	size={new Vector3(75000, 75000, 75000)}
-	cellSize={5000}
-	color={'lightgoldenrodyellow'}
-	linewidth={0.1}
-	opacity={0.1}
-/>
+<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={5000} color={'lightgoldenrodyellow'} linewidth={.1} opacity={.1}/>
 
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />

@@ -12,6 +12,7 @@
 	export let width = 50;
 	export let color = '#c8aaad';
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
+	export let activeWork; // Accept the prop
 
 	onMount(() => {
 		// Set rotation to 0, 90, 180, or 270 degrees (in radians) for each axis
@@ -60,9 +61,10 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick(event) {
-		if (!active) {
+		if (!active && !activeWork) {
 			dispatch('boxclick', { position, size, rotation, id });
 		}
+		event.stopPropagation();
 		active = true;
 		console.log('Clicked Category');
 	}
@@ -90,7 +92,7 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0.5} {color} transparent={true} />
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
 		</T.Mesh>
 	{/if}
 

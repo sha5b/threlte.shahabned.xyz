@@ -30,12 +30,14 @@
 	function handleBoxClick(event) {
 		const { id, position } = event.detail;
 		activeBoxId = id;
+		selectedCategoryId = id;
 		dispatch('boxclick', event.detail);
 	}
 
 	function handleWorkClick(event) {
 		const { id, position } = event.detail;
 		activeBoxId = id;
+		selectedWorkId = id;
 		dispatch('workclick', event.detail);
 	}
 
@@ -102,7 +104,7 @@
 		// Optionally, you can dispatch an event with the updated combined map
 		dispatch('combinedWorkpositions', { combinedWorkPositions });
 	}
-</script>
+</script> 
 
 {#each updatedCategories as category (category.id)}
 	<T.Group>
@@ -125,6 +127,7 @@
 			size={category.size}
 			{cellSize}
 			id={category.id}
+			selectedCategoryId={selectedCategoryId}
 			active={selectedCategoryId === category.id}
 			on:boxclick={handleBoxClick}
 			{color}
