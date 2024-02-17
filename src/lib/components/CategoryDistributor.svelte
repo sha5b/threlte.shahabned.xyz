@@ -19,7 +19,7 @@
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
 
-	let color = 'white';
+	let color = 'snow';
 	const spacingFactor = 2; // Used to scale the size
 	let cellSize = 500;
 
@@ -121,7 +121,7 @@ function calculateContainerRange(categories, maxScaledSize, padding = .1) {
 		>
 			<T.Mesh
 				position={[
-					category.size.x / 2 + 125, // Half the size to the right
+					category.size.x / 2 - 125, // Half the size to the right
 					-category.size.y / 2 - 125, // Half the size down
 					category.size.z / 2 // Assuming you want it aligned with the front of the box
 				]}

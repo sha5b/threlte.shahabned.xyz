@@ -12,6 +12,7 @@
 	function handleBoxClick(event) {
 		const { position, newCameraPosition, id } = event.detail;
 		selectedCategoryId = id;
+		selectedWork = null;
 	}
 
 	function handleWorkClick(event) {
@@ -24,6 +25,7 @@
 	function setCategoryId(id) {
 		currentId = id;
 		selectedCategoryId = id;
+		selectedWork = null;
 	}
 	function setWorkId(id) {
 		currentId = id;
@@ -47,14 +49,12 @@
 	}
 </script>
 
-
-
 <nav>
-	<h1 on:click={() => (showDropdown = !showDropdown)}>shahab nedaei</h1>
+	<h1 on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</h1>
 	<div class="dashed-line"></div>
 	{#if showDropdown}
 		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }}>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+			<p>{@html data.owner.description}</p>
 		</div>
 		<div class="dashed-line"></div>
 	{/if}
@@ -90,8 +90,8 @@
 	<div class="dashed-line"></div>
 	<!-- Render the filtered works in a similar button grid -->
 	<buttongrid>
-		{#if selectedWork}
-			<!-- Render the selected work button first -->
+		{#if selectedWork && selectedWork.id !== null}
+			<!-- Render the selected work button only if workId is not null -->
 			<button class="selected-work" on:click={() => setWorkId(selectedWork.id)} transition:slide>
 				{selectedWork.title}
 			</button>
@@ -155,7 +155,7 @@
 		flex-grow: 1;
 		min-height: 100vh;
 		background: rgb(13, 19, 32);
-		background: linear-gradient(180deg, rgb(8, 18, 31) 0%, rgb(4, 12, 19) 100%);
+		background: radial-gradient(circle at center, rgb(10, 92, 166) 0%, rgb(71, 16, 134) 100%);
 	}
 
 	nav {

@@ -90,6 +90,7 @@
 					transparent={true}
 					dashArray={0.1}
 					dashRatio={0.3}
+					attenuate={true}
 				/>
 			</T.Mesh>
 		{/each}

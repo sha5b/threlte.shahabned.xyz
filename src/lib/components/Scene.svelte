@@ -143,12 +143,7 @@
 		maxPolarAngle={180}
 	/>
 </T.PerspectiveCamera>
-<HTML transform renderOrder={3}>
-	<button>HELP ME I NEED TO BE RENDERED</button>
-	<div>
-		<p>Hi</p>
-	</div>
-</HTML>
+
 <T.DirectionalLight intensity={0.8} position.x={5} position.y={10} />
 <T.AmbientLight intensity={0.2} />
 
@@ -164,7 +159,7 @@
 	on:combinedWorkpositions={handleWorkPositions}
 />
 
-<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={5000} {color} linewidth={.1} opacity={.1}/>
+<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={5000} color={'lightgoldenrodyellow'} linewidth={.1} opacity={.1}/>
 
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />

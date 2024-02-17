@@ -12,9 +12,12 @@ export const load = async () => {
 		expand: 'category, reference'
 	})
 
+	const owner = await pb.collection('users').getOne('dwuvjtbcmpf5pz0')
+
 	return {
 		categories,
-		works
+		works,
+		owner
 	}
 }
 

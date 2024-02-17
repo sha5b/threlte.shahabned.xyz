@@ -9,7 +9,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
-	export let width = 25;
+	export let width = 50;
 	export let color = '#c8aaad';
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 
@@ -79,6 +79,8 @@
 					opacity={1}
 					transparent={true}
 					attenuate={true}
+					dashArray={0.1}
+					dashRatio={0.3}
 				/>
 			</T.Mesh>
 		{/each}
@@ -88,7 +90,7 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe/>
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
 		</T.Mesh>
 	{/if}
 
