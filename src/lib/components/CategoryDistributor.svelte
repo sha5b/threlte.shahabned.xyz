@@ -14,7 +14,6 @@
 	} from '$lib/utils/utils';
 	import { onMount } from 'svelte';
 
-
 	export let categories = [];
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
@@ -27,7 +26,6 @@
 	export let activeBoxId = null; // This will store the ID of the currently active box
 	export let selectedCategoryId;
 	export let selectedWorkId;
-
 
 	function handleBoxClick(event) {
 		const { id, position } = event.detail;
@@ -71,15 +69,15 @@
 		}, new Vector3());
 	}
 
-function calculateContainerRange(categories, maxScaledSize, padding = .1) {
-	const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length) / 2); // Halving the number of categories per side
-	const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes + 1) * padding; // Adjusted formula
-	const volume = ['x', 'y', 'z'].reduce(
-		(vol, axis) => vol * paddedSize(maxScaledSize[axis], numCategoriesPerSide),
-		1
-	);
-	return new Vector3(...Array(3).fill(Math.cbrt(volume)));
-}
+	function calculateContainerRange(categories, maxScaledSize, padding = 0.1) {
+		const numCategoriesPerSide = Math.ceil(Math.cbrt(categories.length) / 2); // Halving the number of categories per side
+		const paddedSize = (dimension, numBoxes) => dimension * numBoxes + (numBoxes + 1) * padding; // Adjusted formula
+		const volume = ['x', 'y', 'z'].reduce(
+			(vol, axis) => vol * paddedSize(maxScaledSize[axis], numCategoriesPerSide),
+			1
+		);
+		return new Vector3(...Array(3).fill(Math.cbrt(volume)));
+	}
 
 	const updatedCategories = enrichCategories(categories, works);
 	const categoryPositions = new Map();
@@ -94,18 +92,16 @@ function calculateContainerRange(categories, maxScaledSize, padding = .1) {
 	});
 
 	function handleWorkPositions(event) {
-    const newPositions = event.detail.absoluteWorkPositions;
+		const newPositions = event.detail.absoluteWorkPositions;
 
-    // Merge the new positions into the combinedWorkPositions map
-    newPositions.forEach((position, id) => {
-        combinedWorkPositions.set(id, position);
-    });
+		// Merge the new positions into the combinedWorkPositions map
+		newPositions.forEach((position, id) => {
+			combinedWorkPositions.set(id, position);
+		});
 
-    // Optionally, you can dispatch an event with the updated combined map
-    dispatch('combinedWorkpositions', { combinedWorkPositions });
-}
-
-
+		// Optionally, you can dispatch an event with the updated combined map
+		dispatch('combinedWorkpositions', { combinedWorkPositions });
+	}
 </script>
 
 {#each updatedCategories as category (category.id)}
@@ -121,17 +117,17 @@ function calculateContainerRange(categories, maxScaledSize, padding = .1) {
 		>
 			<T.Mesh
 				position={[
-					category.size.x / 2 - 125, // Half the size to the right
-					-category.size.y / 2 - 125, // Half the size down
+					-category.size.x / 2, // Half the size to the right
+					-category.size.y / 2, // Half the size down
 					category.size.z / 2 // Assuming you want it aligned with the front of the box
 				]}
 			>
-				<Text text={category.title} fontSize={400} anchorX="left" anchorY="bottom" />
+				<Text text={category.title} fontSize={300} anchorX="left" anchorY="bottom" />
 			</T.Mesh></CategoryBox
 		>
 		<T.Mesh renderOrder={2}>
 			<WorkDistributor
-			{selectedWorkId}
+				{selectedWorkId}
 				{color}
 				categoryPosition={categoryPositions.get(category.id)}
 				works={category.works}
@@ -142,6 +138,6 @@ function calculateContainerRange(categories, maxScaledSize, padding = .1) {
 				on:workpositions={handleWorkPositions}
 			/>
 		</T.Mesh>
-		<WorkCombiner {cellSize} {color} {works} {combinedWorkPositions}/>
+		<WorkCombiner {cellSize} {color} {works} {combinedWorkPositions} />
 	</T.Group>
 {/each}
