@@ -18,8 +18,7 @@
 	export let active;
 	export let categoryPosition;
 	const absoluteWorkPositions = new Map();
-	export let selectedWorkId
-
+	export let selectedWorkId;
 
 	function loadTextureForWork(work) {
 		const imageUrl = getImageURL(work.collectionId, work.id, work.thump);
@@ -37,12 +36,9 @@
 		dispatch('workclick', event.detail);
 	}
 
-
 	const range = categorySize.clone();
 
-
 	let workPositions = new Map();
-
 
 	const workSize = new Vector3(cellSize, cellSize, cellSize);
 
@@ -52,7 +48,6 @@
 		workPositions,
 		cellSize
 	);
-
 
 	works.forEach((work) => {
 		const position = workPositions.get(work.id);
@@ -67,13 +62,12 @@
 		workPositions.set(work.id, position);
 	});
 
-	let rotation = [0, 0, 0]; 
+	let rotation = [0, 0, 0];
 
 	onMount(() => {
 		rotation = [0, (Math.floor(Math.random() * 4) * Math.PI) / 2, 0];
 		dispatch('workpositions', { absoluteWorkPositions });
 	});
-
 </script>
 
 {#each works as work (work.id)}
@@ -91,7 +85,7 @@
 			{color}
 		>
 			{#if texture}
-				<WorkDisplay {work} {texture} {rotation} {cellSize} {color} />
+				<WorkDisplay activeCategory={active} {work} {texture} {rotation} {cellSize} {color} />
 			{/if}</WorkBox
 		>
 	{/await}
