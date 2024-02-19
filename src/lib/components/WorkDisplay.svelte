@@ -53,45 +53,37 @@
 		<!-- Add more text or other elements as needed -->
 	</T.Group>
 </T.Group>
-{#if activeCategory}
-	<T.Group>
-		<T.Mesh
-			position={[
-				-225, // Half the size to the right
-				225, // Half the size down
-				250 // Assuming you want it aligned with the front of the box
-			]}
-			overflowWrap={'break-word'}
-			maxWidth={cellSize}
-		>
-			<Text text={work.title} fontSize={40} {color} />
-		</T.Mesh>
-		<T.Mesh
-			position={[
-				-225, // Half the size to the right
-				-225, // Half the size down
-				225 // Assuming you want it aligned with the front of the box
-			]}
-		>
-			<Text
-				text={work.expand.category.title}
-				fontSize={20}
-				{color}
-				anchorX="left"
-				anchorY="bottom"
-			/>
-		</T.Mesh>
-		<T.Mesh
-			position={[
-				225, // Half the size to the right
-				-225, // Half the size down
-				225 // Assuming you want it aligned with the front of the box
-			]}
-		>
-			<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
-		</T.Mesh>
-	</T.Group>
-{/if}
+<T.Group>
+	<T.Mesh
+		position={[
+			-225, // Half the size to the right
+			225, // Half the size down
+			250 // Assuming you want it aligned with the front of the box
+		]}
+		overflowWrap={'break-word'}
+		maxWidth={cellSize}
+	>
+		<Text text={work.title} fontSize={40} {color} />
+	</T.Mesh>
+	<T.Mesh
+		position={[
+			-225, // Half the size to the right
+			-225, // Half the size down
+			225 // Assuming you want it aligned with the front of the box
+		]}
+	>
+		<Text text={work.expand.category.title} fontSize={20} {color} anchorX="left" anchorY="bottom" />
+	</T.Mesh>
+	<T.Mesh
+		position={[
+			225, // Half the size to the right
+			-225, // Half the size down
+			225 // Assuming you want it aligned with the front of the box
+		]}
+	>
+		<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
+	</T.Mesh>
+</T.Group>
 
 <style>
 	.flex-container {

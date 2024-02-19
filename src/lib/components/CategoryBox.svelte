@@ -9,7 +9,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
-	export let width = 50;
+	export let width = 10;
 	export let color = '#c8aaad';
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 	export let activeWork; // Accept the prop
@@ -71,6 +71,7 @@
 </script>
 
 <T.Group position={[position.x, position.y, position.z]} {rotation}>
+
 	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>

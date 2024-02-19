@@ -74,7 +74,7 @@
 			categoryPosition,
 			absolutePosition
 		});
-		console.log('Clicked Work')
+		console.log('Clicked Work');
 	}
 </script>
 
@@ -98,12 +98,12 @@
 	<T.Mesh>
 		<slot />
 	</T.Mesh>
-		{#if !activeWork}
-			<T.Mesh renderOrder={2} {target} on:click={handleClick}>
-				<T.BoxGeometry args={[size.x - 50, size.y - 50, size.z - 50]} />
-				<T.MeshBasicMaterial opacity={0} transparent={true} {color} />
-			</T.Mesh>
-		{:else}
-			<BackgroundGrid {size} cellSize={cellSize / 5} {color} linewidth={0.25} opacity={0.25} />
-		{/if}
+	{#if !activeWork}
+		<T.Mesh renderOrder={2} {target} on:click={handleClick}>
+			<T.BoxGeometry args={[size.x - 50, size.y - 50, size.z - 50]} />
+			<T.MeshBasicMaterial opacity={0} transparent={true} {color} />
+		</T.Mesh>
+	{:else}
+		<BackgroundGrid {size} cellSize={cellSize / 5} {color} linewidth={0.25} opacity={0.25} />
+	{/if}
 </T.Group>

@@ -49,16 +49,80 @@
 	}
 </script>
 
-<scene>
-<App
-	{data}
-	{currentId}
-	{selectedCategoryId}
-	{selectedWorkId}
-	on:boxclick={handleBoxClick}
-	on:workclick={handleWorkClick}
-/>
-</scene>
+<nav>
+	<h1 on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</h1>
+	<div class="dashed-line"></div>
+	{#if showDropdown}
+		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }}>
+			<p>{@html data.owner.description}</p>
+		</div>
+		<div class="dashed-line"></div>
+	{/if}
+
+	<buttongrid>
+		{#if selectedCategoryId}
+			<!-- Render the selected category button first -->
+			<button
+				class="selected-category"
+				on:click={() => setCategoryId(selectedCategoryId)}
+				transition:slide={{
+					delay: 0,
+					duration: 300,
+					start: 0.5
+				}}
+			>
+				{data.categories.find((category) => category.id === selectedCategoryId).title}
+			</button>
+		{/if}
+		{#each data.categories as category}
+			{#if category.id !== selectedCategoryId}
+				<!-- Render all non-selected categories -->
+				<button
+					on:click={() => setCategoryId(category.id)}
+					in:fly={{ x: 200, duration: 400 }}
+					out:fly={{ x: -200, duration: 400 }}
+				>
+					{category.title}
+				</button>
+			{/if}
+		{/each}
+	</buttongrid>
+	<div class="dashed-line"></div>
+	<!-- Render the filtered works in a similar button grid -->
+	<buttongrid>
+		{#if selectedWork && selectedWork.id !== null}
+			<!-- Render the selected work button only if workId is not null -->
+			<button class="selected-work" on:click={() => setWorkId(selectedWork.id)} transition:slide>
+				{selectedWork.title}
+			</button>
+		{/if}
+		{#each filteredWorks as work}
+			{#if work.id !== selectedWorkId}
+				<!-- Render all non-selected works -->
+				<button
+					on:click={() => setWorkId(work.id)}
+					in:fly={{ x: 200, duration: 400 }}
+					out:fly={{ x: -200, duration: 400 }}
+				>
+					{work.title}
+				</button>
+			{/if}
+		{/each}
+	</buttongrid>
+</nav>
+
+<flex>
+	<scene>
+		<App
+			{data}
+			{currentId}
+			{selectedCategoryId}
+			{selectedWorkId}
+			on:boxclick={handleBoxClick}
+			on:workclick={handleWorkClick}
+		/>
+	</scene>
+</flex>
 
 <style>
 	:global(body) {
