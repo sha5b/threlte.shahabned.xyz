@@ -6,6 +6,8 @@
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
 	import BackgroundGrid from './BackgroundGrid.svelte';
+	import * as THREE from 'three';
+
 	export let position = new Vector3(0, 0, 0);
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
@@ -101,7 +103,7 @@
 	{#if !activeWork}
 		<T.Mesh renderOrder={2} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x - 50, size.y - 50, size.z - 50]} />
-			<T.MeshBasicMaterial opacity={0} transparent={true} {color} />
+			<T.MeshBasicMaterial opacity={0} transparent={true} {color} side={THREE.DoubleSide}/>
 		</T.Mesh>
 	{:else}
 		<BackgroundGrid {size} cellSize={cellSize / 5} {color} linewidth={0.25} opacity={0.25} />

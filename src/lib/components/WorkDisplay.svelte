@@ -47,7 +47,7 @@
 	<T.Group {rotation} on:click={stopPropagation}>
 		<T.Mesh rotation={planeRotation}>
 			<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
-			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} />
+			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1}    transparent={true} />
 		</T.Mesh>
 
 		<!-- Add more text or other elements as needed -->
@@ -63,13 +63,13 @@
 		overflowWrap={'break-word'}
 		maxWidth={cellSize}
 	>
-		<Text text={work.title} fontSize={40} {color} />
+		<Text text={work.title} fontSize={40} {color} material={meshTextMaterial}/>
 	</T.Mesh>
 	<T.Mesh
 		position={[
 			-225, // Half the size to the right
 			-225, // Half the size down
-			225 // Assuming you want it aligned with the front of the box
+			250 // Assuming you want it aligned with the front of the box
 		]}
 	>
 		<Text text={work.expand.category.title} fontSize={20} {color} anchorX="left" anchorY="bottom" />
@@ -78,23 +78,10 @@
 		position={[
 			225, // Half the size to the right
 			-225, // Half the size down
-			225 // Assuming you want it aligned with the front of the box
+			250 // Assuming you want it aligned with the front of the box
 		]}
 	>
 		<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
 	</T.Mesh>
 </T.Group>
 
-<style>
-	.flex-container {
-		width: 10000px;
-	}
-	flex {
-		width: 100%;
-		height: 100%;
-		display: flex; /* This makes it a flex container */
-		align-items: left; /* This centers children vertically */
-		justify-content: left; /* This centers children horizontally */
-		flex-direction: column;
-	}
-</style>

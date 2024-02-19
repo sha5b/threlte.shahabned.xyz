@@ -13,6 +13,7 @@
 		generateUniquePositions
 	} from '$lib/utils/utils';
 	import { onMount } from 'svelte';
+	
 
 	export let categories = [];
 	export let works = [];
@@ -134,8 +135,8 @@
 		>
 			<T.Mesh
 				position={[
-					-category.size.x / 2, // Half the size to the right
-					-category.size.y / 2, // Half the size down
+					-category.size.x / 2 + 125, // Half the size to the right
+					-category.size.y / 2 + 25, // Half the size down
 					category.size.z / 2 // Assuming you want it aligned with the front of the box
 				]}
 			>

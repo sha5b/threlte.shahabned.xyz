@@ -14,7 +14,7 @@
 
 	export let data; //Pasted data from the Database
 
-	export let cameraPosition = tweened([-2500, 2500, 2500], {
+	export let cameraPosition = tweened([-25000, 25000, 25000], {
 		duration: 2500,
 		easing: cubicOut
 	});
@@ -23,7 +23,7 @@
 		easing: cubicOut
 	});
 
-	let cameraFOV = 45;
+	let cameraFOV = 25;
 	let cameraRotation = writable([0, 0, 0]);
 	let camera;
 	let orbitControls;
@@ -127,7 +127,7 @@
 	makeDefault
 	fov={cameraFOV}
 	near={1}
-	far={50000}
+	far={75000}
 	focus={$cameraTarget}
 >
 	<OrbitControls

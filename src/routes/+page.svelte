@@ -4,6 +4,8 @@
 	import { writable } from 'svelte/store';
 	export let data;
 	import { slide, fly, fade } from 'svelte/transition';
+	import { getImageURL } from '$lib/utils/getURL';
+	import { afterUpdate } from 'svelte';
 
 	let selectedCategoryId = null;
 	let selectedWorkId = null;
@@ -47,71 +49,170 @@
 	} else {
 		selectedWork = null;
 	}
+	let navElement;
+
+	afterUpdate(() => {
+		if (navElement) {
+			navElement.scrollTo(0, navElement.scrollHeight);
+		}
+	});
 </script>
 
-<scene>
-<App
-	{data}
-	{currentId}
-	{selectedCategoryId}
-	{selectedWorkId}
-	on:boxclick={handleBoxClick}
-	on:workclick={handleWorkClick}
-/>
-</scene>
+<nav bind:this={navElement}>
+	<button class="main-title" on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</button>
+	{#if showDropdown}
+		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }} out:fade={{ duration: 300 }}>
+			<p>{@html data.owner.description}</p>
+		</div>
+	{/if}
+
+	<buttonflex>
+		{#if selectedCategoryId}
+			<!-- Render the selected category button first -->
+			<button
+				class="selected-category"
+				on:click={() => setCategoryId(selectedCategoryId)}
+				transition:slide={{
+					delay: 0,
+					duration: 300,
+					start: 0.5
+				}}
+			>
+				{data.categories.find((category) => category.id === selectedCategoryId).title}
+			</button>
+		{/if}
+		{#each data.categories as category}
+			{#if category.id !== selectedCategoryId}
+				<!-- Render all non-selected categories -->
+				<button
+					on:click={() => setCategoryId(category.id)}
+					in:fly={{ x: 200, duration: 400 }}
+					out:fly={{ x: -200, duration: 400 }}
+				>
+					{category.title}
+				</button>
+			{/if}
+		{/each}
+	</buttonflex>
+
+	<!-- Render the filtered works in a similar button grid -->
+	<buttonflex>
+		{#if selectedWork && selectedWork.id !== null}
+			<!-- Render the selected work button only if workId is not null -->
+			<button class="selected-work" on:click={() => setWorkId(selectedWork.id)} transition:slide>
+				{selectedWork.title}
+			</button>
+		{/if}
+		{#each filteredWorks as work}
+			{#if work.id !== selectedWorkId}
+				<!-- Render all non-selected works -->
+				<button
+					on:click={() => setWorkId(work.id)}
+					in:fly={{ x: 200, duration: 400 }}
+					out:fly={{ x: -200, duration: 400 }}
+				>
+					{work.title}
+				</button>
+			{/if}
+		{/each}
+	</buttonflex>
+
+	{#if selectedWork && selectedWork.id !== null}
+		<!-- Render the image and additional information of the selected work after the buttonflex -->
+		<div>
+			<img
+				src={getImageURL(selectedWork.collectionId, selectedWork.id, selectedWork.thump)}
+				alt={`Thumbnail for ${selectedWork.title}`}
+			/>
+			<!-- Add any other information you want to display here -->
+		</div>
+	{/if}
+</nav>
+
+<flex>
+	<scene>
+		<App
+			{data}
+			{currentId}
+			{selectedCategoryId}
+			{selectedWorkId}
+			on:boxclick={handleBoxClick}
+			on:workclick={handleWorkClick}
+		/>
+	</scene>
+</flex>
 
 <style>
 	:global(body) {
 		margin: 0px;
 	}
-	buttongrid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+	buttonflex {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		display: flex;
+		flex-direction: row;
 		grid-gap: 12.5px;
 		text-align: left; /* Align text to the left */
+		flex-wrap: wrap;
 	}
 	.selected-category {
 		grid-column: 1 / -1; /* Span across all columns */
-		font-size: 2rem; /* Larger font size */
+		font-size: 1.5rem; /* Larger font size */
 		font-weight: bold; /* Bold font weight */
+		color: white;
 	}
 
 	.selected-work {
 		grid-column: 1 / -1; /* Span across all columns */
-		font-size: 2rem; /* Larger font size */
+		font-size: 1.5rem; /* Larger font size */
 		font-weight: bold; /* Bold font weight */
-		/* Add any additional styles you want for selected work */
+		color: white;
 	}
 	.dashed-line {
 		border-top: 2px dashed #ccc; /* Adjust color and style as needed */
 		margin: 20px -50px; /* Adjust spacing as needed */
 	}
 	scene {
+		position: fixed;
+		z-index: -1;
 		display: block;
 		flex-grow: 1;
+		min-width: 100vw;
 		min-height: 100vh;
 		background: rgb(13, 19, 32);
 		background: radial-gradient(circle at center, rgb(10, 92, 166) 0%, rgb(71, 16, 134) 100%);
 	}
 
 	nav {
+		scrollbar-width: none;
+		-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
 		padding: 50px;
-		width: 500px;
-		background: rgb(255, 255, 255);
+		width: 25%;
+		/* background: rgba(255, 255, 255, 0.05); */
 		position: absolute;
-		right: 0px;
-		bottom: 0px;
+		right: 0; /* Align to the bottom right corner */
+		bottom: 0; /* Align to the bottom right corner */
 		overflow-x: hidden; /* Hide horizontal scrollbar */
-		overflow-y: auto; /* Enable vertical scrolling if needed *
-
+		overflow-y: auto; /* Enable vertical scrolling if needed */
+		max-height: 100vh; /* Maximum height */
+		overflow-y: auto; /* Scroll vertically if content overflows */
 		/* Grid background styles */
-		background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-		background-size: 25px 25px; /* Size of the grid cells */
+		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+		background-size: 25px 25px; */
+	}
+	nav::-webkit-scrollbar {
+		display: none;
 	}
 
 	.dropdown {
 		z-index: 1;
+	}
+	.main-title{
+		margin-left: 0;
+		font-size: 2rem;
+		font-weight: bold;
+		color: white;
 	}
 
 	button {
@@ -120,6 +221,7 @@
 		color: inherit;
 		font: inherit;
 		cursor: pointer;
+		color: #ccc;
 		margin: 0;
 		text-decoration: none; /* Optional to remove underline from links if used as buttons */
 		justify-self: start; /* Align grid items to the start (left) */
@@ -128,5 +230,19 @@
 
 	h1 {
 		margin: 0;
+		color: white;
+		font-size: 2rem;
+	}
+	p {
+		color: white;
+		font-size: 1rem;
+	}
+
+	img {
+		max-width: 100%; /* Ensure the image is not wider than the nav */
+		max-height: 100%; /* Adjust max height as needed */
+		object-fit: contain; /* Ensure the whole image fits within the bounds without cropping */
+		display: block; /* Remove extra space below the image */
+		margin: 0 auto; /* Center image if it's not as wide as nav */
 	}
 </style>

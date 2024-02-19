@@ -5,6 +5,7 @@
 	import { MeshLineGeometry, MeshLineMaterial, interactivity, Grid } from '@threlte/extras';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import BackgroundGrid from './BackgroundGrid.svelte';
+	import * as THREE from 'three';
 
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
@@ -71,7 +72,6 @@
 </script>
 
 <T.Group position={[position.x, position.y, position.z]} {rotation}>
-
 	<T.Mesh renderOrder={1}>
 		{#each lines as points}
 			<T.Mesh>
@@ -90,12 +90,12 @@
 	</T.Mesh>
 
 	<slot />
+
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} />
+			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe  side={THREE.DoubleSide}/>
 		</T.Mesh>
 	{/if}
-
 	<BackgroundGrid {size} {cellSize} {color} linewidth={0.1} opacity={0.1} />
 </T.Group>
