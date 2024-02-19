@@ -106,6 +106,6 @@
 			<T.MeshBasicMaterial opacity={0} transparent={true} {color} side={THREE.DoubleSide}/>
 		</T.Mesh>
 	{:else}
-		<BackgroundGrid {size} cellSize={cellSize / 5} {color} linewidth={0.25} opacity={0.25} />
+		<BackgroundGrid {size} cellSize={cellSize / 3} {color} linewidth={0.25} opacity={0.25} />
 	{/if}
 </T.Group>

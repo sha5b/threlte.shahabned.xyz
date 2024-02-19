@@ -10,7 +10,7 @@
 	export let position = new Vector3(0, 0, 0);
 	export let size = new Vector3(500, 500, 500);
 	export let cellSize = 500;
-	export let width = 10;
+	export let width = 25;
 	export let color = '#c8aaad';
 	let rotation = [0, 0, 0]; // Rotation as an array [x, y, z]
 	export let activeWork; // Accept the prop

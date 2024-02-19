@@ -49,16 +49,9 @@
 	} else {
 		selectedWork = null;
 	}
-	let navElement;
-
-	afterUpdate(() => {
-		if (navElement) {
-			navElement.scrollTo(0, navElement.scrollHeight);
-		}
-	});
 </script>
 
-<nav bind:this={navElement}>
+<nav>
 	<button class="main-title" on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</button>
 	{#if showDropdown}
 		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }} out:fade={{ duration: 300 }}>

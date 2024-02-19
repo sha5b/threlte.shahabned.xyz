@@ -47,7 +47,7 @@
 	<T.Group {rotation} on:click={stopPropagation}>
 		<T.Mesh rotation={planeRotation}>
 			<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
-			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1}    transparent={true} />
+			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} transparent={true} depthWrite={false} />
 		</T.Mesh>
 
 		<!-- Add more text or other elements as needed -->
@@ -63,7 +63,7 @@
 		overflowWrap={'break-word'}
 		maxWidth={cellSize}
 	>
-		<Text text={work.title} fontSize={40} {color} material={meshTextMaterial}/>
+		<Text text={work.title} fontSize={40} {color} material={meshTextMaterial} />
 	</T.Mesh>
 	<T.Mesh
 		position={[
@@ -84,4 +84,3 @@
 		<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
 	</T.Mesh>
 </T.Group>
-
