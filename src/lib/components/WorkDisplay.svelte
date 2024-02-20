@@ -71,10 +71,11 @@
 		]}
 	>
 		<HTML transform {distanceFactor} pointerEvents={'none'}
-			><div>
+			><div class="work-html">
 				<flex>
 				<h1>{work.title}</h1>
 				<p>{work.expand.category.title} </p>
+				<p>{work.type} media </p>
 			</flex>
 			</div></HTML
 		>
@@ -83,7 +84,7 @@
 </T.Group>
 
 <style>
-	div {
+	.work-html {
 		pointer-events: none;
 		width: 500px;
 		height: 500px;
