@@ -15,7 +15,6 @@
 	export let color;
 	export let activeCategory;
 
-
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
 	const geometryWidth = Math.min(cellSize, texture.source.data.width);
@@ -42,16 +41,22 @@
 
 	const meshTextMaterial = new THREE.MeshBasicMaterial({
 		color: 'white', // Set the color you want
-		side: THREE.DoubleSide, // Render both sides of the material
-
+		side: THREE.DoubleSide // Render both sides of the material
 	});
+	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
 </script>
 
 <T.Group on:click={stopPropagation}>
 	<T.Group {rotation} on:click={stopPropagation}>
 		<T.Mesh rotation={planeRotation}>
 			<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
-			<T.MeshBasicMaterial side={THREE.DoubleSide} map={texture} opacity={1} transparent={true} depthWrite={false} />
+			<T.MeshBasicMaterial
+				side={THREE.DoubleSide}
+				map={texture}
+				opacity={1}
+				transparent={true}
+				depthWrite={false}
+			/>
 		</T.Mesh>
 
 		<!-- Add more text or other elements as needed -->
@@ -60,29 +65,46 @@
 <T.Group>
 	<T.Mesh
 		position={[
-			-225, // Half the size to the right
-			225, // Half the size down
+			-50, // Half the size to the right
+			50, // Half the size down
 			250 // Assuming you want it aligned with the front of the box
 		]}
 	>
-		<Text text={work.title} fontSize={40} font={Oxanium} material={meshTextMaterial} />
+		<HTML transform {distanceFactor} pointerEvents={'none'}
+			><div>
+				<flex>
+				<h1>{work.title}</h1>
+				<p>{work.expand.category.title} </p>
+			</flex>
+			</div></HTML
+		>
 	</T.Mesh>
-	<T.Mesh
-		position={[
-			-225, // Half the size to the right
-			-225, // Half the size down
-			250 // Assuming you want it aligned with the front of the box
-		]}
-	>
-		<Text text={work.expand.category.title} fontSize={20} anchorX="left" anchorY="bottom" />
-	</T.Mesh>
-	<T.Mesh
-		position={[
-			225, // Half the size to the right
-			-225, // Half the size down
-			250 // Assuming you want it aligned with the front of the box
-		]}
-	>
-		<Text text={work.type} fontSize={20} {color} anchorX="right" anchorY="bottom" />
-	</T.Mesh>
+
 </T.Group>
+
+<style>
+	div {
+		pointer-events: none;
+		width: 500px;
+		height: 500px;
+		user-select: none;
+		-webkit-user-select: none;
+		overflow: hidden;
+	}
+
+	h1 {
+
+		font-size: 3rem;
+		color: white;
+	}
+	p {
+		font-size: 3rem;
+		color: white;
+	}
+
+	flex {
+		display: flex;
+		flex-direction: column;
+	}
+	
+</style>

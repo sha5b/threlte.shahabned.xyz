@@ -105,6 +105,8 @@
 		// Optionally, you can dispatch an event with the updated combined map
 		dispatch('combinedWorkpositions', { combinedWorkPositions });
 	}
+
+	let distanceFactor = 2000; // Adjust this value as needed to prevent z-fighting
 </script> 
 
 {#each updatedCategories as category (category.id)}
@@ -135,13 +137,36 @@
 		>
 			<T.Mesh
 				position={[
-					-category.size.x / 2 + 125, // Half the size to the right
-					-category.size.y / 2 + 25, // Half the size down
+					0, // Half the size to the right
+					0, // Half the size down
 					category.size.z / 2 // Assuming you want it aligned with the front of the box
 				]}
 			>
-				<Text text={category.title} fontSize={300} anchorX="left" anchorY="bottom" />
+				<HTML transform {distanceFactor} pointerEvents={'none'}>
+					<div style="pointer-events: none; width: {category.size.x}; height: {category.size.y};">
+						<h1>{category.title}</h1>
+					</div>
+				</HTML>
 			</T.Mesh></CategoryBox
 		>
 	</T.Group>
 {/each}
+
+<style>
+		div {
+		pointer-events: none;
+		
+		user-select: none;
+		-webkit-user-select: none;
+		overflow: hidden;
+		text-align: left; /* This line aligns text to the left */
+		word-break: break-all;
+	}
+
+	h1 {
+		text-align: left; /* Aligns text inside h1 elements to the left */
+		font-size: 3rem;
+		color: white;
+	}
+	
+</style>
