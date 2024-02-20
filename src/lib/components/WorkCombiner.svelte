@@ -93,5 +93,5 @@
 </script>
 
 {#each curveGeometries as geometry, i (i)}
-	<T.Line {geometry} material={new THREE.LineBasicMaterial({ color: color, linewidth: 2 })} />
+	<T.Line {geometry} material={new THREE.LineBasicMaterial({ color: color, linewidth: 1 })} />
 {/each}

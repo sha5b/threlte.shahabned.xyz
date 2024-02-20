@@ -28,7 +28,6 @@
 	let camera;
 	let orbitControls;
 
-
 	// Handle Mouse Events
 
 	let workDistance = writable(0);
@@ -106,7 +105,7 @@
 			targetDistance = 7500;
 		} else if (combinedWorkPositions.has(currentId)) {
 			newPosition = combinedWorkPositions.get(currentId);
-			targetDistance = 1000;
+			targetDistance = 2000;
 		}
 
 		if (newPosition) {
@@ -119,6 +118,7 @@
 			cameraTarget.set([newPosition.x, newPosition.y, newPosition.z]);
 		}
 	}
+	
 </script>
 
 <T.PerspectiveCamera
@@ -143,7 +143,6 @@
 	/>
 </T.PerspectiveCamera>
 
-
 <T.AmbientLight intensity={2} />
 
 <CategoryDistributor
@@ -158,7 +157,13 @@
 	on:combinedWorkpositions={handleWorkPositions}
 />
 
-<BackgroundGrid size={new Vector3(75000, 75000, 75000)} cellSize={5000} color={'lightgoldenrodyellow'} linewidth={.1} opacity={.1}/>
+<BackgroundGrid
+	size={new Vector3(75000, 75000, 75000)}
+	cellSize={5000}
+	color={'lightgoldenrodyellow'}
+	linewidth={0.1}
+	opacity={0.1}
+/>
 
 <!-- <T.Mesh position={$cameraTarget}>
 	<T.BoxGeometry args={[250, 250, 250]} />

@@ -103,7 +103,7 @@
 	{#if !activeWork}
 		<T.Mesh renderOrder={2} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x - 50, size.y - 50, size.z - 50]} />
-			<T.MeshBasicMaterial opacity={0} transparent={true} {color} side={THREE.DoubleSide}/>
+			<T.MeshBasicMaterial opacity={0} transparent={true} {color} />
 		</T.Mesh>
 	{:else}
 		<BackgroundGrid {size} cellSize={cellSize / 3} {color} linewidth={0.25} opacity={0.25} />

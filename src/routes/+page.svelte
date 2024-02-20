@@ -52,12 +52,12 @@
 </script>
 
 <nav>
-	<button class="main-title" on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</button>
+	<!-- <button class="main-title" on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</button>
 	{#if showDropdown}
 		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }} out:fade={{ duration: 300 }}>
 			<p>{@html data.owner.description}</p>
 		</div>
-	{/if}
+	{/if} -->
 
 	<buttonflex>
 		{#if selectedCategoryId}
@@ -87,7 +87,7 @@
 			{/if}
 		{/each}
 	</buttonflex>
-
+	<div class="dashed-line"></div>
 	<!-- Render the filtered works in a similar button grid -->
 	<buttonflex>
 		{#if selectedWork && selectedWork.id !== null}
@@ -110,16 +110,14 @@
 		{/each}
 	</buttonflex>
 
-	{#if selectedWork && selectedWork.id !== null}
-		<!-- Render the image and additional information of the selected work after the buttonflex -->
+	<!-- {#if selectedWork && selectedWork.id !== null}
 		<div>
 			<img
 				src={getImageURL(selectedWork.collectionId, selectedWork.id, selectedWork.thump)}
 				alt={`Thumbnail for ${selectedWork.title}`}
 			/>
-			<!-- Add any other information you want to display here -->
 		</div>
-	{/if}
+	{/if} -->
 </nav>
 
 <flex>
@@ -147,16 +145,19 @@
 		grid-gap: 12.5px;
 		text-align: left; /* Align text to the left */
 		flex-wrap: wrap;
+		justify-content: right;
 	}
 	.selected-category {
-		grid-column: 1 / -1; /* Span across all columns */
+		flex-basis: 100%;
+		flex-grow: 1;
 		font-size: 1.5rem; /* Larger font size */
 		font-weight: bold; /* Bold font weight */
 		color: white;
 	}
 
 	.selected-work {
-		grid-column: 1 / -1; /* Span across all columns */
+		flex-basis: 100%;
+		flex-grow: 1;
 		font-size: 1.5rem; /* Larger font size */
 		font-weight: bold; /* Bold font weight */
 		color: white;
@@ -177,21 +178,22 @@
 	}
 
 	nav {
+		padding-top: 4rem;
+		padding-right: 5rem;
 		scrollbar-width: none;
 		-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
-		padding: 50px;
 		width: 25%;
-		/* background: rgba(255, 255, 255, 0.05); */
+		/* background: rgba(71, 16, 134, 0.5); */
 		position: absolute;
 		right: 0; /* Align to the bottom right corner */
-		bottom: 0; /* Align to the bottom right corner */
+		top: 0; /* Align to the bottom right corner */
 		overflow-x: hidden; /* Hide horizontal scrollbar */
 		overflow-y: auto; /* Enable vertical scrolling if needed */
 		max-height: 100vh; /* Maximum height */
 		overflow-y: auto; /* Scroll vertically if content overflows */
 		/* Grid background styles */
-		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-			linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 		background-size: 25px 25px; */
 	}
 	nav::-webkit-scrollbar {
@@ -201,7 +203,7 @@
 	.dropdown {
 		z-index: 1;
 	}
-	.main-title{
+	.main-title {
 		margin-left: 0;
 		font-size: 2rem;
 		font-weight: bold;
@@ -214,11 +216,11 @@
 		color: inherit;
 		font: inherit;
 		cursor: pointer;
-		color: #ccc;
+		color: white;
 		margin: 0;
 		text-decoration: none; /* Optional to remove underline from links if used as buttons */
 		justify-self: start; /* Align grid items to the start (left) */
-		text-align: left;
+		text-align: right;
 	}
 
 	h1 {

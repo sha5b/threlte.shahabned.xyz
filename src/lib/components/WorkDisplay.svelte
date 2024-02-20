@@ -6,12 +6,15 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { onMount, onDestroy } from 'svelte';
+
+	const Oxanium = '/fonts/Oxanium_ExtraLight_Regular.json';
 	export let work;
 	export let texture;
 	export let rotation;
 	export let cellSize;
 	export let color;
 	export let activeCategory;
+
 
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
@@ -38,8 +41,9 @@
 	});
 
 	const meshTextMaterial = new THREE.MeshBasicMaterial({
-		color: '#000000', // Set the color you want
-		side: THREE.DoubleSide // Render both sides of the material
+		color: 'white', // Set the color you want
+		side: THREE.DoubleSide, // Render both sides of the material
+
 	});
 </script>
 
@@ -60,10 +64,8 @@
 			225, // Half the size down
 			250 // Assuming you want it aligned with the front of the box
 		]}
-		overflowWrap={'break-word'}
-		maxWidth={cellSize}
 	>
-		<Text text={work.title} fontSize={40} {color} material={meshTextMaterial} />
+		<Text text={work.title} fontSize={40} font={Oxanium} material={meshTextMaterial} />
 	</T.Mesh>
 	<T.Mesh
 		position={[
@@ -72,7 +74,7 @@
 			250 // Assuming you want it aligned with the front of the box
 		]}
 	>
-		<Text text={work.expand.category.title} fontSize={20} {color} anchorX="left" anchorY="bottom" />
+		<Text text={work.expand.category.title} fontSize={20} anchorX="left" anchorY="bottom" />
 	</T.Mesh>
 	<T.Mesh
 		position={[
