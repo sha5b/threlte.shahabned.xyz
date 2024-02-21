@@ -49,6 +49,12 @@
 	} else {
 		selectedWork = null;
 	}
+
+	function formatDate(dateString) {
+		const options = { year: 'numeric', month: 'long' };
+		const date = new Date(dateString);
+		return date.toLocaleDateString(undefined, options);
+	}
 </script>
 
 <nav>
@@ -110,32 +116,68 @@
 		{/each}
 	</buttonflex>
 	{#if selectedWork && selectedWork.id !== null}
+		<div class="dashed-line"></div>
 		<div class="work-details">
-			<!-- Add a table for displaying work details with headers at the top -->
-			<table>
-				<tr>
-					<th>Format</th>
-					<th>Dimensions</th>
-					<!-- Add more headers as needed -->
-				</tr>
-				<tr>
-					<td>{selectedWork.format}</td>
-					<td>{selectedWork.dimension}</td>
-					<!-- Add more data cells as needed -->
-				</tr>
-				<!-- Repeat <tr> for additional works or details -->
-			</table>
+			<div class="work-info">
+				{#if selectedWork.dimension}
+					<div class="info-item">
+						<span class="info-title">dimension:</span>
+						<span class="info-content">{selectedWork.dimension}</span>
+					</div>
+				{/if}
+				{#if selectedWork.format}
+					<div class="info-item">
+						<span class="info-title">format:</span>
+						<span class="info-content">{selectedWork.format}</span>
+					</div>
+				{/if}
+				{#if selectedWork.format}
+					<div class="info-item">
+						<span class="info-title">media:</span>
+						<span class="info-content">{selectedWork.type}</span>
+					</div>
+				{/if}
+			</div>
+			<div class="work-info">
+				{#if selectedWork.editions > 0}
+					<div class="info-item">
+						<span class="info-title">editions:</span>
+						<span class="info-content">{selectedWork.editions}</span>
+					</div>
+				{/if}
+				<div class="info-item">
+					<span class="info-title">date:</span>
+					<span class="info-content">{formatDate(selectedWork.date)}</span>
+				</div>
+			</div>
+			{#if selectedWork.expand && selectedWork.expand.colab && selectedWork.expand.colab.length > 0}
+				<div class="work-info">
+					<div class="info-item">
+						<span class="info-title">collaborations:</span>
+						<div class="info-content">
+							{#each selectedWork.expand.colab as colab}
+								<a href={colab.link} class="list-item" target="_blank">{colab.title}</a>
+							{/each}
+						</div>
+					</div>
+				</div>
+			{/if}
+			{#if selectedWork.expand.exhibitions && selectedWork.exhibitions.length > 0}
+				<div class="work-info">
+					<div class="info-item">
+						<span class="info-title">exhibitions:</span>
+						<div class="info-content">
+							{#each selectedWork.expand.exhibitions as exhibition}
+							<div>
+								<a class="list-item" href={exhibition.link} target="_blank">{exhibition.title}</a>
+							</div>
+							{/each}
+						</div>
+					</div>
+				</div>
+			{/if}
 		</div>
 	{/if}
-
-	<!-- {#if selectedWork && selectedWork.id !== null}
-		<div>
-			<img
-				src={getImageURL(selectedWork.collectionId, selectedWork.id, selectedWork.thump)}
-				alt={`Thumbnail for ${selectedWork.title}`}
-			/>
-		</div>
-	{/if} -->
 </nav>
 
 <flex>
@@ -196,8 +238,8 @@
 	}
 
 	nav {
-		padding-top: 4rem;
-		padding-right: 5rem;
+		padding-top: 1rem;
+		padding-right: 2rem;
 		scrollbar-width: none;
 		-ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
 		width: 25%;
@@ -218,27 +260,42 @@
 		display: none;
 	}
 
-	.work-details table {
-		/* Add your styling for the table here */
-		border-collapse: collapse;
-		width: 100%;
-		margin-top: 1rem;
+	.work-details {
+		/* Style for the work details container */
 	}
-
-	.work-details th {
-		/* Add your styling for table headers here */
-		text-align: left;
-		font-size: 0.8rem; /* Smaller font size for the header */
-		padding: 0.5rem;
+	.work-info {
+		display: flex;
+		justify-content: flex-end; /* Align flex container items to the right */
+		flex-wrap: wrap;
+		margin-bottom: 1rem; /* Space between rows */
+	}
+	.info-item {
+		color: white;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end; /* Align info item content to the right */
+		margin-left: 2rem; /* Space between items, now on the left */
+	}
+	.info-title {
+		color: white;
+		font-size: 0.8rem;
+		font-weight: bold; /* Optional: make the content bold */
+		margin-bottom: 0.25rem;
+	}
+	.info-content {
 		text-align: right; /* Align text to the right */
 		color: white;
 	}
 
-	.work-details td {
-		/* Add your styling for table data here */
-		padding: 0.5rem;
-		text-align: right; /* Align text to the right */
-		color: white;
+	.list-item {
+		display: block; /* Each exhibition item fills a row */
+		margin-bottom: 0.5rem; /* Space between exhibition items, if needed */
+	}
+
+	a {
+		display: block; /* Make the link fill the exhibition item's row */
+		text-decoration: none; /* Optional: Removes underline from links */
+		color: inherit; /* Optional: Inherits color from parent */
 	}
 
 	button {
@@ -262,6 +319,9 @@
 	p {
 		color: white;
 		font-size: 1rem;
+		text-align: justify; /* Justify text */
+		text-align-last: right; /* Align the last line to the right */
+		line-height: 1.5; /* Set line height (example: 1.5) */
 	}
 
 	img {
