@@ -58,13 +58,6 @@
 </script>
 
 <nav>
-	<!-- <button class="main-title" on:click={() => (showDropdown = !showDropdown)}>{data.owner.name}</button>
-	{#if showDropdown}
-		<div class="dropdown" in:fade={{ delay: 0, duration: 300 }} out:fade={{ duration: 300 }}>
-			<p>{@html data.owner.description}</p>
-		</div>
-	{/if} -->
-
 	<buttonflex>
 		{#if selectedCategoryId}
 			<!-- Render the selected category button first -->
@@ -168,9 +161,9 @@
 						<span class="info-title">exhibitions:</span>
 						<div class="info-content">
 							{#each selectedWork.expand.exhibitions as exhibition}
-							<div>
-								<a class="list-item" href={exhibition.link} target="_blank">{exhibition.title}</a>
-							</div>
+								<div>
+									<a class="list-item" href={exhibition.link} target="_blank">{exhibition.title}</a>
+								</div>
 							{/each}
 						</div>
 					</div>

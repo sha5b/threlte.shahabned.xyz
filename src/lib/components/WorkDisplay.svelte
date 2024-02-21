@@ -65,36 +65,37 @@
 <T.Group>
 	<T.Mesh
 		position={[
-			-50, // Half the size to the right
-			50, // Half the size down
+			0, // Half the size to the right
+			0, // Half the size down
 			250 // Assuming you want it aligned with the front of the box
 		]}
 	>
 		<HTML transform {distanceFactor} pointerEvents={'none'}
 			><div class="work-html">
-				<flex>
 				<h1>{work.title}</h1>
-				<p>{work.expand.category.title} </p>
-				<p>{work.type} media </p>
-			</flex>
+				<div style='display: flex;justify-content: space-between'>
+					<p>{work.expand.category.title}</p>
+					<p>{work.type} media</p>
+				</div>
 			</div></HTML
 		>
 	</T.Mesh>
-
 </T.Group>
 
 <style>
 	.work-html {
-		pointer-events: none;
-		width: 500px;
-		height: 500px;
-		user-select: none;
-		-webkit-user-select: none;
-		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		height: 700px; /* Ensure the container stretches full height */
+		width: 700px;
+		text-align: left;
+	}
+	.work-html h1 {
+		margin-bottom: auto; /* Push all other elements to the bottom */
 	}
 
 	h1 {
-
 		font-size: 3rem;
 		color: white;
 	}
@@ -107,5 +108,4 @@
 		display: flex;
 		flex-direction: column;
 	}
-	
 </style>
