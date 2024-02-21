@@ -99,7 +99,7 @@
 		color: white;
 	}
 	p {
-		font-size: 3rem;
+		font-size: 2rem;
 		color: white;
 	}
 

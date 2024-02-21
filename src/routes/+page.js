@@ -9,7 +9,7 @@ export const load = async () => {
 
 	const works = await pb.collection('works').getFullList({
 		sort: '-date',
-		expand: 'category, reference'
+		expand: 'category, reference, colab, exhibitions'
 	})
 
 	const owner = await pb.collection('users').getOne('dwuvjtbcmpf5pz0')

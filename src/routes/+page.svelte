@@ -109,6 +109,24 @@
 			{/if}
 		{/each}
 	</buttonflex>
+	{#if selectedWork && selectedWork.id !== null}
+		<div class="work-details">
+			<!-- Add a table for displaying work details with headers at the top -->
+			<table>
+				<tr>
+					<th>Format</th>
+					<th>Dimensions</th>
+					<!-- Add more headers as needed -->
+				</tr>
+				<tr>
+					<td>{selectedWork.format}</td>
+					<td>{selectedWork.dimension}</td>
+					<!-- Add more data cells as needed -->
+				</tr>
+				<!-- Repeat <tr> for additional works or details -->
+			</table>
+		</div>
+	{/if}
 
 	<!-- {#if selectedWork && selectedWork.id !== null}
 		<div>
@@ -200,13 +218,26 @@
 		display: none;
 	}
 
-	.dropdown {
-		z-index: 1;
+	.work-details table {
+		/* Add your styling for the table here */
+		border-collapse: collapse;
+		width: 100%;
+		margin-top: 1rem;
 	}
-	.main-title {
-		margin-left: 0;
-		font-size: 2rem;
-		font-weight: bold;
+
+	.work-details th {
+		/* Add your styling for table headers here */
+		text-align: left;
+		font-size: 0.8rem; /* Smaller font size for the header */
+		padding: 0.5rem;
+		text-align: right; /* Align text to the right */
+		color: white;
+	}
+
+	.work-details td {
+		/* Add your styling for table data here */
+		padding: 0.5rem;
+		text-align: right; /* Align text to the right */
 		color: white;
 	}
 
