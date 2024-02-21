@@ -14,7 +14,8 @@
 	export let cellSize;
 	export let color;
 	export let activeCategory;
-	export let mediaType;
+	export let media
+
 
 	// Calculate aspect ratio and geometry dimensions
 	const textureAspectRatio = texture.source.data.height / texture.source.data.width;

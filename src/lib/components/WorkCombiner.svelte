@@ -13,11 +13,6 @@
 
 	let linesToDraw = [];
 
-	export let start;
-	export let control;
-	export let end;
-	export let curveDetail = 50; // Number of points to sample along the cu
-
 	function calculateLines() {
 		linesToDraw = []; // Reset the lines to draw
 
