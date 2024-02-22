@@ -53,7 +53,9 @@
 		cameraTarget.set([position.x, position.y, position.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		cameraRotation.set(rotation);
-		dispatch('boxclick', { id });
+		dispatch('boxclick', {
+			id
+		});
 	}
 
 	function onWorkClick(event) {
@@ -78,7 +80,9 @@
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
 
-		dispatch('workclick', { id });
+		dispatch('workclick', {
+			id
+		});
 	}
 
 	export let currentId;
@@ -92,6 +96,7 @@
 		categoryPositions = event.detail.categoryPositions;
 		const size = event.detail.size;
 	}
+
 	function handleWorkPositions(event) {
 		combinedWorkPositions = event.detail.combinedWorkPositions;
 	}
@@ -123,10 +128,9 @@
 	let near = 100; // The minimum distance to start applying fog.
 	let far = 1000; // The maximum distance at which fog stops being c
 	let density = 1; // The density of the fog. Higher numbers make the fog thicker.
-
 </script>
 
-<T.FogExp2 color={fogColor} density={density} />
+<T.FogExp2 color={fogColor} {density} />
 
 <!-- lookAt, look at that because of the rotation -->
 <T.PerspectiveCamera
@@ -172,8 +176,9 @@
 	opacity={0.1}
 />
 
-
 <!-- <T.Mesh position={$cameraTarget}>
-	<T.BoxGeometry args={[250, 250, 250]} />
-	<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />
-</T.Mesh> -->
+
+<T.BoxGeometry args={[250, 250, 250]} />
+
+<T.MeshBasicMaterial opacity={0.25} transparent={true} doubleSided={true} color="red" />
+                </T.Mesh> -->

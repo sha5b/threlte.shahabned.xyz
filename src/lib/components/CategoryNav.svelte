@@ -1,64 +1,17 @@
 <script>
-	//@ts-nocheck
+    //@ts-nocheck
 	import App from '$lib/components/App.svelte';
 	import { writable } from 'svelte/store';
-	export let data;
 	import { slide, fly, fade } from 'svelte/transition';
 	import { getImageURL } from '$lib/utils/getURL';
 	import { afterUpdate } from 'svelte';
-
-	let selectedCategoryId = null;
-	let selectedWorkId = null;
-	let currentId = null;
-
-	function handleBoxClick(event) {
-		const { position, newCameraPosition, id } = event.detail;
-		selectedCategoryId = id;
-		selectedWork = null;
-	}
-
-	function handleWorkClick(event) {
-		const { id, absolutePosition, newCameraPosition } = event.detail;
-		selectedWorkId = id;
-
-		// Handle work ID as needed
-	}
-
-	function setCategoryId(id) {
-		currentId = id;
-		selectedCategoryId = id;
-		selectedWork = null;
-	}
-
-	function setWorkId(id) {
-		currentId = id;
-		selectedWorkId = id;
-	}
-
-	// This computed variable will reactively update whenever `selectedCategoryId` or `data.works` changes.
-	$: filteredWorks = selectedCategoryId
-		? data.works.filter((work) => work.category === selectedCategoryId)
-		: [];
-
-	let showDropdown = false;
-
-	let selectedWork = selectedWorkId ? data.works.find((work) => work.id === selectedWorkId) : null;
-
-	// Make sure to update selectedWork whenever selectedWorkId changes
-	$: if (selectedWorkId) {
-		selectedWork = data.works.find((work) => work.id === selectedWorkId);
-	} else {
-		selectedWork = null;
-	}
-
-	function formatDate(dateString) {
-		const options = {
-			year: 'numeric',
-			month: 'long'
-		};
-		const date = new Date(dateString);
-		return date.toLocaleDateString(undefined, options);
-	}
+	export let data;
+	export let selectedCategoryId;
+	export let setCategoryId;
+	export let selectedWorkId;
+	export let setWorkId;
+	export let filteredWorks;
+	export let selectedWork;
 </script>
 
 <nav>
@@ -90,6 +43,7 @@
 			{/if}
 		{/each}
 	</buttonflex>
+
 	<div class="dashed-line"></div>
 	<!-- Render the filtered works in a similar button grid -->
 	<buttonflex>
@@ -98,7 +52,9 @@
 			<button class="selected-work" on:click={() => setWorkId(selectedWork.id)} transition:slide>
 				{selectedWork.title}
 			</button>
+			{console.log(selectedWork.reference)}
 		{/if}
+
 		{#each filteredWorks as work}
 			{#if work.id !== selectedWorkId}
 				<!-- Render all non-selected works -->
@@ -114,24 +70,6 @@
 	</buttonflex>
 	{#if selectedWork && selectedWork.id !== null}
 		<div class="dashed-line"></div>
-		{#if selectedWork.reference && selectedWork.reference.length > 0}
-			<div class="work-info">
-				<div class="info-item">
-					<span class="info-title">reference:</span>
-					<div class="info-content">
-						{#each selectedWork.reference as referenceId}
-							{#each data.works as work}
-								{#if work.id === referenceId}
-									<button class="list-item" on:click={() => setWorkId(work.id)} transition:slide>
-										{work.title}
-									</button>
-								{/if}
-							{/each}
-						{/each}
-					</div>
-				</div>
-			</div>
-		{/if}
 		<div class="work-details">
 			<div class="work-info">
 				{#if selectedWork.dimension}
@@ -195,19 +133,6 @@
 	{/if}
 </nav>
 
-<flex>
-	<scene>
-		<App
-			{data}
-			{currentId}
-			{selectedCategoryId}
-			{selectedWorkId}
-			on:boxclick={handleBoxClick}
-			on:workclick={handleWorkClick}
-		/>
-	</scene>
-</flex>
-
 <style>
 	:global(body) {
 		margin: 0px;
@@ -252,17 +177,6 @@
 		/* Adjust spacing as needed */
 	}
 
-	scene {
-		position: fixed;
-		z-index: -1;
-		display: block;
-		flex-grow: 1;
-		min-width: 100vw;
-		min-height: 100vh;
-		background: rgb(13, 19, 32);
-		background: radial-gradient(circle at center, rgb(10, 92, 166) 0%, rgb(71, 16, 134) 100%);
-	}
-
 	nav {
 		padding-top: 1rem;
 		padding-right: 2rem;
@@ -270,6 +184,7 @@
 		-ms-overflow-style: none;
 		/* Hide scrollbar for IE and Edge */
 		width: 25%;
+		/* background: rgba(71, 16, 134, 0.5); */
 		position: absolute;
 		right: 0;
 		/* Align to the bottom right corner */
@@ -330,26 +245,17 @@ background-size: 25px 25px; */
 		text-align: right;
 		/* Align text to the right */
 		color: white;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
 	}
 
 	.list-item {
 		display: block;
-		text-align: right;
 		/* Each exhibition item fills a row */
 		margin-bottom: 0.5rem;
-		align-items: flex-end;
 		/* Space between exhibition items, if needed */
 	}
 
 	a {
 		display: block;
-		transition:
-			background-color 0.3s ease,
-			color 0.3s ease; /* Smooth transition for background and text color */
-		background-color: rgba(255, 255, 255, 0);
 		/* Make the link fill the exhibition item's row */
 		text-decoration: none;
 		/* Optional: Removes underline from links */
@@ -358,11 +264,6 @@ background-size: 25px 25px; */
 	}
 
 	button {
-		transition:
-			background-color 0.3s ease,
-			color 0.3s ease; /* Smooth transition for background and text color */
-		background-color: rgba(255, 255, 255, 0);
-		padding: 0;
 		background: none;
 		border: none;
 		color: inherit;
@@ -377,22 +278,33 @@ background-size: 25px 25px; */
 		text-align: right;
 	}
 
-	.selected-work:hover {
-		background-color: rgba(255, 255, 255, 0); /* Or any desired color for hover state */
-		filter: none; /* Remove the invert filter effect on hover */
+	h1 {
+		margin: 0;
+		color: white;
+		font-size: 2rem;
 	}
 
-	.selected-category:hover {
-		background-color: rgba(255, 255, 255, 0); /* Or any desired color for hover state */
-		filter: none; /* Remove the invert filter effect on hover */
-	}
-	button:hover {
-		background-color: rgba(0, 0, 0, 1);
-		filter: invert(100%); /* Invert colors on hover */
+	p {
+		color: white;
+		font-size: 1rem;
+		text-align: justify;
+		/* Justify text */
+		text-align-last: right;
+		/* Align the last line to the right */
+		line-height: 1.5;
+		/* Set line height (example: 1.5) */
 	}
 
-	a:hover {
-		background-color: rgba(0, 0, 0, 1);
-		filter: invert(100%); /* Invert colors on hover */
+	img {
+		max-width: 100%;
+		/* Ensure the image is not wider than the nav */
+		max-height: 100%;
+		/* Adjust max height as needed */
+		object-fit: contain;
+		/* Ensure the whole image fits within the bounds without cropping */
+		display: block;
+		/* Remove extra space below the image */
+		margin: 0 auto;
+		/* Center image if it's not as wide as nav */
 	}
 </style>
