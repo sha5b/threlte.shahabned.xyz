@@ -12,17 +12,28 @@
 	export let cellSize;
 
 	let linesToDraw = [];
+	let drawnConnections = new Set(); // Track drawn connections to avoid duplicates
 
 	function calculateLines() {
 		linesToDraw = []; // Reset the lines to draw
+		drawnConnections.clear(); // Reset the drawn connections
 
 		// Check if 'works' is defined and is an array
 		if (Array.isArray(works)) {
 			works.forEach((work) => {
-				// Check if 'work.expand' exists and 'work.expand.reference' is an array
 				if (work.expand && Array.isArray(work.expand.reference)) {
 					work.expand.reference.forEach((ref) => {
-						if (combinedWorkPositions.has(ref.id) && combinedWorkPositions.has(work.id)) {
+						// Create a connection string identifier
+						const connectionId = [work.id, ref.id].sort().join('-');
+
+						if (
+							!drawnConnections.has(connectionId) &&
+							combinedWorkPositions.has(ref.id) &&
+							combinedWorkPositions.has(work.id)
+						) {
+							// Mark this connection as drawn
+							drawnConnections.add(connectionId);
+
 							let startPos = combinedWorkPositions.get(work.id);
 							let endPos = combinedWorkPositions.get(ref.id);
 
@@ -88,5 +99,10 @@
 </script>
 
 {#each curveGeometries as geometry, i (i)}
-	<T.Line {geometry} material={new THREE.LineBasicMaterial({ color: color, linewidth: 1 })} />
+	<T.Mesh>
+		<T.Line
+			{geometry}
+			material={new THREE.LineBasicMaterial({ color: color, linewidth: 0.1, opacity: 0 })}
+		/>
+	</T.Mesh>
 {/each}

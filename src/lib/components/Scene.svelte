@@ -124,13 +124,8 @@
 		}
 	}
 
-	let fogColor = 'white'; // white fog
-	let near = 100; // The minimum distance to start applying fog.
-	let far = 1000; // The maximum distance at which fog stops being c
-	let density = 1; // The density of the fog. Higher numbers make the fog thicker.
-</script>
 
-<T.FogExp2 color={fogColor} {density} />
+</script>
 
 <!-- lookAt, look at that because of the rotation -->
 <T.PerspectiveCamera
@@ -171,7 +166,7 @@
 <BackgroundGrid
 	size={new Vector3(75000, 75000, 75000)}
 	cellSize={5000}
-	color={'lightgoldenrodyellow'}
+	color={'white'}
 	linewidth={0.1}
 	opacity={0.1}
 />

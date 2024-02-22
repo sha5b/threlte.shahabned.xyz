@@ -260,10 +260,12 @@
 		min-width: 100vw;
 		min-height: 100vh;
 		background: rgb(13, 19, 32);
-		background: radial-gradient(circle at center, rgb(10, 92, 166) 0%, rgb(71, 16, 134) 100%);
+		background: radial-gradient(circle at center, rgb(206, 37, 88) 0%, rgb(16, 129, 110) 100%);
 	}
 
 	nav {
+		backdrop-filter: blur(2px);
+
 		padding-top: 1rem;
 		padding-right: 2rem;
 		scrollbar-width: none;
@@ -285,10 +287,9 @@
 		/* Scroll vertically if content overflows */
 		/* Grid background styles */
 		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 
-linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-
-background-size: 25px 25px; */
+		background-size: 25px 25px; */
 	}
 
 	nav::-webkit-scrollbar {
