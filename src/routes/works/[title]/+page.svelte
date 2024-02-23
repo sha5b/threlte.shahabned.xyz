@@ -22,46 +22,56 @@
 	}
 </script>
 
+<svelte:head>
+    <title>shahabverse | {$page.params.title}</title>
+	<link rel="canonical" href="https://shahabned.xyz/" />
+    
+</svelte:head>
+
 <div>
 	{#each data.works as work}
 		{#if work.id === workId}
 			<h1>{work.title}</h1>
-			<p>{formatDate(work.date)}</p>
-			<p>{work.expand.category.title}</p>
-			<p>{work.type} media</p>
-			<p>{work.format}</p>
-			<p>{work.dimension}</p>
+			<h3>date: {formatDate(work.date)}</h3>
+			<h3>category: {work.expand.category.title}</h3>
+			<h3>{work.type} media</h3>
+			<h3>format: {work.format}</h3>
+			<h3>dimensions: {work.dimension}</h3>
 			{#if work.editions}
-				<p>{work.editions}</p>
+				<p>printeditions: {work.editions}</p>
 			{/if}
 			{#if work.expand.colab}
+				<h3>collaboration:</h3>
 				{#each work.expand.colab as colab}
-					<p>{colab.title}</p>
+					<div>
+						<a href={colab.link} target="_blank">{colab.title}</a>
+					</div>
 				{/each}
 			{/if}
 			{#if work.synopsis}
+				<h3>synopsis</h3>
 				<div>{@html work.synopsis}</div>
 			{/if}
 			{#if work.expand.exhibitions}
+				<h3>exhibitoins</h3>
 				{#each work.expand.exhibitions as exhibition}
 					{#each data.colabs as colab}
 						{#if colab.id === exhibition.curator}
-							<!-- If a matching id is found, print the colab data -->
-                            <p>Exhibition: {exhibition.title} - {formatDate(exhibition.date)} - {colab.title}</p>
-							<!-- Add other colab details you want to display -->
+							<div>
+								<a href={exhibition.link} target="_blank">{exhibition.title}</a>
+							</div>
 						{/if}
 					{/each}
 				{/each}
 			{/if}
-			{#if work.expand.reference}
+			<!-- {#if work.expand.reference}
 				{#each work.expand.reference as reference}
 					<p>{reference.title}</p>
 				{/each}
-			{/if}
+			{/if} -->
 		{/if}
 	{/each}
 </div>
 
 <style>
-    
 </style>

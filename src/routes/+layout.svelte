@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Shahabverse</title>
+
 </svelte:head>
 
 <slot />
