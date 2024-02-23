@@ -8,7 +8,12 @@ export const load = async () => {
 		expand: 'category, reference, colab, exhibitions'
 	});
 
+	const colabs = await pb.collection('collaborations').getFullList({
+		sort: '-title',
+		expand: 'curator'
+	});
+
 	return {
-		works
+		works, colabs
 	};
 };
