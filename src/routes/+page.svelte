@@ -7,6 +7,7 @@
 	import { getImageURL } from '$lib/utils/getURL';
 	import { afterUpdate } from 'svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
+	import DetailInformation from '$lib/components/DetailInformation.svelte';
 
 	let selectedCategoryId = null;
 	let selectedWorkId = null;
@@ -72,6 +73,7 @@
 	{setWorkId}
 	{formatDate}
 />
+
 
 <flex>
 	<scene>

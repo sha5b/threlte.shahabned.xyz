@@ -46,6 +46,8 @@
 		side: THREE.DoubleSide // Render both sides of the material
 	});
 	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
+	
+	
 </script>
 
 <T.Group on:click={stopPropagation}>
