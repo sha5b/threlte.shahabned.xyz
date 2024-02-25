@@ -40,6 +40,9 @@
 	function previousImage() {
 		currentImageIndex.update((n) => n - 1);
 	}
+	$: if (selectedWorkId) {
+		currentImageIndex.set(0);
+	}
 </script>
 
 <nav>
