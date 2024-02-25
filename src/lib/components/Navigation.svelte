@@ -182,7 +182,10 @@
 {#if showModal}
 	<div class="modal" on:click={closeModal}>
 		<div class="modal-content" on:click|stopPropagation>
-			<img src={selectedImage} alt="Selected image" />
+			{#if selectedImage}
+				<!-- Debug: Display the image URL on the modal for verification -->
+				<img src={selectedImage} alt="Selected image" />
+			{/if}
 			<button class="close-modal" on:click={closeModal}>×</button>
 		</div>
 	</div>
@@ -232,17 +235,6 @@
 			)
 			1;
 		margin: 20px -50px;
-	}
-
-	scene {
-		position: fixed;
-		z-index: -1;
-		display: block;
-		flex-grow: 1;
-		min-width: 100vw;
-		min-height: 100vh;
-		background: rgb(13, 19, 32);
-		background: radial-gradient(circle at center, rgb(206, 37, 88) 0%, rgb(16, 129, 110) 100%);
 	}
 
 	nav {
@@ -419,7 +411,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		z-index: 1000; /* Ensure it's above other content */
+		z-index: 1000; /* Ensures it's above other content */
 	}
 	.modal-content {
 		position: relative;
@@ -427,13 +419,10 @@
 		max-height: 80vh;
 	}
 	.modal-content img {
-		width: 100%;
-		height: auto;
-		max-height: 100%;
-		object-fit: contain;
-		display: block; /* This ensures the image is treated as a block-level element */
-		max-width: 100%; /* This ensures the image does not exceed the modal-content width */
-		max-height: 100%; /* This ensures the image does not exceed the modal-content height */
+		position: relative;
+		width: auto; /* Allow the content to size based on its content */
+		max-width: 80vw;
+		max-height: 80vh;
 	}
 	.close-modal {
 		position: absolute;
@@ -444,5 +433,7 @@
 		color: white;
 		font-size: 2rem;
 		cursor: pointer;
+		padding: 0.5rem;
+		margin: 2rem;
 	}
 </style>
