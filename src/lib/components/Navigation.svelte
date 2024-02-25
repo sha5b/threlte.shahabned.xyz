@@ -175,9 +175,10 @@
 		</div>
 		{#if selectedWork.gallery && selectedWork.gallery.length > 0}
 			<div class="slider">
-				<button class="previous" on:click={previousImage} disabled={$currentImageIndex === 0}
-					>Previous</button
+				<button class="nav-button prev" on:click={previousImage} disabled={$currentImageIndex === 0}
+					>◀</button
 				>
+
 				<div
 					class="img-container"
 					on:click={() => handleImageClick(selectedWork.gallery[$currentImageIndex])}
@@ -191,15 +192,16 @@
 						alt={`Image ${$currentImageIndex + 1} of ${selectedWork.title}`}
 					/>
 				</div>
+
 				<button
-					class="next"
+					class="nav-button next"
 					on:click={nextImage}
-					disabled={$currentImageIndex === selectedWork.gallery.length - 1}>Next</button
+					disabled={$currentImageIndex === selectedWork.gallery.length - 1}>▶</button
 				>
 			</div>
 		{/if}
 		{#if selectedWork.synopsis}
-			<div class="info-content">
+			<div class="info-synopsis">
 				{@html selectedWork.synopsis}
 			</div>
 		{/if}
@@ -336,6 +338,15 @@
 		flex-direction: column;
 		align-items: flex-end;
 	}
+	.info-synopsis {
+		text-align: justify;
+		direction: rtl;
+		/* Align text to the right */
+		color: white;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
 
 	.list-item {
 		display: block;
@@ -399,17 +410,46 @@
 	}
 
 	.slider {
+		position: relative;
 		display: flex; /* Use flexbox instead of grid */
 		align-items: center; /* Align children vertically */
 		justify-content: space-between; /* Distribute space between children */
-		padding-top: 2rem;
-		padding-bottom: 2rem;
 	}
 
+	.nav-button {
+		position: absolute;
+		top: 50%; /* Position the button halfway down the container */
+		transform: translateY(-50%); /* Offset the button by half its height */
+		width: 50px; /* Adjust width as needed */
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+		color: white;
+		border: none;
+		font-size: 24px; /* Adjust arrow size as needed */
+		cursor: pointer;
+		z-index: 2; /* Ensure buttons are above the image */
+	}
+
+	.nav-button.prev {
+		left: 0;
+		text-align: center;
+		justify-content: center;
+		justify-items: center;
+	}
+
+	.nav-button.next {
+		right: 0;
+		text-align: center;
+		justify-content: center;
+		justify-items: center;
+	}
 	.img-container {
+		position: relative;
 		flex-grow: 1; /* Allow image container to fill available space */
 		overflow: hidden; /* Ensure the image doesn't escape the container */
 		position: relative; /* Needed for absolute positioning of the image */
+		width: 100%;
+		height: 100%;
 	}
 
 	.img-container::before {
