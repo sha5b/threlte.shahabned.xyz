@@ -7,6 +7,7 @@
 	export let setCategoryId;
 	export let setWorkId;
 	export let formatDate;
+	import { writable } from 'svelte/store';
 
 	import { getImageURL } from '$lib/utils/getURL';
 
@@ -26,6 +27,18 @@
 
 	function closeModal() {
 		showModal = false;
+	}
+
+	// Store to keep track of the current image index
+	const currentImageIndex = writable(0);
+
+	// Increment or decrement the current image index
+	function nextImage() {
+		currentImageIndex.update((n) => n + 1);
+	}
+
+	function previousImage() {
+		currentImageIndex.update((n) => n - 1);
 	}
 </script>
 
@@ -160,21 +173,34 @@
 				</div>
 			{/if}
 		</div>
+		{#if selectedWork.gallery && selectedWork.gallery.length > 0}
+			<div class="slider">
+				<button class="previous" on:click={previousImage} disabled={$currentImageIndex === 0}
+					>Previous</button
+				>
+				<div
+					class="img-container"
+					on:click={() => handleImageClick(selectedWork.gallery[$currentImageIndex])}
+				>
+					<img
+						src={getImageURL(
+							selectedWork.collectionId,
+							selectedWork.id,
+							selectedWork.gallery[$currentImageIndex]
+						)}
+						alt={`Image ${$currentImageIndex + 1} of ${selectedWork.title}`}
+					/>
+				</div>
+				<button
+					class="next"
+					on:click={nextImage}
+					disabled={$currentImageIndex === selectedWork.gallery.length - 1}>Next</button
+				>
+			</div>
+		{/if}
 		{#if selectedWork.synopsis}
 			<div class="info-content">
 				{@html selectedWork.synopsis}
-			</div>
-		{/if}
-		{#if selectedWork.gallery && selectedWork.gallery.length > 0}
-			<div class="slider">
-				{#each selectedWork.gallery as imageFilename, index}
-					<div class="img-container" on:click={() => handleImageClick(imageFilename)}>
-						<img
-							src={getImageURL(selectedWork.collectionId, selectedWork.id, imageFilename)}
-							alt={`Image ${index} of ${selectedWork.title}`}
-						/>
-					</div>
-				{/each}
 			</div>
 		{/if}
 	{/if}
@@ -373,15 +399,15 @@
 	}
 
 	.slider {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr); /* Creates two columns */
-		gap: 10px; /* Adjust the gap size as needed */
+		display: flex; /* Use flexbox instead of grid */
+		align-items: center; /* Align children vertically */
+		justify-content: space-between; /* Distribute space between children */
 		padding-top: 2rem;
 		padding-bottom: 2rem;
 	}
 
 	.img-container {
-		width: 100%;
+		flex-grow: 1; /* Allow image container to fill available space */
 		overflow: hidden; /* Ensure the image doesn't escape the container */
 		position: relative; /* Needed for absolute positioning of the image */
 	}
@@ -390,6 +416,11 @@
 		content: '';
 		display: block;
 		padding-top: 100%; /* This creates an aspect ratio of 1:1 for the container */
+	}
+
+	.slider button {
+		/* Styles for the previous and next buttons */
+		flex: 0 0 auto; /* Do not grow or shrink */
 	}
 
 	img {
