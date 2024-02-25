@@ -16,32 +16,9 @@
 	// Define selectedWork reactively based on selectedWorkId and data.works
 	$: selectedWork = selectedWorkId ? data.works.find((work) => work.id === selectedWorkId) : null;
 
-	let showModal = false;
-	let selectedImage = null;
-
-	function handleImageClick(imageFilename) {
-		selectedImage = getImageURL(selectedWork.collectionId, selectedWork.id, imageFilename);
-		console.log(selectedImage); // For debugging purposes
-		showModal = true;
-	}
-
-	function closeModal() {
-		showModal = false;
-	}
-
-	// Store to keep track of the current image index
-	const currentImageIndex = writable(0);
-
-	// Increment or decrement the current image index
-	function nextImage() {
-		currentImageIndex.update((n) => n + 1);
-	}
-
-	function previousImage() {
-		currentImageIndex.update((n) => n - 1);
-	}
-	$: if (selectedWorkId) {
-		currentImageIndex.set(0);
+	$: if (selectedCategoryId !== null) {
+		selectedWorkId = null; // Reset selected work
+		// Reset any other state related to the work information
 	}
 </script>
 
@@ -176,51 +153,13 @@
 				</div>
 			{/if}
 		</div>
-		{#if selectedWork.gallery && selectedWork.gallery.length > 0}
-			<div class="slider">
-				<button class="nav-button prev" on:click={previousImage} disabled={$currentImageIndex === 0}
-					>◀</button
-				>
-
-				<div
-					class="img-container"
-					on:click={() => handleImageClick(selectedWork.gallery[$currentImageIndex])}
-				>
-					<img
-						src={getImageURL(
-							selectedWork.collectionId,
-							selectedWork.id,
-							selectedWork.gallery[$currentImageIndex]
-						)}
-						alt={`Image ${$currentImageIndex + 1} of ${selectedWork.title}`}
-					/>
-				</div>
-
-				<button
-					class="nav-button next"
-					on:click={nextImage}
-					disabled={$currentImageIndex === selectedWork.gallery.length - 1}>▶</button
-				>
-			</div>
-		{/if}
 		{#if selectedWork.synopsis}
-			<div class="info-synopsis">
+			<div class="info-content">
 				{@html selectedWork.synopsis}
 			</div>
 		{/if}
 	{/if}
 </nav>
-{#if showModal}
-	<div class="modal" on:click={closeModal}>
-		<div class="modal-content" on:click|stopPropagation>
-			{#if selectedImage}
-				<!-- Debug: Display the image URL on the modal for verification -->
-				<img src={selectedImage} alt="Selected image" />
-			{/if}
-			<button class="close-modal" on:click={closeModal}>×</button>
-		</div>
-	</div>
-{/if}
 
 <style>
 	buttonflex {
@@ -292,10 +231,10 @@
 		overflow-y: auto;
 		/* Scroll vertically if content overflows */
 		/* Grid background styles */
-		background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 
-		background-size: 25px 25px;
+		background-size: 25px 25px; */
 	}
 
 	nav::-webkit-scrollbar {
@@ -335,15 +274,6 @@
 
 	.info-content {
 		text-align: right;
-		/* Align text to the right */
-		color: white;
-		display: flex;
-		flex-direction: column;
-		align-items: flex-end;
-	}
-	.info-synopsis {
-		text-align: justify;
-		direction: rtl;
 		/* Align text to the right */
 		color: white;
 		display: flex;
@@ -412,102 +342,4 @@
 		filter: invert(100%); /* Invert colors on hover */
 	}
 
-	.slider {
-		position: relative;
-		display: flex; /* Use flexbox instead of grid */
-		align-items: center; /* Align children vertically */
-		justify-content: space-between; /* Distribute space between children */
-	}
-
-	.nav-button {
-		position: absolute;
-		top: 50%; /* Position the button halfway down the container */
-		transform: translateY(-50%); /* Offset the button by half its height */
-		width: 50px; /* Adjust width as needed */
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-		color: white;
-		border: none;
-		font-size: 24px; /* Adjust arrow size as needed */
-		cursor: pointer;
-		z-index: 2; /* Ensure buttons are above the image */
-	}
-
-	.nav-button.prev {
-		left: 0;
-		text-align: center;
-		justify-content: center;
-		justify-items: center;
-	}
-
-	.nav-button.next {
-		right: 0;
-		text-align: center;
-		justify-content: center;
-		justify-items: center;
-	}
-	.img-container {
-		position: relative;
-		flex-grow: 1; /* Allow image container to fill available space */
-		overflow: hidden; /* Ensure the image doesn't escape the container */
-		position: relative; /* Needed for absolute positioning of the image */
-		width: 100%;
-		height: 100%;
-	}
-
-	.img-container::before {
-		content: '';
-		display: block;
-		padding-top: 100%; /* This creates an aspect ratio of 1:1 for the container */
-	}
-
-	.slider button {
-		/* Styles for the previous and next buttons */
-		flex: 0 0 auto; /* Do not grow or shrink */
-	}
-
-	img {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover; /* Cover the container without stretching */
-	}
-
-	.modal {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0, 0, 0, 0.5);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 1000; /* Ensures it's above other content */
-	}
-	.modal-content {
-		position: relative;
-		max-width: 80vw;
-		max-height: 80vh;
-	}
-	.modal-content img {
-		position: relative;
-		width: auto; /* Allow the content to size based on its content */
-		max-width: 80vw;
-		max-height: 80vh;
-	}
-	.close-modal {
-		position: absolute;
-		top: 0;
-		right: 0;
-		background: none;
-		border: none;
-		color: white;
-		font-size: 2rem;
-		cursor: pointer;
-		padding: 0.5rem;
-		margin: 2rem;
-	}
 </style>
