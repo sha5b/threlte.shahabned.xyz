@@ -1,11 +1,7 @@
 <script>
 	//@ts-nocheck
 	import App from '$lib/components/App.svelte';
-	import { writable } from 'svelte/store';
 	export let data;
-	import { slide, fly, fade } from 'svelte/transition';
-	import { getImageURL } from '$lib/utils/getURL';
-	import { afterUpdate } from 'svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
 	import DetailInformation from '$lib/components/DetailInformation.svelte';
 
@@ -73,7 +69,6 @@
 	{setWorkId}
 	{formatDate}
 />
-
 
 <flex>
 	<scene>

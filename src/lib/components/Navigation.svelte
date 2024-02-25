@@ -8,10 +8,25 @@
 	export let setWorkId;
 	export let formatDate;
 
+	import { getImageURL } from '$lib/utils/getURL';
+
 	import { slide, fly, fade } from 'svelte/transition';
 
 	// Define selectedWork reactively based on selectedWorkId and data.works
 	$: selectedWork = selectedWorkId ? data.works.find((work) => work.id === selectedWorkId) : null;
+
+	let showModal = false;
+	let selectedImage = null;
+
+	function handleImageClick(imageFilename) {
+		selectedImage = getImageURL(selectedWork.collectionId, selectedWork.id, imageFilename);
+		console.log(selectedImage); // For debugging purposes
+		showModal = true;
+	}
+
+	function closeModal() {
+		showModal = false;
+	}
 </script>
 
 <nav>
@@ -67,6 +82,24 @@
 	</buttonflex>
 	{#if selectedWork && selectedWork.id !== null}
 		<div class="dashed-line"></div>
+		{#if selectedWork.reference && selectedWork.reference.length > 0}
+			<div class="work-info">
+				<div class="info-item">
+					<span class="info-title">reference:</span>
+					<div class="info-content">
+						{#each selectedWork.reference as referenceId}
+							{#each data.works as work}
+								{#if work.id === referenceId}
+									<button class="list-item" on:click={() => setWorkId(work.id)} transition:slide>
+										{work.title}
+									</button>
+								{/if}
+							{/each}
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/if}
 		<div class="work-details">
 			<div class="work-info">
 				{#if selectedWork.dimension}
@@ -127,26 +160,33 @@
 				</div>
 			{/if}
 		</div>
-		{#if selectedWork.reference && selectedWork.reference.length > 0}
-			<div class="work-info">
-				<div class="info-item">
-					<span class="info-title">reference:</span>
-					<div class="info-content">
-						{#each selectedWork.reference as referenceId}
-							{#each data.works as work}
-								{#if work.id === referenceId}
-									<button class="list-item" on:click={() => setWorkId(work.id)} transition:slide>
-										{work.title}
-									</button>
-								{/if}
-							{/each}
-						{/each}
+		{#if selectedWork.synopsis}
+			<div class="info-content">
+				{@html selectedWork.synopsis}
+			</div>
+		{/if}
+		{#if selectedWork.gallery && selectedWork.gallery.length > 0}
+			<div class="slider">
+				{#each selectedWork.gallery as imageFilename, index}
+					<div class="img-container" on:click={() => handleImageClick(imageFilename)}>
+						<img
+							src={getImageURL(selectedWork.collectionId, selectedWork.id, imageFilename)}
+							alt={`Image ${index} of ${selectedWork.title}`}
+						/>
 					</div>
-				</div>
+				{/each}
 			</div>
 		{/if}
 	{/if}
 </nav>
+{#if showModal}
+	<div class="modal" on:click={closeModal}>
+		<div class="modal-content" on:click|stopPropagation>
+			<img src={selectedImage} alt="Selected image" />
+			<button class="close-modal" on:click={closeModal}>×</button>
+		</div>
+	</div>
+{/if}
 
 <style>
 	buttonflex {
@@ -210,6 +250,7 @@
 
 		padding-top: 1rem;
 		padding-right: 2rem;
+		padding-left: 2rem;
 		scrollbar-width: none;
 		-ms-overflow-style: none;
 		/* Hide scrollbar for IE and Edge */
@@ -337,5 +378,71 @@
 	a:hover {
 		background-color: rgba(0, 0, 0, 1);
 		filter: invert(100%); /* Invert colors on hover */
+	}
+
+	.slider {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr); /* Creates two columns */
+		gap: 10px; /* Adjust the gap size as needed */
+		padding-top: 2rem;
+		padding-bottom: 2rem;
+	}
+
+	.img-container {
+		width: 100%;
+		overflow: hidden; /* Ensure the image doesn't escape the container */
+		position: relative; /* Needed for absolute positioning of the image */
+	}
+
+	.img-container::before {
+		content: '';
+		display: block;
+		padding-top: 100%; /* This creates an aspect ratio of 1:1 for the container */
+	}
+
+	img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* Cover the container without stretching */
+	}
+
+	.modal {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background-color: rgba(0, 0, 0, 0.5);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1000; /* Ensure it's above other content */
+	}
+	.modal-content {
+		position: relative;
+		max-width: 80vw;
+		max-height: 80vh;
+	}
+	.modal-content img {
+		width: 100%;
+		height: auto;
+		max-height: 100%;
+		object-fit: contain;
+		display: block; /* This ensures the image is treated as a block-level element */
+		max-width: 100%; /* This ensures the image does not exceed the modal-content width */
+		max-height: 100%; /* This ensures the image does not exceed the modal-content height */
+	}
+	.close-modal {
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: none;
+		border: none;
+		color: white;
+		font-size: 2rem;
+		cursor: pointer;
 	}
 </style>
