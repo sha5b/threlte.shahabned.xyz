@@ -14,6 +14,7 @@
 	export let cellSize;
 	export let color;
 	export let activeCategory;
+	export let selectedWorkId;
 	let planeRotation = [0, 0, 0];
 	let interval;
 	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
@@ -91,12 +92,18 @@
 			Math.random() * Math.PI * 2 // Random rotation around z-axis
 		];
 	}
+	let previousWorkId = work.id;
+
+	$: previousWorkId = work.id; // This will be updated whenever 'work' changes
+	$: if (selectedWorkId !== work.id || previousWorkId !== work.id) {
+		showGallery = false;
+	}
 </script>
 
 {#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
 	<T.Group on:click={stopPropagation}>
 		<T.Group {rotation}>
-			<T.Mesh rotation={planeRotation}>
+			<T.Mesh rotation={planeRotation} on:click={toggleGallery}>
 				<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
 				<T.MeshBasicMaterial
 					side={THREE.DoubleSide}
@@ -128,12 +135,12 @@
 		>
 	</T.Mesh>
 </T.Group>
+
 {#if showGallery}
 	{#each work.gallery as galleryItem, index}
-		{console.log(getImageURL(work.collectionId, work.id, galleryItem))}
-		<T.Group position={getRandomPosition(cellSize)} on:click={stopPropagation}>
-			<HTML transform {distanceFactor} pointerEvents={'none'}>
-				<div class="work-html">
+		<T.Group position={getRandomPosition(cellSize)} on:click={stopPropagation} raycast={false}>
+			<HTML {distanceFactor} pointerEvents={'none'} raycast={false}>
+				<div style="pointer-events: none">
 					<!-- Your HTML content with img tag -->
 					<img src={getImageURL(work.collectionId, work.id, galleryItem)} alt={galleryItem.title} />
 				</div>

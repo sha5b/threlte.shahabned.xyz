@@ -27,7 +27,7 @@
 	export let activeBoxId = null; // This will store the ID of the currently active box
 	export let selectedCategoryId;
 	export let selectedWorkId;
-
+	
 	function handleBoxClick(event) {
 		const { id, position } = event.detail;
 		activeBoxId = id;

@@ -76,7 +76,7 @@
 		on:workclick={handleWorkClick}
 		{color}
 	>
-		<WorkDisplay activeCategory={active} {work} {rotation} {cellSize} {color} />
+		<WorkDisplay activeCategory={active} {work} {selectedWorkId} {rotation} {cellSize} {color} />
 	</WorkBox>
 {/each}
 

@@ -94,7 +94,7 @@
 	{#if !active}
 		<T.Mesh renderOrder={1} {target} on:click={handleClick}>
 			<T.BoxGeometry args={[size.x, size.y, size.z]} />
-			<T.MeshBasicMaterial opacity={0} {color} transparent={true} wireframe  side={THREE.DoubleSide}/>
+			<T.MeshBasicMaterial opacity={1} color={'red'} transparent={true} wireframe  side={THREE.DoubleSide}/>
 		</T.Mesh>
 	{/if}
 	<BackgroundGrid {size} {cellSize} {color} linewidth={0.1} opacity={0.1} />

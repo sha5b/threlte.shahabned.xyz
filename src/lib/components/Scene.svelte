@@ -59,6 +59,7 @@
 	}
 
 	function onWorkClick(event) {
+		event.stopPropagation();
 		const { position, id, absolutePosition } = event.detail;
 
 		const distance = new Vector3(...$cameraPosition).sub(new Vector3(...position)).length(); //
@@ -78,6 +79,7 @@
 		// Update the camera's target and position
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
+		
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
 
 		dispatch('workclick', {
