@@ -15,6 +15,8 @@
 	export let color;
 	export let activeCategory;
 	export let selectedWorkId;
+	export let activeWork;
+
 	let planeRotation = [0, 0, 0];
 	let interval;
 	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
@@ -89,28 +91,27 @@
 		return [
 			0, // Random rotation around x-axis
 			Math.random() * Math.PI * 2, // Random rotation around y-axis
-			Math.random() * Math.PI * 2 // Random rotation around z-axis
+			0 // Random rotation around z-axis
 		];
 	}
 
-	$: if (selectedWorkId !== work.id) {
-		showGallery = false;
-	}
+    $: showGallery = activeWork;
 
-	console.log(activeCategory)
+
+
 </script>
 
 {#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
 	<T.Group on:click={stopPropagation}>
 		<T.Group {rotation}>
-			<T.Mesh rotation={planeRotation} on:click={toggleGallery}>
+			<T.Mesh rotation={planeRotation} >
 				<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
 				<T.MeshBasicMaterial
 					side={THREE.DoubleSide}
 					opacity={1}
 					map={texture}
 					transparent={true}
-					depthWrite={false}
+					depthTest={true}
 				/>
 			</T.Mesh>
 		</T.Group>
@@ -138,14 +139,25 @@
 
 {#if showGallery}
 	{#each work.gallery as galleryItem, index}
-		<T.Mesh position={getRandomPosition(cellSize)} on:click={stopPropagation} raycast={false}>
-			<HTML {distanceFactor} pointerEvents={'none'} >
-				<div style="pointer-events: none">
-					<!-- Your HTML content with img tag -->
-					<img src={getImageURL(work.collectionId, work.id, galleryItem)} alt={galleryItem.title} />
-				</div>
-			</HTML>
-		</T.Mesh>
+		<T.Group rotation = {getRandomRotation()}>
+			<T.Mesh
+				position={getRandomPosition(cellSize)}
+				on:click={stopPropagation}
+				raycast={false}
+				rotation={planeRotation}
+			>
+				<HTML transform distanceFactor={distanceFactor/2}  pointerEvents={'none'}>
+					<div >
+						<!-- Your HTML content with img tag -->
+						<img
+							src={getImageURL(work.collectionId, work.id, galleryItem)}
+							alt={galleryItem.title}
+							style="max-width: {cellSize}px; max-height: {cellSize}px;"
+						/>
+					</div>
+				</HTML>
+			</T.Mesh>
+		</T.Group>
 	{/each}
 {/if}
 

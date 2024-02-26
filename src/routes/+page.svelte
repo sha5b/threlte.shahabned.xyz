@@ -60,6 +60,11 @@
 	}
 </script>
 
+<svelte:head>
+    <title>shahabverse</title>
+	<link rel="canonical" href="https://shahabned.xyz/" />
+    
+</svelte:head>
 <Navigation
 	{selectedCategoryId}
 	{selectedWorkId}
@@ -93,8 +98,8 @@
 		z-index: -1;
 		display: block;
 		flex-grow: 1;
-		min-width: 100vw;
-		min-height: 100vh;
+		min-width: 100%;
+		min-height: 100%;
 		background: rgb(13, 19, 32);
 		background: radial-gradient(circle at center, rgb(206, 37, 88) 0%, rgb(16, 129, 110) 100%);
 	}

@@ -216,7 +216,7 @@
 		scrollbar-width: none;
 		-ms-overflow-style: none;
 		/* Hide scrollbar for IE and Edge */
-		width: 25%;
+		width: 20%;
 		position: absolute;
 		right: 0;
 		/* Align to the bottom right corner */
@@ -231,10 +231,10 @@
 		overflow-y: auto;
 		/* Scroll vertically if content overflows */
 		/* Grid background styles */
-		background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 
-		background-size: 25px 25px;
+		background-size: 25px 25px; */
 	}
 
 	nav::-webkit-scrollbar {
@@ -341,5 +341,6 @@
 		background-color: rgba(0, 0, 0, 1);
 		filter: invert(100%); /* Invert colors on hover */
 	}
+
 
 </style>

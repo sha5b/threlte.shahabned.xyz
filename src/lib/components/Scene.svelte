@@ -12,6 +12,17 @@
 	import { get } from 'svelte/store';
 	import BackgroundGrid from './BackgroundGrid.svelte';
 
+	import { onMount, onDestroy } from 'svelte';
+	onMount(() => {
+		window.addEventListener('mousedown', disableMouseEvents, true);
+		window.addEventListener('mouseup', disableMouseEvents, true);
+	});
+
+	// When the component is destroyed, remove the event listeners
+	onDestroy(() => {
+		window.removeEventListener('mousedown', disableMouseEvents, true);
+		window.removeEventListener('mouseup', disableMouseEvents, true);
+	});
 	export let data; //Pasted data from the Database
 
 	export let cameraPosition = tweened([-25000, 25000, 25000], {
@@ -29,6 +40,11 @@
 	let orbitControls;
 
 	// Handle Mouse Events
+
+	function disableMouseEvents(event) {
+		event.preventDefault();
+		event.stopPropagation();
+	}
 
 	let workDistance = writable(0);
 	let categoryDistance = writable(0);
@@ -79,7 +95,7 @@
 		// Update the camera's target and position
 		cameraTarget.set([absolutePosition.x, absolutePosition.y, absolutePosition.z]);
 		cameraPosition.set([newCameraPosition.x, newCameraPosition.y, newCameraPosition.z]);
-		
+
 		// After handling the work click, reset the flag after a delay to allow for any boxclick event to be cancelled
 
 		dispatch('workclick', {
@@ -125,8 +141,6 @@
 			cameraTarget.set([newPosition.x, newPosition.y, newPosition.z]);
 		}
 	}
-
-
 </script>
 
 <!-- lookAt, look at that because of the rotation -->
