@@ -7,6 +7,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { onMount, onDestroy } from 'svelte';
 	import { getImageURL } from '$lib/utils/getURL';
+	import { Vector3 } from 'three';
 
 	export let work;
 	export let rotation;
@@ -14,10 +15,6 @@
 	export let color;
 	export let activeCategory;
 	export let media;
-
-	let texture;
-	let geometryWidth;
-	let geometryHeight;
 
 	function stopPropagation(event) {
 		event.stopPropagation();
@@ -73,11 +70,33 @@
 	$: if (work) {
 		textureDataPromise = loadTextureForWork(work);
 	}
+
+	let showGallery = false;
+
+	function toggleGallery() {
+		showGallery = !showGallery;
+	}
+
+	function getRandomPosition(cellSize) {
+		return [
+			(Math.random() - 0.5) * cellSize,
+			(Math.random() - 0.5) * cellSize,
+			(Math.random() - 0.5) * cellSize
+		];
+	}
+	function getRandomRotation() {
+		// Rotation values are in radians.
+		return [
+			0, // Random rotation around x-axis
+			Math.random() * Math.PI * 2, // Random rotation around y-axis
+			Math.random() * Math.PI * 2 // Random rotation around z-axis
+		];
+	}
 </script>
 
 {#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
 	<T.Group on:click={stopPropagation}>
-		<T.Group {rotation} on:click={stopPropagation}>
+		<T.Group {rotation} on:click={toggleGallery}>
 			<T.Mesh rotation={planeRotation}>
 				<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
 				<T.MeshBasicMaterial
@@ -110,6 +129,22 @@
 		>
 	</T.Mesh>
 </T.Group>
+{#if showGallery}
+	{#each work.gallery as galleryItem, index}
+	{console.log(getImageURL(work.collectionId, work.id, galleryItem))}
+		<T.Group position={getRandomPosition(cellSize)} rotation={getRandomRotation()}>
+			<HTML transform distanceFactor={distanceFactor/2} pointerEvents={'none'}>
+				<div class="work-html">
+					<!-- Your HTML content with img tag -->
+					<img
+						src={getImageURL(work.collectionId, work.id, galleryItem)}
+						alt={galleryItem.title}
+					/>
+				</div>
+			</HTML>
+		</T.Group>
+	{/each}
+{/if}
 
 <style>
 	.work-html {
