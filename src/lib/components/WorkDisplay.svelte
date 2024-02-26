@@ -92,12 +92,12 @@
 			Math.random() * Math.PI * 2 // Random rotation around z-axis
 		];
 	}
-	let previousWorkId = work.id;
 
-	$: previousWorkId = work.id; // This will be updated whenever 'work' changes
-	$: if (selectedWorkId !== work.id || previousWorkId !== work.id) {
+	$: if (selectedWorkId !== work.id) {
 		showGallery = false;
 	}
+
+	console.log(activeCategory)
 </script>
 
 {#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
@@ -138,14 +138,14 @@
 
 {#if showGallery}
 	{#each work.gallery as galleryItem, index}
-		<T.Group position={getRandomPosition(cellSize)} on:click={stopPropagation} raycast={false}>
-			<HTML {distanceFactor} pointerEvents={'none'} raycast={false}>
+		<T.Mesh position={getRandomPosition(cellSize)} on:click={stopPropagation} raycast={false}>
+			<HTML {distanceFactor} pointerEvents={'none'} >
 				<div style="pointer-events: none">
 					<!-- Your HTML content with img tag -->
 					<img src={getImageURL(work.collectionId, work.id, galleryItem)} alt={galleryItem.title} />
 				</div>
 			</HTML>
-		</T.Group>
+		</T.Mesh>
 	{/each}
 {/if}
 

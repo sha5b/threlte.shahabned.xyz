@@ -22,11 +22,13 @@
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
 
-
 	function handleWorkClick(event) {
 		const { id } = event.detail;
 		activeBoxId = id;
-		dispatch('workclick', event.detail);
+		const work = works.find((w) => w.id === id);
+		if (work) {
+			dispatch('workclick', { ...event.detail, category: work.category });
+		}
 	}
 
 	const range = categorySize.clone();

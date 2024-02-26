@@ -32,13 +32,15 @@
 		const { id, position } = event.detail;
 		activeBoxId = id;
 		selectedCategoryId = id;
+		selectedWorkId = null;
 		dispatch('boxclick', event.detail);
 	}
 
 	function handleWorkClick(event) {
-		const { id, position } = event.detail;
+		const { id, position, category } = event.detail;
 		activeBoxId = id;
 		selectedWorkId = id;
+		selectedCategoryId = category
 		dispatch('workclick', event.detail);
 	}
 
