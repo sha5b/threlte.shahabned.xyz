@@ -14,13 +14,16 @@
 	export let cellSize;
 	export let color;
 	export let activeCategory;
-	export let media;
+	let planeRotation = [0, 0, 0];
+	let interval;
+	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
+	let showGallery = false;
+
 
 	function stopPropagation(event) {
 		event.stopPropagation();
 	}
-	let planeRotation = [0, 0, 0];
-	let interval;
+
 
 	// Start the rotation when the component is first added to the DOM
 	onMount(() => {
@@ -39,7 +42,7 @@
 		color: 'white', // Set the color you want
 		side: THREE.DoubleSide // Render both sides of the material
 	});
-	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
+
 
 	async function loadTextureForWork(work) {
 		let loadedTexture;
@@ -71,10 +74,11 @@
 		textureDataPromise = loadTextureForWork(work);
 	}
 
-	let showGallery = false;
+
 
 	function toggleGallery() {
 		showGallery = !showGallery;
+		
 	}
 
 	function getRandomPosition(cellSize) {
@@ -132,8 +136,8 @@
 {#if showGallery}
 	{#each work.gallery as galleryItem, index}
 	{console.log(getImageURL(work.collectionId, work.id, galleryItem))}
-		<T.Group position={getRandomPosition(cellSize)} rotation={getRandomRotation()}>
-			<HTML transform distanceFactor={distanceFactor/2} pointerEvents={'none'}>
+		<T.Group position={getRandomPosition(cellSize)} >
+			<HTML {distanceFactor} pointerEvents={'none'}>
 				<div class="work-html">
 					<!-- Your HTML content with img tag -->
 					<img

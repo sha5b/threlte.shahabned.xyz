@@ -21,7 +21,7 @@
 	// Dispatcher
 	const dispatch = createEventDispatcher();
 	let activeBoxId = null; // This will store the ID of the currently active box
-	let categoryPositions = null;
+
 
 	function handleWorkClick(event) {
 		const { id } = event.detail;
