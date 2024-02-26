@@ -6,21 +6,18 @@
 	import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import { onMount, onDestroy } from 'svelte';
+	import { getImageURL } from '$lib/utils/getURL';
 
-	const Oxanium = '/fonts/Oxanium_ExtraLight_Regular.json';
 	export let work;
-	export let texture;
 	export let rotation;
 	export let cellSize;
 	export let color;
 	export let activeCategory;
-	export let media
+	export let media;
 
-
-	// Calculate aspect ratio and geometry dimensions
-	const textureAspectRatio = texture.source.data.height / texture.source.data.width;
-	const geometryWidth = Math.min(cellSize, texture.source.data.width);
-	const geometryHeight = geometryWidth * textureAspectRatio;
+	let texture;
+	let geometryWidth;
+	let geometryHeight;
 
 	function stopPropagation(event) {
 		event.stopPropagation();
@@ -46,26 +43,54 @@
 		side: THREE.DoubleSide // Render both sides of the material
 	});
 	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
-	
-	
+
+	async function loadTextureForWork(work) {
+		let loadedTexture;
+		let textureAspectRatio;
+		let loadedGeometryWidth;
+		let loadedGeometryHeight;
+
+		const imageUrl = getImageURL(work.collectionId, work.id, work.thump);
+
+		try {
+			loadedTexture = await useTexture(imageUrl); // Assuming useTexture is async
+			textureAspectRatio = loadedTexture.source.data.height / loadedTexture.source.data.width;
+			loadedGeometryWidth = Math.min(cellSize, loadedTexture.source.data.width);
+			loadedGeometryHeight = loadedGeometryWidth * textureAspectRatio;
+		} catch (error) {
+			console.error('Error loading texture:', error);
+		}
+
+		return {
+			texture: loadedTexture,
+			geometryWidth: loadedGeometryWidth,
+			geometryHeight: loadedGeometryHeight
+		};
+	}
+
+	// Reactive statement to load the texture when 'work' changes
+	let textureDataPromise;
+	$: if (work) {
+		textureDataPromise = loadTextureForWork(work);
+	}
 </script>
 
-<T.Group on:click={stopPropagation}>
-	<T.Group {rotation} on:click={stopPropagation}>
-		<T.Mesh rotation={planeRotation}>
-			<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
-			<T.MeshBasicMaterial
-				side={THREE.DoubleSide}
-				map={texture}
-				opacity={1}
-				transparent={true}
-				depthWrite={false}
-			/>
-		</T.Mesh>
-
-		<!-- Add more text or other elements as needed -->
+{#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
+	<T.Group on:click={stopPropagation}>
+		<T.Group {rotation} on:click={stopPropagation}>
+			<T.Mesh rotation={planeRotation}>
+				<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
+				<T.MeshBasicMaterial
+					side={THREE.DoubleSide}
+					opacity={1}
+					map={texture}
+					transparent={true}
+					depthWrite={false}
+				/>
+			</T.Mesh>
+		</T.Group>
 	</T.Group>
-</T.Group>
+{/await}
 <T.Group>
 	<T.Mesh
 		position={[
@@ -77,7 +102,7 @@
 		<HTML transform {distanceFactor} pointerEvents={'none'}
 			><div class="work-html">
 				<h1>{work.title}</h1>
-				<div style='display: flex;justify-content: space-between'>
+				<div style="display: flex;justify-content: space-between">
 					<p>{work.expand.category.title}</p>
 					<p>{work.type} media</p>
 				</div>

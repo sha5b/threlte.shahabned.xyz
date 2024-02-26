@@ -231,10 +231,10 @@
 		overflow-y: auto;
 		/* Scroll vertically if content overflows */
 		/* Grid background styles */
-		/* background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+		background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
 
-		background-size: 25px 25px; */
+		background-size: 25px 25px;
 	}
 
 	nav::-webkit-scrollbar {

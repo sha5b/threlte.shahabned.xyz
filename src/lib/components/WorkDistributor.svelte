@@ -4,12 +4,10 @@
 	import WorkBox from '$lib/components/WorkBox.svelte';
 	import WorkDisplay from './WorkDisplay.svelte';
 	import { generateUniquePositions } from '$lib/utils/utils';
-	import { Vector3, VideoTexture } from 'three';
-	import * as THREE from 'three';
+	import { Vector3 } from 'three';
+
 	import { createEventDispatcher } from 'svelte';
-	import { useTexture, Text } from '@threlte/extras';
 	import { onMount } from 'svelte';
-	import { getImageURL } from '$lib/utils/getURL';
 
 	export let works;
 	export let cellSize;
@@ -19,35 +17,6 @@
 	export let categoryPosition;
 	const absoluteWorkPositions = new Map();
 	export let selectedWorkId;
-	let mediaType
-
-	
-	function loadTextureForWork(work) {
-		const fileExtension = work.thump.split('.').pop().toLowerCase();
-
-		// Check for image file types
-		if (['jpg', 'jpeg', 'png', 'gif','webp'].includes(fileExtension)) {
-			const imageUrl = getImageURL(work.collectionId, work.id, work.thump);
-			console.log(fileExtension, "Loaded")
-			return useTexture(imageUrl);
-		}
-		// Check for video file types
-		else if (['mp4', 'webm', 'ogg'].includes(fileExtension)) {
-			const videoUrl = getImageURL(work.collectionId, work.id, work.thump);
-			console.log(fileExtension, "Loaded")
-			// Handle video texture loading here
-		}
-		// Check for glTF file types
-		else if (['gltf', 'glb'].includes(fileExtension)) {
-			const gltfUrl = getImageURL(work.collectionId, work.id, work.thump);
-			console.log(fileExtension, "Loaded")
-			// Handle glTF loading here
-		}
-		// Handle other file types or errors
-		else {
-			console.error('Unsupported file type:', fileExtension);
-		}
-	}
 
 	// Dispatcher
 	const dispatch = createEventDispatcher();
@@ -95,24 +64,20 @@
 </script>
 
 {#each works as work (work.id)}
-	{#await loadTextureForWork(work) then texture}
-		<WorkBox
-			absolutePosition={absoluteWorkPositions.get(work.id)}
-			{categoryPosition}
-			{works}
-			position={absoluteWorkPositions.get(work.id)}
-			{cellSize}
-			activeCategory={active}
-			activeWork={selectedWorkId === work.id}
-			id={work.id}
-			on:workclick={handleWorkClick}
-			{color}
-		>
-			{#if texture}
-				<WorkDisplay activeCategory={active} {work} {texture} {rotation} {cellSize} {color} />
-			{/if}</WorkBox
-		>
-	{/await}
+	<WorkBox
+		absolutePosition={absoluteWorkPositions.get(work.id)}
+		{categoryPosition}
+		{works}
+		position={absoluteWorkPositions.get(work.id)}
+		{cellSize}
+		activeCategory={active}
+		activeWork={selectedWorkId === work.id}
+		id={work.id}
+		on:workclick={handleWorkClick}
+		{color}
+	>
+		<WorkDisplay activeCategory={active} {work} {rotation} {cellSize} {color} />
+	</WorkBox>
 {/each}
 
 <!-- src={getImageURL(work.collectionId, work.id, work.file)} -->
