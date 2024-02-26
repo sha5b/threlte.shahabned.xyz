@@ -19,11 +19,9 @@
 	let distanceFactor = 250; // Adjust this value as needed to prevent z-fighting
 	let showGallery = false;
 
-
 	function stopPropagation(event) {
 		event.stopPropagation();
 	}
-
 
 	// Start the rotation when the component is first added to the DOM
 	onMount(() => {
@@ -42,7 +40,6 @@
 		color: 'white', // Set the color you want
 		side: THREE.DoubleSide // Render both sides of the material
 	});
-
 
 	async function loadTextureForWork(work) {
 		let loadedTexture;
@@ -74,11 +71,9 @@
 		textureDataPromise = loadTextureForWork(work);
 	}
 
-
-
-	function toggleGallery() {
+	function toggleGallery(event) {
+		event.stopPropagation();
 		showGallery = !showGallery;
-		
 	}
 
 	function getRandomPosition(cellSize) {
@@ -100,7 +95,7 @@
 
 {#await textureDataPromise then { texture, geometryWidth, geometryHeight }}
 	<T.Group on:click={stopPropagation}>
-		<T.Group {rotation} on:click={toggleGallery}>
+		<T.Group {rotation}>
 			<T.Mesh rotation={planeRotation}>
 				<T.PlaneGeometry args={[geometryWidth / 1.5, geometryHeight / 1.5]} />
 				<T.MeshBasicMaterial
@@ -135,15 +130,12 @@
 </T.Group>
 {#if showGallery}
 	{#each work.gallery as galleryItem, index}
-	{console.log(getImageURL(work.collectionId, work.id, galleryItem))}
-		<T.Group position={getRandomPosition(cellSize)} >
-			<HTML {distanceFactor} pointerEvents={'none'}>
+		{console.log(getImageURL(work.collectionId, work.id, galleryItem))}
+		<T.Group position={getRandomPosition(cellSize)} on:click={stopPropagation}>
+			<HTML transform {distanceFactor} pointerEvents={'none'}>
 				<div class="work-html">
 					<!-- Your HTML content with img tag -->
-					<img
-						src={getImageURL(work.collectionId, work.id, galleryItem)}
-						alt={galleryItem.title}
-					/>
+					<img src={getImageURL(work.collectionId, work.id, galleryItem)} alt={galleryItem.title} />
 				</div>
 			</HTML>
 		</T.Group>
