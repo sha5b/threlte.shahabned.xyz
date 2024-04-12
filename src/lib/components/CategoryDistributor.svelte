@@ -19,7 +19,7 @@
 	export let works = [];
 	export let size = new Vector3(500, 500, 500);
 
-	let color = 'snow';
+	let color = 'black';
 	const spacingFactor = 2; // Used to scale the size
 	let cellSize = 500;
 
@@ -168,7 +168,7 @@
 	h1 {
 		text-align: left; /* Aligns text inside h1 elements to the left */
 		font-size: 3rem;
-		color: white;
+		color: black;
 	}
 	
 </style>

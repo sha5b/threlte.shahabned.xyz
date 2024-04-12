@@ -207,7 +207,7 @@
 		/* Larger font size */
 		font-weight: bold;
 		/* Bold font weight */
-		color: white;
+		color: black;
 	}
 
 	.selected-work {
@@ -217,15 +217,15 @@
 		/* Larger font size */
 		font-weight: bold;
 		/* Bold font weight */
-		color: white;
+		color: black;
 	}
 
 	.dashed-line {
 		border-top: 2px solid transparent;
 		border-image: repeating-linear-gradient(
 				to right,
-				white,
-				white 10px,
+				black,
+				black 10px,
 				transparent 10px,
 				transparent 20px
 			)
@@ -288,7 +288,7 @@
 	}
 
 	.info-item {
-		color: white;
+		color: black;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
@@ -298,7 +298,7 @@
 	}
 
 	.info-title {
-		color: white;
+		color: black;
 		font-size: 0.8rem;
 		font-weight: bold;
 		/* Optional: make the content bold */
@@ -308,7 +308,7 @@
 	.info-content {
 		text-align: right;
 		/* Align text to the right */
-		color: white;
+		color: black;
 		display: flex;
 		flex-direction: column;
 		align-items: flex-end;
@@ -347,7 +347,7 @@
 		color: inherit;
 		font: inherit;
 		cursor: pointer;
-		color: white;
+		color: black;
 		margin: 0;
 		text-decoration: none;
 		/* Optional to remove underline from links if used as buttons */

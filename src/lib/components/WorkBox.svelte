@@ -12,7 +12,7 @@
 	export let cellSize = 500;
 	export let size = new Vector3(cellSize, cellSize, cellSize);
 	export let width = 5;
-	export let color = 'white';
+	export let color = 'black';
 	export let categoryPosition;
 	export let absolutePosition;
 	export let works;

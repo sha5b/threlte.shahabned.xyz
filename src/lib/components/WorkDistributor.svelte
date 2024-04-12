@@ -11,7 +11,7 @@
 
 	export let works;
 	export let cellSize;
-	export let color = '#c8aaad';
+	export let color = 'black';
 	export let categorySize = new Vector3(500, 500, 500); // Assuming categorySize should be a Vector3
 	export let active;
 	export let categoryPosition;

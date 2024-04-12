@@ -182,7 +182,7 @@
 <BackgroundGrid
 	size={new Vector3(75000, 75000, 75000)}
 	cellSize={5000}
-	color={'white'}
+	color={'black'}
 	linewidth={0.1}
 	opacity={0.1}
 />

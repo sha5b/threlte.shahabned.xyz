@@ -5,7 +5,7 @@
 
 	export let size = new Vector3(1000, 1000, 1000);
 	export let cellSize = 100;
-	export let color = '#c8aaad';
+	export let color = 'black';
     export let linewidth = 3;
     export let opacity = 1;
 

@@ -147,7 +147,7 @@
 				rotation={planeRotation}
 			>
 				<HTML transform distanceFactor={distanceFactor/2}  pointerEvents={'none'}>
-					<div >
+					<div>
 						<!-- Your HTML content with img tag -->
 						<img
 							src={getImageURL(work.collectionId, work.id, galleryItem)}
@@ -176,11 +176,10 @@
 
 	h1 {
 		font-size: 3rem;
-		color: white;
+		color: black;
 	}
 	p {
-		font-size: 2rem;
-		color: white;
+		font-size: black;
 	}
 
 	flex {
